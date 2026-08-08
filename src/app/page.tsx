@@ -24,9 +24,8 @@ import {
   QrCode,
   Building2,
   FileText,
-  Loader2,
   ArrowRight,
-  CheckCircle,
+  ZoomIn,
 } from "lucide-react";
 import CountUp from "@/components/CountUp";
 import AnimatedList from "@/components/AnimatedList";
@@ -393,12 +392,15 @@ export default function Home() {
   const [courierOption, setCourierOption] = useState<string>("Instant (Gojek/Grab)");
   const [isCopied, setIsCopied] = useState<boolean>(false);
 
+  // IMAGE LIGHTBOX POPUP STATE
+  const [previewProduct, setPreviewProduct] = useState<Product | null>(null);
+
   // PAYMENT MODAL & ORDER PROCESSING STAGE STATES
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState<boolean>(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<"BCA" | "QRIS">("BCA");
   const [specialNotes, setSpecialNotes] = useState<string>("");
   const [isAccountCopied, setIsAccountCopied] = useState<boolean>(false);
-  const [orderProcessingStage, setOrderProcessingStage] = useState<number>(0); // 0 = Idle, 1 = Merekam, 2 = Membuat, 3 = Membuka WA
+  const [orderProcessingStage, setOrderProcessingStage] = useState<number>(0);
 
   const categories = ["Semua", "Ikan Utuh", "Udang", "Cumi", "Kerang", "Fillet"];
 
@@ -500,17 +502,16 @@ export default function Home() {
     }
   };
 
-  // MULTI-STAGE ANIMATION & WA REDIRECT HANDLER
   const handleProceedOrderWithAnimation = () => {
     if (cart.length === 0) return;
-    setOrderProcessingStage(1); // Stage 1: Merekam pesanan
+    setOrderProcessingStage(1);
 
     setTimeout(() => {
-      setOrderProcessingStage(2); // Stage 2: Membuat pesanan
+      setOrderProcessingStage(2);
     }, 900);
 
     setTimeout(() => {
-      setOrderProcessingStage(3); // Stage 3: Membuka WhatsApp
+      setOrderProcessingStage(3);
     }, 1800);
 
     setTimeout(() => {
@@ -527,15 +528,28 @@ export default function Home() {
   const renderProductCard = (product: Product) => (
     <div
       key={product.id}
-      className="bg-[#FFFFFF] rounded-xl border border-[#E2ECE7] overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between h-full"
+      className="bg-[#FFFFFF] rounded-xl border border-[#E2ECE7] overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between h-full"
     >
       <div>
-        <div className="relative h-52 overflow-hidden bg-[#F4F9F6] group">
+        {/* PRODUCT IMAGE WITH CLICKABLE LIGHTBOX POPUP TRIGGER */}
+        <div
+          onClick={() => setPreviewProduct(product)}
+          className="relative h-52 overflow-hidden bg-[#F4F9F6] group cursor-pointer"
+        >
           <img
             src={product.image}
             alt={product.name}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
           />
+
+          {/* HOVER ZOOM ICON OVERLAY */}
+          <div className="absolute inset-0 bg-[#332219]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+            <span className="bg-[#FFFFFF]/90 backdrop-blur-sm text-[#332219] text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-md transform scale-90 group-hover:scale-100 transition-transform duration-200">
+              <ZoomIn className="w-4 h-4 text-[#4E6B5D]" />
+              <span>Lihat Foto Dekat</span>
+            </span>
+          </div>
+
           <div className="absolute top-3 left-3 flex flex-col gap-1.5 items-start">
             {product.isCatchOfDay && (
               <span className="bg-[#D97706] text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md shadow-sm">
@@ -609,8 +623,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF6F0] text-[#332219] antialiased font-sans transition-colors duration-200">
-      {/* 1. TOP ANNOUNCEMENT BAR */}
-      <div className="bg-[#332219] text-[#FAF6F0] text-xs font-semibold py-2.5 px-4 text-center flex flex-wrap items-center justify-center gap-x-4 gap-y-1 shadow-sm">
+      {/* 1. TOP ANNOUNCEMENT BAR (STAGGERED ON-LOAD ANIMATION 1) */}
+      <div className="bg-[#332219] text-[#FAF6F0] text-xs font-semibold py-2.5 px-4 text-center flex flex-wrap items-center justify-center gap-x-4 gap-y-1 shadow-sm animate-in fade-in slide-in-from-top duration-300">
         <div className="flex items-center gap-1.5">
           <Clock className="w-3.5 h-3.5 text-[#D97706]" />
           <span>Pre-Order H-1 (Batas Order 18:00 WIB)</span>
@@ -626,8 +640,8 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 2. NAVIGATION BAR */}
-      <header className="sticky top-0 z-30 bg-[#FAF6F0]/95 backdrop-blur-md border-b border-[#E2ECE7] shadow-sm transition-all duration-200">
+      {/* 2. NAVIGATION BAR (STAGGERED ON-LOAD ANIMATION 2) */}
+      <header className="sticky top-0 z-30 bg-[#FAF6F0]/95 backdrop-blur-md border-b border-[#E2ECE7] shadow-sm transition-all duration-200 animate-in fade-in slide-in-from-top-3 duration-400">
         <div className="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3 group cursor-pointer">
             <img
@@ -672,10 +686,10 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 3. HERO SECTION */}
+      {/* 3. HERO SECTION (STAGGERED ON-LOAD ANIMATIONS 3 & 4) */}
       <section className="relative overflow-hidden pt-10 pb-14 px-4 border-b border-[#E2ECE7] bg-[#FAF6F0]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-          <div className="md:col-span-7">
+          <div className="md:col-span-7 animate-in fade-in slide-in-from-left-6 duration-500">
             <div className="flex flex-wrap items-center gap-2 mb-4">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EBF2EE] text-[#4E6B5D] text-[11px] font-bold border border-[#E2ECE7]">
                 <Clock className="w-3.5 h-3.5 text-[#D97706]" />
@@ -716,7 +730,7 @@ export default function Home() {
             </div>
 
             {/* REACT BITS <CountUp /> STAT BADGE */}
-            <div className="inline-flex items-center gap-3 bg-[#FFFFFF] px-4 py-2.5 rounded-xl border border-[#E2ECE7] shadow-sm">
+            <div className="inline-flex items-center gap-3 bg-[#FFFFFF] px-4 py-2.5 rounded-xl border border-[#E2ECE7] shadow-sm animate-in fade-in zoom-in-95 duration-600">
               <div className="p-2 rounded-lg bg-[#EBF2EE] text-[#4E6B5D]">
                 <PackageCheck className="w-4.5 h-4.5 text-[#4E6B5D]" />
               </div>
@@ -733,7 +747,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="md:col-span-5 flex justify-center">
+          <div className="md:col-span-5 flex justify-center animate-in fade-in slide-in-from-right-6 zoom-in-95 duration-500">
             <div className="bg-[#FFFFFF] p-4 rounded-2xl border border-[#E2ECE7] shadow-md max-w-xs text-center hover:shadow-lg transition-shadow duration-200">
               <img
                 src="/logo.png"
@@ -750,10 +764,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. VALUE HIGHLIGHTS */}
+      {/* 4. VALUE HIGHLIGHTS (STAGGERED ON-LOAD ANIMATION 5) */}
       <section className="py-8 px-4 bg-[#FFFDF9] border-b border-[#E2ECE7]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5">
+          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5 animate-in fade-in slide-in-from-bottom-3 duration-400">
             <div className="p-2.5 rounded-lg bg-[#EBF2EE] text-[#4E6B5D] shrink-0">
               <Scissors className="w-5 h-5" />
             </div>
@@ -765,7 +779,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5">
+          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5 animate-in fade-in slide-in-from-bottom-4 duration-500">
             <div className="p-2.5 rounded-lg bg-[#EBF2EE] text-[#4E6B5D] shrink-0">
               <Clock className="w-5 h-5" />
             </div>
@@ -777,7 +791,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5">
+          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5 animate-in fade-in slide-in-from-bottom-5 duration-600">
             <div className="p-2.5 rounded-lg bg-[#EBF2EE] text-[#4E6B5D] shrink-0">
               <MessageCircle className="w-5 h-5" />
             </div>
@@ -791,8 +805,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. PRODUCT CATALOG SECTION */}
-      <section id="katalog" className="py-14 px-4 max-w-6xl mx-auto w-full flex-grow">
+      {/* 5. PRODUCT CATALOG SECTION (STAGGERED ON-LOAD ANIMATION 6) */}
+      <section id="katalog" className="py-14 px-4 max-w-6xl mx-auto w-full flex-grow animate-in fade-in slide-in-from-bottom-6 duration-600">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
@@ -804,7 +818,7 @@ export default function Home() {
               Menu Seafood Lauk at Me By Umma
             </h2>
             <p className="text-xs text-[#7A6254] mt-1">
-              Pilih produk dan tentukan gramasi yang Anda butuhkan (Harga per Kg).
+              Pilih produk dan tentukan gramasi yang Anda butuhkan (Klik gambar untuk zoom detail foto).
             </p>
           </div>
 
@@ -844,7 +858,73 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. MODAL CUSTOMIZATION */}
+      {/* 6. IMAGE LIGHTBOX / PREVIEW MODAL WITH SMOOTH ZOOM ANIMATION */}
+      {previewProduct && (
+        <div className="fixed inset-0 z-50 bg-[#332219]/70 backdrop-blur-md flex items-center justify-center p-4 transition-opacity duration-250 animate-in fade-in">
+          <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-lg w-full p-5 shadow-2xl relative animate-in zoom-in-90 duration-250">
+            <button
+              onClick={() => setPreviewProduct(null)}
+              className="absolute top-3 right-3 text-[#7A6254] hover:text-[#332219] p-1.5 rounded-full bg-white/80 hover:bg-white shadow-md z-10 transition-all"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="relative h-72 sm:h-80 w-full rounded-xl overflow-hidden mb-4 bg-[#FAF6F0] border border-[#E2ECE7]">
+              <img
+                src={previewProduct.image}
+                alt={previewProduct.name}
+                className="w-full h-full object-cover animate-in zoom-in-95 duration-300"
+              />
+              {previewProduct.discountBadge && (
+                <span className="absolute top-3 left-3 bg-[#991B1B] text-white text-xs font-bold px-3 py-1 rounded-md shadow-md">
+                  {previewProduct.discountBadge}
+                </span>
+              )}
+            </div>
+
+            <div className="flex items-center justify-between mb-2">
+              <div>
+                <span className="text-[11px] font-bold text-[#4E6B5D] uppercase tracking-wider block">
+                  {previewProduct.category}
+                </span>
+                <h3 className="text-lg font-bold text-[#332219]">
+                  {previewProduct.name}
+                </h3>
+              </div>
+              <div className="text-right">
+                <span className="text-lg font-bold text-[#332219] block">
+                  {previewProduct.displayPriceText}
+                </span>
+                {previewProduct.originalPriceText && (
+                  <span className="text-xs text-[#7A6254] line-through block">
+                    {previewProduct.originalPriceText}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            <div className="text-xs text-[#7A6254] mb-4 bg-[#FAF6F0] p-2.5 rounded-lg border border-[#E2ECE7]">
+              {previewProduct.portionEstimate} • {previewProduct.note}
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => {
+                  const prod = previewProduct;
+                  setPreviewProduct(null);
+                  openCustomizeModal(prod);
+                }}
+                className="flex-1 bg-[#4E6B5D] hover:bg-[#3B5447] active:scale-98 text-white font-semibold text-xs py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
+              >
+                <Scissors className="w-4 h-4" />
+                <span>Pilih Berat & Jenis Potongan</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 7. MODAL CUSTOMIZATION */}
       {selectedProductForModal && (
         <div className="fixed inset-0 z-50 bg-[#332219]/40 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-200">
           <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-md w-full p-6 shadow-xl relative animate-in fade-in zoom-in-95 duration-200">
@@ -946,7 +1026,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* 7. CHECKOUT DRAWER WITH "BELI SEKARANG" BUTTON THAT OPENS PAYMENT MODAL */}
+      {/* 8. CHECKOUT DRAWER */}
       {isCheckoutOpen && (
         <div className="fixed inset-0 z-50 bg-[#332219]/40 backdrop-blur-sm flex justify-end transition-opacity duration-200">
           <div className="bg-[#FFFFFF] w-full max-w-md h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-250">
@@ -1098,7 +1178,7 @@ export default function Home() {
               )}
             </div>
 
-            {/* CHECKOUT BUTTONS & COPY ORDER SUMMARY */}
+            {/* CHECKOUT BUTTONS */}
             {cart.length > 0 && (
               <div className="pt-4 border-t border-[#E2ECE7] space-y-2.5">
                 <div className="flex items-center justify-between mb-2">
@@ -1108,7 +1188,6 @@ export default function Home() {
                   </span>
                 </div>
 
-                {/* "BELI SEKARANG" BUTTON - OPENS PAYMENT & ORDER DETAILS POPUP */}
                 <button
                   onClick={() => setIsPaymentModalOpen(true)}
                   className="w-full bg-[#166534] hover:bg-[#14532d] active:scale-98 text-white font-bold text-sm py-3.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
@@ -1117,7 +1196,6 @@ export default function Home() {
                   <ArrowRight className="w-4 h-4" />
                 </button>
 
-                {/* COPY ORDER TEXT BUTTON */}
                 <button
                   onClick={handleCopyOrderSummary}
                   className="w-full bg-[#FFFFFF] hover:bg-[#FAF6F0] border border-[#E2ECE7] text-[#523A2D] font-semibold text-xs py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
@@ -1140,11 +1218,10 @@ export default function Home() {
         </div>
       )}
 
-      {/* 8. PAYMENT METHOD & DETAIL PESANAN POPUP WITH MULTI-STAGE ANIMATION */}
+      {/* 9. PAYMENT METHOD POPUP */}
       {isPaymentModalOpen && (
         <div className="fixed inset-0 z-50 bg-[#332219]/50 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
           <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-lg w-full p-6 shadow-2xl relative my-8 animate-in fade-in zoom-in-95 duration-200">
-            {/* CLOSE BUTTON */}
             {orderProcessingStage === 0 && (
               <button
                 onClick={() => setIsPaymentModalOpen(false)}
@@ -1154,7 +1231,6 @@ export default function Home() {
               </button>
             )}
 
-            {/* PROCESSING STAGE ANIMATION OVERLAY */}
             {orderProcessingStage > 0 ? (
               <div className="py-12 text-center flex flex-col items-center justify-center space-y-4">
                 <div className="relative">
@@ -1183,7 +1259,6 @@ export default function Home() {
                   </p>
                 </div>
 
-                {/* STAGE PROGRESS BAR */}
                 <div className="w-full max-w-xs bg-[#E2ECE7] h-2 rounded-full overflow-hidden mt-4">
                   <div
                     className="bg-[#4E6B5D] h-full transition-all duration-500 ease-out"
@@ -1212,7 +1287,6 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* DETAIL RINGKASAN PESANAN */}
                 <div className="mb-5 bg-[#FAF6F0] p-4 rounded-xl border border-[#E2ECE7] space-y-2">
                   <h4 className="text-xs font-bold text-[#332219] uppercase tracking-wider flex items-center justify-between">
                     <span>Ringkasan Item Pesanan ({cart.length})</span>
@@ -1237,7 +1311,6 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* METODE PEMBAYARAN SELECTION (BCA vs QRIS) */}
                 <div className="mb-5">
                   <label className="text-xs font-bold text-[#332219] block mb-2">
                     Pilih Metode Pembayaran:
@@ -1281,7 +1354,6 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* PAYMENT METHOD DETAILS (BCA VS QRIS DUMMY) */}
                 <div className="mb-5 bg-[#FFFDF9] p-4 rounded-xl border border-[#E2ECE7]">
                   {selectedPaymentMethod === "BCA" ? (
                     <div>
@@ -1319,7 +1391,6 @@ export default function Home() {
                         Scan QRIS (Gopay / OVO / Dana / ShopeePay / BCA Mobile)
                       </span>
                       <div className="bg-white p-3 rounded-xl border border-[#E2ECE7] inline-block shadow-sm">
-                        {/* AUTHENTIC SVG QRIS DUMMY */}
                         <svg className="w-40 h-40 mx-auto" viewBox="0 0 200 200">
                           <rect width="200" height="200" fill="#ffffff" rx="8" />
                           <path d="M10 10 h60 v60 h-60 z" fill="#000000" />
@@ -1347,7 +1418,6 @@ export default function Home() {
                   )}
                 </div>
 
-                {/* REKOMENDASI TAMBAHAN: CATATAN KHUSUS PESANAN */}
                 <div className="mb-6">
                   <label className="text-xs font-bold text-[#332219] block mb-1.5 flex items-center gap-1.5">
                     <FileText className="w-3.5 h-3.5 text-[#4E6B5D]" />
@@ -1362,7 +1432,6 @@ export default function Home() {
                   />
                 </div>
 
-                {/* CONFIRM ORDER BUTTON WITH MULTI-STAGE LOADING ANIMATION */}
                 <button
                   onClick={handleProceedOrderWithAnimation}
                   className="w-full bg-[#166534] hover:bg-[#14532d] active:scale-98 text-white font-bold text-sm py-3.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
@@ -1376,7 +1445,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* 9. FOOTER */}
+      {/* 10. FOOTER */}
       <footer className="bg-[#332219] text-[#FAF6F0] py-10 px-4 border-t border-[#523A2D] mt-16">
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8">
           <div>
