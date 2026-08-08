@@ -3,7 +3,6 @@
 import { useState } from "react";
 import {
   ShoppingBag,
-  Sparkles,
   ShieldCheck,
   ChevronRight,
   Filter,
@@ -19,8 +18,9 @@ import {
   CalendarOff,
   Copy,
   Check,
-  Utensils,
   Award,
+  PackageCheck,
+  BadgeCheck,
 } from "lucide-react";
 import CountUp from "@/components/CountUp";
 import AnimatedList from "@/components/AnimatedList";
@@ -664,23 +664,20 @@ export default function Home() {
               </a>
             </div>
 
-            {/* REACT BITS <CountUp /> STAT BADGE */}
+            {/* UPDATED STAT BADGE: NO SPARKLE ICON, NO DESCR TEXT, ADDED "SEJAK 2023" */}
             <div className="inline-flex items-center gap-3 bg-[#FFFFFF] px-4 py-2.5 rounded-xl border border-[#E2ECE7] shadow-sm">
               <div className="p-2 rounded-lg bg-[#EBF2EE] text-[#4E6B5D]">
-                <Sparkles className="w-4 h-4 text-[#D97706]" />
+                <PackageCheck className="w-4.5 h-4.5 text-[#4E6B5D]" />
               </div>
-              <div className="text-xs">
-                <span className="text-[#7A6254] block text-[11px]">Kepercayaan Pelanggan Pesisir</span>
-                <span className="text-base font-bold text-[#332219] flex items-center gap-1 font-display">
-                  <CountUp
-                    from={0}
-                    to={10000}
-                    separator="."
-                    duration={2.5}
-                    className="font-bold text-[#4E6B5D]"
-                  />
-                  <span>+ Orderan Terlayani</span>
-                </span>
+              <div className="text-xs sm:text-sm font-bold text-[#332219] flex items-center gap-1.5 font-display">
+                <CountUp
+                  from={0}
+                  to={10000}
+                  separator="."
+                  duration={2.5}
+                  className="font-bold text-[#4E6B5D]"
+                />
+                <span>+ Orderan Terlayani Sejak 2023</span>
               </div>
             </div>
           </div>
