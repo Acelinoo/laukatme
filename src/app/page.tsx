@@ -20,7 +20,13 @@ import {
   Check,
   Award,
   PackageCheck,
-  BadgeCheck,
+  CreditCard,
+  QrCode,
+  Building2,
+  FileText,
+  Loader2,
+  ArrowRight,
+  CheckCircle,
 } from "lucide-react";
 import CountUp from "@/components/CountUp";
 import AnimatedList from "@/components/AnimatedList";
@@ -387,6 +393,13 @@ export default function Home() {
   const [courierOption, setCourierOption] = useState<string>("Instant (Gojek/Grab)");
   const [isCopied, setIsCopied] = useState<boolean>(false);
 
+  // PAYMENT MODAL & ORDER PROCESSING STAGE STATES
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState<boolean>(false);
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<"BCA" | "QRIS">("BCA");
+  const [specialNotes, setSpecialNotes] = useState<string>("");
+  const [isAccountCopied, setIsAccountCopied] = useState<boolean>(false);
+  const [orderProcessingStage, setOrderProcessingStage] = useState<number>(0); // 0 = Idle, 1 = Merekam, 2 = Membuat, 3 = Membuka WA
+
   const categories = ["Semua", "Ikan Utuh", "Udang", "Cumi", "Kerang", "Fillet"];
 
   const filteredProducts =
@@ -436,6 +449,17 @@ export default function Home() {
     message += `• Alamat: ${customerAddress || "-"}\n`;
     message += `• Opsi Pengiriman: ${courierOption}\n\n`;
 
+    message += `*Metode Pembayaran Selected:*\n`;
+    message += `• Pembayaran: ${
+      selectedPaymentMethod === "BCA"
+        ? "Transfer Bank BCA (No. Rek: 810-551-3964 a.n Lauk at Me)"
+        : "QRIS All Payment (Scan QR Code)"
+    }\n`;
+    if (specialNotes) {
+      message += `• Catatan Khusus: ${specialNotes}\n`;
+    }
+    message += `\n`;
+
     message += `*Daftar Pesanan Seafood:*\n`;
     cart.forEach((item, index) => {
       const itemPrice = (item.product.pricePerKg * item.weightGram) / 1000;
@@ -454,11 +478,14 @@ export default function Home() {
     return message;
   };
 
-  const generateWhatsAppURL = () => {
-    const text = buildOrderSummaryText();
-    if (!text) return "#";
-    const adminPhone = "6289667782004";
-    return `https://wa.me/${adminPhone}?text=${encodeURIComponent(text)}`;
+  const handleCopyAccount = async () => {
+    try {
+      await navigator.clipboard.writeText("8105513964");
+      setIsAccountCopied(true);
+      setTimeout(() => setIsAccountCopied(false), 2000);
+    } catch (err) {
+      console.error("Failed to copy account number", err);
+    }
   };
 
   const handleCopyOrderSummary = async () => {
@@ -471,6 +498,30 @@ export default function Home() {
     } catch (err) {
       console.error("Failed to copy order text", err);
     }
+  };
+
+  // MULTI-STAGE ANIMATION & WA REDIRECT HANDLER
+  const handleProceedOrderWithAnimation = () => {
+    if (cart.length === 0) return;
+    setOrderProcessingStage(1); // Stage 1: Merekam pesanan
+
+    setTimeout(() => {
+      setOrderProcessingStage(2); // Stage 2: Membuat pesanan
+    }, 900);
+
+    setTimeout(() => {
+      setOrderProcessingStage(3); // Stage 3: Membuka WhatsApp
+    }, 1800);
+
+    setTimeout(() => {
+      const text = buildOrderSummaryText();
+      const adminPhone = "6289667782004";
+      const waUrl = `https://wa.me/${adminPhone}?text=${encodeURIComponent(text)}`;
+      setOrderProcessingStage(0);
+      setIsPaymentModalOpen(false);
+      setIsCheckoutOpen(false);
+      window.open(waUrl, "_blank");
+    }, 2700);
   };
 
   const renderProductCard = (product: Product) => (
@@ -558,7 +609,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF6F0] text-[#332219] antialiased font-sans transition-colors duration-200">
-      {/* 1. TOP ANNOUNCEMENT BAR (WITH CUT-OFF TIME & SUNDAY OFF) */}
+      {/* 1. TOP ANNOUNCEMENT BAR */}
       <div className="bg-[#332219] text-[#FAF6F0] text-xs font-semibold py-2.5 px-4 text-center flex flex-wrap items-center justify-center gap-x-4 gap-y-1 shadow-sm">
         <div className="flex items-center gap-1.5">
           <Clock className="w-3.5 h-3.5 text-[#D97706]" />
@@ -621,7 +672,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 3. HERO SECTION WITH REACT BITS <CountUp /> ANIMATION */}
+      {/* 3. HERO SECTION */}
       <section className="relative overflow-hidden pt-10 pb-14 px-4 border-b border-[#E2ECE7] bg-[#FAF6F0]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-7">
@@ -664,7 +715,7 @@ export default function Home() {
               </a>
             </div>
 
-            {/* UPDATED STAT BADGE: NO SPARKLE ICON, NO DESCR TEXT, ADDED "SEJAK 2023" */}
+            {/* REACT BITS <CountUp /> STAT BADGE */}
             <div className="inline-flex items-center gap-3 bg-[#FFFFFF] px-4 py-2.5 rounded-xl border border-[#E2ECE7] shadow-sm">
               <div className="p-2 rounded-lg bg-[#EBF2EE] text-[#4E6B5D]">
                 <PackageCheck className="w-4.5 h-4.5 text-[#4E6B5D]" />
@@ -740,7 +791,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. PRODUCT CATALOG SECTION WITH REACT BITS <AnimatedList /> IN MOBILE */}
+      {/* 5. PRODUCT CATALOG SECTION */}
       <section id="katalog" className="py-14 px-4 max-w-6xl mx-auto w-full flex-grow">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
@@ -852,7 +903,7 @@ export default function Home() {
               </div>
             </div>
 
-            {/* CUT OPTION SELECTOR (SPECIFIC TO THIS PRODUCT) */}
+            {/* CUT OPTION SELECTOR */}
             <div className="mb-6">
               <label className="text-xs font-bold text-[#332219] block mb-2">
                 2. Spesifikasi Jenis Potongan ({selectedProductForModal.category})
@@ -895,7 +946,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* 7. CHECKOUT DRAWER / MODAL WITH COPY ORDER SUMMARY FEATURE */}
+      {/* 7. CHECKOUT DRAWER WITH "BELI SEKARANG" BUTTON THAT OPENS PAYMENT MODAL */}
       {isCheckoutOpen && (
         <div className="fixed inset-0 z-50 bg-[#332219]/40 backdrop-blur-sm flex justify-end transition-opacity duration-200">
           <div className="bg-[#FFFFFF] w-full max-w-md h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-250">
@@ -920,7 +971,7 @@ export default function Home() {
                 </button>
               </div>
 
-              {/* H-1 & SUNDAY OFF DISCLAIMER IN DRAWER */}
+              {/* H-1 & SUNDAY OFF DISCLAIMER */}
               <div className="bg-[#FAF6F0] p-3 rounded-xl border border-[#E2ECE7] mb-4 text-xs space-y-1">
                 <div className="flex items-center gap-1.5 text-[#332219] font-bold">
                   <Clock className="w-3.5 h-3.5 text-[#D97706]" />
@@ -1057,15 +1108,14 @@ export default function Home() {
                   </span>
                 </div>
 
-                <a
-                  href={generateWhatsAppURL()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full bg-[#166534] hover:bg-[#14532d] active:scale-98 text-white font-bold text-xs py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
+                {/* "BELI SEKARANG" BUTTON - OPENS PAYMENT & ORDER DETAILS POPUP */}
+                <button
+                  onClick={() => setIsPaymentModalOpen(true)}
+                  className="w-full bg-[#166534] hover:bg-[#14532d] active:scale-98 text-white font-bold text-sm py-3.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
                 >
-                  <PhoneCall className="w-4 h-4" />
-                  <span>Kirim Pesanan Ke WA (089667782004)</span>
-                </a>
+                  <span>Beli Sekarang</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
 
                 {/* COPY ORDER TEXT BUTTON */}
                 <button
@@ -1090,7 +1140,243 @@ export default function Home() {
         </div>
       )}
 
-      {/* 8. FOOTER */}
+      {/* 8. PAYMENT METHOD & DETAIL PESANAN POPUP WITH MULTI-STAGE ANIMATION */}
+      {isPaymentModalOpen && (
+        <div className="fixed inset-0 z-50 bg-[#332219]/50 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-lg w-full p-6 shadow-2xl relative my-8 animate-in fade-in zoom-in-95 duration-200">
+            {/* CLOSE BUTTON */}
+            {orderProcessingStage === 0 && (
+              <button
+                onClick={() => setIsPaymentModalOpen(false)}
+                className="absolute top-4 right-4 text-[#7A6254] hover:text-[#332219] p-1 rounded-lg hover:bg-[#FAF6F0] transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            )}
+
+            {/* PROCESSING STAGE ANIMATION OVERLAY */}
+            {orderProcessingStage > 0 ? (
+              <div className="py-12 text-center flex flex-col items-center justify-center space-y-4">
+                <div className="relative">
+                  <div className="w-16 h-16 rounded-full border-4 border-[#E2ECE7] border-t-[#4E6B5D] animate-spin flex items-center justify-center"></div>
+                  <ShoppingBag className="w-6 h-6 text-[#4E6B5D] absolute inset-0 m-auto" />
+                </div>
+
+                <div className="space-y-1">
+                  {orderProcessingStage === 1 && (
+                    <h3 className="text-base font-bold text-[#332219] animate-pulse">
+                      📝 Merekam pesanan...
+                    </h3>
+                  )}
+                  {orderProcessingStage === 2 && (
+                    <h3 className="text-base font-bold text-[#332219] animate-pulse">
+                      📦 Membuat pesanan...
+                    </h3>
+                  )}
+                  {orderProcessingStage === 3 && (
+                    <h3 className="text-base font-bold text-[#166534] animate-pulse">
+                      📲 Membuka WhatsApp...
+                    </h3>
+                  )}
+                  <p className="text-xs text-[#7A6254]">
+                    Mohon tunggu sebentar, Anda akan diarahkan ke WhatsApp Admin.
+                  </p>
+                </div>
+
+                {/* STAGE PROGRESS BAR */}
+                <div className="w-full max-w-xs bg-[#E2ECE7] h-2 rounded-full overflow-hidden mt-4">
+                  <div
+                    className="bg-[#4E6B5D] h-full transition-all duration-500 ease-out"
+                    style={{
+                      width:
+                        orderProcessingStage === 1
+                          ? "35%"
+                          : orderProcessingStage === 2
+                          ? "70%"
+                          : "100%",
+                    }}
+                  />
+                </div>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[#E2ECE7]">
+                  <CreditCard className="w-5 h-5 text-[#4E6B5D]" />
+                  <div>
+                    <h3 className="text-base font-bold text-[#332219]">
+                      Detail & Metode Pembayaran
+                    </h3>
+                    <span className="text-xs text-[#7A6254]">
+                      Konfirmasi pesanan dan pilih opsi pembayaran Anda
+                    </span>
+                  </div>
+                </div>
+
+                {/* DETAIL RINGKASAN PESANAN */}
+                <div className="mb-5 bg-[#FAF6F0] p-4 rounded-xl border border-[#E2ECE7] space-y-2">
+                  <h4 className="text-xs font-bold text-[#332219] uppercase tracking-wider flex items-center justify-between">
+                    <span>Ringkasan Item Pesanan ({cart.length})</span>
+                    <span className="text-[#4E6B5D] font-bold">
+                      Total: Rp {calculateSubtotal().toLocaleString("id-ID")}
+                    </span>
+                  </h4>
+                  <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1 scrollbar-none border-t border-[#E2ECE7] pt-2">
+                    {cart.map((item, idx) => (
+                      <div key={idx} className="text-xs flex items-center justify-between">
+                        <div>
+                          <span className="font-semibold text-[#332219]">{item.product.name}</span>
+                          <span className="text-[11px] text-[#7A6254] block">
+                            {item.weightGram}g • {item.cutOption}
+                          </span>
+                        </div>
+                        <span className="font-bold text-[#332219]">
+                          Rp {(((item.product.pricePerKg * item.weightGram) / 1000)).toLocaleString("id-ID")}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* METODE PEMBAYARAN SELECTION (BCA vs QRIS) */}
+                <div className="mb-5">
+                  <label className="text-xs font-bold text-[#332219] block mb-2">
+                    Pilih Metode Pembayaran:
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      onClick={() => setSelectedPaymentMethod("BCA")}
+                      className={`p-3 rounded-xl border text-left transition-all flex flex-col justify-between ${
+                        selectedPaymentMethod === "BCA"
+                          ? "border-[#4E6B5D] bg-[#EBF2EE] text-[#4E6B5D] font-bold shadow-sm"
+                          : "border-[#E2ECE7] bg-white text-[#523A2D] hover:border-[#4E6B5D]"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <Building2 className="w-4 h-4 text-[#4E6B5D]" />
+                        {selectedPaymentMethod === "BCA" && (
+                          <CheckCircle2 className="w-4 h-4 text-[#4E6B5D]" />
+                        )}
+                      </div>
+                      <span className="text-xs font-bold">Transfer BCA</span>
+                      <span className="text-[10px] text-[#7A6254] font-normal">810-551-3964</span>
+                    </button>
+
+                    <button
+                      onClick={() => setSelectedPaymentMethod("QRIS")}
+                      className={`p-3 rounded-xl border text-left transition-all flex flex-col justify-between ${
+                        selectedPaymentMethod === "QRIS"
+                          ? "border-[#4E6B5D] bg-[#EBF2EE] text-[#4E6B5D] font-bold shadow-sm"
+                          : "border-[#E2ECE7] bg-white text-[#523A2D] hover:border-[#4E6B5D]"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <QrCode className="w-4 h-4 text-[#4E6B5D]" />
+                        {selectedPaymentMethod === "QRIS" && (
+                          <CheckCircle2 className="w-4 h-4 text-[#4E6B5D]" />
+                        )}
+                      </div>
+                      <span className="text-xs font-bold">QRIS All Payment</span>
+                      <span className="text-[10px] text-[#7A6254] font-normal">Scan Kode QR</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* PAYMENT METHOD DETAILS (BCA VS QRIS DUMMY) */}
+                <div className="mb-5 bg-[#FFFDF9] p-4 rounded-xl border border-[#E2ECE7]">
+                  {selectedPaymentMethod === "BCA" ? (
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-xs font-bold text-[#332219]">Bank BCA</span>
+                        <span className="text-[11px] text-[#4E6B5D] font-semibold">
+                          a.n Lauk at Me / Umma
+                        </span>
+                      </div>
+                      <div className="bg-[#FAF6F0] p-3 rounded-lg border border-[#E2ECE7] flex items-center justify-between">
+                        <span className="text-base font-mono font-bold text-[#332219]">
+                          810-551-3964
+                        </span>
+                        <button
+                          onClick={handleCopyAccount}
+                          className="bg-[#FFFFFF] border border-[#E2ECE7] hover:border-[#4E6B5D] text-[#332219] text-xs font-semibold px-2.5 py-1 rounded flex items-center gap-1 transition-all"
+                        >
+                          {isAccountCopied ? (
+                            <>
+                              <Check className="w-3.5 h-3.5 text-[#166534]" />
+                              <span className="text-[#166534]">Tersalin</span>
+                            </>
+                          ) : (
+                            <>
+                              <Copy className="w-3.5 h-3.5 text-[#7A6254]" />
+                              <span>Salin Rekening</span>
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="text-center">
+                      <span className="text-xs font-bold text-[#332219] block mb-2">
+                        Scan QRIS (Gopay / OVO / Dana / ShopeePay / BCA Mobile)
+                      </span>
+                      <div className="bg-white p-3 rounded-xl border border-[#E2ECE7] inline-block shadow-sm">
+                        {/* AUTHENTIC SVG QRIS DUMMY */}
+                        <svg className="w-40 h-40 mx-auto" viewBox="0 0 200 200">
+                          <rect width="200" height="200" fill="#ffffff" rx="8" />
+                          <path d="M10 10 h60 v60 h-60 z" fill="#000000" />
+                          <path d="M20 20 h40 v40 h-40 z" fill="#ffffff" />
+                          <path d="M30 30 h20 v20 h-20 z" fill="#000000" />
+                          <path d="M130 10 h60 v60 h-60 z" fill="#000000" />
+                          <path d="M140 20 h40 v40 h-40 z" fill="#ffffff" />
+                          <path d="M150 30 h20 v20 h-20 z" fill="#000000" />
+                          <path d="M10 130 h60 v60 h-60 z" fill="#000000" />
+                          <path d="M20 140 h40 v40 h-40 z" fill="#ffffff" />
+                          <path d="M30 150 h20 v20 h-20 z" fill="#000000" />
+                          <rect x="90" y="20" width="20" height="40" fill="#000000" />
+                          <rect x="20" y="90" width="40" height="20" fill="#000000" />
+                          <rect x="90" y="90" width="40" height="40" fill="#000000" />
+                          <rect x="140" y="90" width="40" height="20" fill="#000000" />
+                          <rect x="90" y="140" width="20" height="40" fill="#000000" />
+                          <rect x="140" y="140" width="40" height="40" fill="#000000" />
+                          <text x="100" y="105" fontSize="12" fontWeight="bold" textAnchor="middle" fill="#FFFFFF">QRIS</text>
+                        </svg>
+                      </div>
+                      <span className="text-[11px] text-[#7A6254] block mt-2 font-medium">
+                        Lauk at Me — QRIS Resmi
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* REKOMENDASI TAMBAHAN: CATATAN KHUSUS PESANAN */}
+                <div className="mb-6">
+                  <label className="text-xs font-bold text-[#332219] block mb-1.5 flex items-center gap-1.5">
+                    <FileText className="w-3.5 h-3.5 text-[#4E6B5D]" />
+                    <span>Catatan Khusus Pesanan (Opsional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    placeholder="Contoh: Minta diantar sebelum jam 10 pagi, atau bungkus pisah"
+                    value={specialNotes}
+                    onChange={(e) => setSpecialNotes(e.target.value)}
+                    className="w-full px-3 py-2 rounded-lg border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-white"
+                  />
+                </div>
+
+                {/* CONFIRM ORDER BUTTON WITH MULTI-STAGE LOADING ANIMATION */}
+                <button
+                  onClick={handleProceedOrderWithAnimation}
+                  className="w-full bg-[#166534] hover:bg-[#14532d] active:scale-98 text-white font-bold text-sm py-3.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
+                >
+                  <PhoneCall className="w-4 h-4" />
+                  <span>Konfirmasi & Pesan via WA</span>
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* 9. FOOTER */}
       <footer className="bg-[#332219] text-[#FAF6F0] py-10 px-4 border-t border-[#523A2D] mt-16">
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8">
           <div>
