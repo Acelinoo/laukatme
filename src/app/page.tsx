@@ -75,7 +75,7 @@ const PRODUCTS: Product[] = [
     category: "Udang",
     pricePerKg: 55000,
     displayPriceText: "Rp 55.000 / kg",
-    image: "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=600&q=80",
+    image: "/images/udang%20vuname%20kecil.png",
     inStock: true,
     minWeightGram: 500,
     note: "Isi ± 200 pcs per kg. Manis alami & segar.",
@@ -87,7 +87,7 @@ const PRODUCTS: Product[] = [
     category: "Udang",
     pricePerKg: 80000,
     displayPriceText: "Rp 80.000 / kg",
-    image: "https://images.unsplash.com/photo-1559742811-822863c46c83?auto=format&fit=crop&w=600&q=80",
+    image: "/images/udang%20vuname%20sedang.png",
     inStock: true,
     minWeightGram: 500,
     isCatchOfDay: true,
@@ -100,7 +100,7 @@ const PRODUCTS: Product[] = [
     category: "Udang",
     pricePerKg: 100000,
     displayPriceText: "Rp 100.000 / kg",
-    image: "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=600&q=80",
+    image: "/images/udang%20vuname%20besar.png",
     inStock: true,
     minWeightGram: 500,
     isCatchOfDay: true,
@@ -113,7 +113,7 @@ const PRODUCTS: Product[] = [
     category: "Udang",
     pricePerKg: 110000,
     displayPriceText: "Rp 110.000 / kg",
-    image: "https://images.unsplash.com/photo-1559742811-822863c46c83?auto=format&fit=crop&w=600&q=80",
+    image: "/images/udang%20vuname%20sedang.png",
     inStock: true,
     minWeightGram: 250,
     note: "Praktis tanpa kulit, bersih siap langsung masak.",
@@ -130,7 +130,7 @@ const PRODUCTS: Product[] = [
     category: "Cumi",
     pricePerKg: 75000,
     displayPriceText: "Rp 75.000 / kg",
-    image: "https://images.unsplash.com/photo-1604908176997-125f25cc6f3d?auto=format&fit=crop&w=600&q=80",
+    image: "/images/cumi.png",
     inStock: true,
     minWeightGram: 500,
     isCatchOfDay: true,
@@ -145,7 +145,7 @@ const PRODUCTS: Product[] = [
     category: "Fillet",
     pricePerKg: 70000,
     displayPriceText: "Rp 70.000 / kg",
-    image: "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=80",
+    image: "/images/ikan%20kakap%20fillet.png",
     inStock: true,
     minWeightGram: 500,
     note: "Daging kakap bersih tanpa tulang & tanpa duri.",
@@ -157,7 +157,7 @@ const PRODUCTS: Product[] = [
     category: "Fillet",
     pricePerKg: 45000,
     displayPriceText: "Rp 45.000 / kg",
-    image: "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?auto=format&fit=crop&w=600&q=80",
+    image: "/images/ikan%20patin%20fillet.png",
     inStock: true,
     minWeightGram: 500,
     note: "Daging patin bersih siap goreng krispi atau sup.",
@@ -171,7 +171,7 @@ const PRODUCTS: Product[] = [
     category: "Ikan Utuh",
     pricePerKg: 65000,
     displayPriceText: "Rp 65.000 / kg",
-    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80",
+    image: "/images/ikan%20gurame.png",
     inStock: true,
     minWeightGram: 700,
     isCatchOfDay: true,
@@ -184,7 +184,7 @@ const PRODUCTS: Product[] = [
     category: "Ikan Utuh",
     pricePerKg: 85000,
     displayPriceText: "Rp 80.000 - 90.000 / kg",
-    image: "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?auto=format&fit=crop&w=600&q=80",
+    image: "/images/ikan%20tenggiri%20super.png",
     inStock: true,
     minWeightGram: 500,
     note: "Kualitas super. Dapat digiling halus (Bahan Pempek / Otak-otak).",
@@ -196,7 +196,7 @@ const PRODUCTS: Product[] = [
     category: "Ikan Utuh",
     pricePerKg: 62500,
     displayPriceText: "Rp 60.000 - 65.000 / kg",
-    image: "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?auto=format&fit=crop&w=600&q=80",
+    image: "/images/ikan%20tenggiri%20biasa.png",
     inStock: true,
     minWeightGram: 500,
     note: "Dapat digiling (Bahan olahan bakso / siomay).",
@@ -208,7 +208,7 @@ const PRODUCTS: Product[] = [
     category: "Ikan Utuh",
     pricePerKg: 65000,
     displayPriceText: "Rp 65.000 / kg",
-    image: "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?auto=format&fit=crop&w=600&q=80",
+    image: "/images/ikan%20nasi%20teri.png",
     inStock: true,
     minWeightGram: 250,
     note: "Teri nasi segar halus pilihan.",
@@ -220,7 +220,7 @@ const PRODUCTS: Product[] = [
     category: "Ikan Utuh",
     pricePerKg: 30000,
     displayPriceText: "Rp 30.000 / kg",
-    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80",
+    image: "/images/ikan%20patin%20daging.png",
     inStock: true,
     minWeightGram: 500,
     note: "Ikan patin segar potongan / utuh.",
@@ -232,7 +232,7 @@ const PRODUCTS: Product[] = [
     category: "Ikan Utuh",
     pricePerKg: 45000,
     displayPriceText: "Rp 45.000 / kg",
-    image: "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?auto=format&fit=crop&w=600&q=80",
+    image: "/images/ikan%20kembung.png",
     inStock: true,
     minWeightGram: 500,
     note: "Isi ± 11 ekor per kg. Gurih kaya gizi.",
@@ -244,7 +244,7 @@ const PRODUCTS: Product[] = [
     category: "Ikan Utuh",
     pricePerKg: 40000,
     displayPriceText: "Rp 40.000 / kg",
-    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80",
+    image: "/images/ikan%20kembung.png",
     inStock: true,
     minWeightGram: 500,
     note: "Ikan banjar kembung manis gurih.",
@@ -256,7 +256,7 @@ const PRODUCTS: Product[] = [
     category: "Ikan Utuh",
     pricePerKg: 180000,
     displayPriceText: "Rp 180.000 / kg",
-    image: "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?auto=format&fit=crop&w=600&q=80",
+    image: "/images/ikan%20bawal%20putih.png",
     inStock: true,
     minWeightGram: 500,
     isCatchOfDay: true,
@@ -269,7 +269,7 @@ const PRODUCTS: Product[] = [
     category: "Ikan Utuh",
     pricePerKg: 65000,
     displayPriceText: "Rp 65.000 / kg",
-    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80",
+    image: "/images/ikan%20bawal%20merah.png",
     inStock: true,
     minWeightGram: 500,
     note: "Bawal hitam segar cocok untuk bakar & tauco.",
@@ -281,7 +281,7 @@ const PRODUCTS: Product[] = [
     category: "Ikan Utuh",
     pricePerKg: 32500,
     displayPriceText: "Rp 30.000 - 35.000 / kg",
-    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80",
+    image: "/images/ikan%20nila.png",
     inStock: true,
     minWeightGram: 500,
     note: "Isi 3 - 5 ekor per kg. Segar gurih enak digoreng krispi.",
@@ -295,7 +295,7 @@ const PRODUCTS: Product[] = [
     category: "Kerang",
     pricePerKg: 27500,
     displayPriceText: "Rp 25.000 - 30.000 / kg",
-    image: "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?auto=format&fit=crop&w=600&q=80",
+    image: "/images/kerang%20dara%20kecil.png",
     inStock: true,
     minWeightGram: 1000,
     note: "Kerang dara segar muara ukuran kecil.",
@@ -307,7 +307,7 @@ const PRODUCTS: Product[] = [
     category: "Kerang",
     pricePerKg: 32500,
     displayPriceText: "Rp 30.000 - 35.000 / kg",
-    image: "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?auto=format&fit=crop&w=600&q=80",
+    image: "/images/kerang%20dara%20sedang.png",
     inStock: true,
     minWeightGram: 1000,
     note: "Kerang dara segar muara ukuran sedang.",
@@ -319,7 +319,7 @@ const PRODUCTS: Product[] = [
     category: "Kerang",
     pricePerKg: 37500,
     displayPriceText: "Rp 35.000 - 40.000 / kg",
-    image: "https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?auto=format&fit=crop&w=600&q=80",
+    image: "/images/kerang%20dara%20besar.png",
     inStock: true,
     minWeightGram: 1000,
     isCatchOfDay: true,
@@ -593,7 +593,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* PRODUCTS GRID */}
+        {/* PRODUCTS GRID WITH LOCAL IMAGES */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProducts.map((product) => (
             <div
@@ -601,16 +601,11 @@ export default function Home() {
               className="bg-[#FFFFFF] rounded-xl border border-[#E2ECE7] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
             >
               <div>
-                <div className="relative h-48 overflow-hidden bg-[#F4F9F6]">
+                <div className="relative h-52 overflow-hidden bg-[#F4F9F6]">
                   <img
                     src={product.image}
                     alt={product.name}
                     className="w-full h-full object-cover"
-                    onError={(e) => {
-                      // Fallback image if remote url fails
-                      (e.target as HTMLImageElement).src =
-                        "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?auto=format&fit=crop&w=600&q=80";
-                    }}
                   />
                   {product.isCatchOfDay && (
                     <span className="absolute top-3 left-3 bg-[#D97706] text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md shadow-sm">
@@ -675,11 +670,7 @@ export default function Home() {
               <img
                 src={selectedProductForModal.image}
                 alt={selectedProductForModal.name}
-                className="w-14 h-14 rounded-lg object-cover border border-[#E2ECE7] shrink-0"
-                onError={(e) => {
-                  (e.target as HTMLImageElement).src =
-                    "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?auto=format&fit=crop&w=600&q=80";
-                }}
+                className="w-16 h-16 rounded-lg object-cover border border-[#E2ECE7] shrink-0"
               />
               <div>
                 <h3 className="text-base font-bold text-[#332219]">
