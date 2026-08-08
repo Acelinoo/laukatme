@@ -15,6 +15,8 @@ import {
   Minus,
   X,
   MessageCircle,
+  Clock,
+  CalendarOff,
 } from "lucide-react";
 
 interface Product {
@@ -386,6 +388,7 @@ export default function Home() {
     const adminPhone = "6289667782004"; // WA Admin resmi Lauk at Me By Umma
 
     let message = `*HALO LAUK AT ME BY UMMA — PESANAN SEAFOOD SEGAR*\n\n`;
+    message += `📌 *Sistem Pemesanan:* Pre-Order H-1 (Hari Minggu OFF/Libur)\n\n`;
     message += `*Detail Pemesan:*\n`;
     message += `• Nama: ${customerName || "-"}\n`;
     message += `• Alamat: ${customerAddress || "-"}\n`;
@@ -405,29 +408,38 @@ export default function Home() {
     message += `• Kemasan Vakum: ${includeVacuum ? "Ya (+Rp 8.000)" : "Tidak"}\n\n`;
 
     message += `*Estimasi Total Biaya:* Rp ${calculateSubtotal().toLocaleString("id-ID")}\n\n`;
-    message += `_Catatan: Total pasti akan dikonfirmasi Admin via WA setelah timbangan fisik presisi dilakukan._`;
+    message += `_Catatan: Pengiriman dilakukan sesuai ketentuan Pemesanan H-1 (Senin-Sabtu). Total pasti dikonfirmasi Admin via WA setelah timbangan fisik presisi._`;
 
     return `https://wa.me/${adminPhone}?text=${encodeURIComponent(message)}`;
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF6F0] text-[#332219] antialiased font-sans">
-      {/* 1. TOP ANNOUNCEMENT BAR */}
-      <div className="bg-[#332219] text-[#FAF6F0] text-xs font-semibold py-2.5 px-4 text-center flex items-center justify-center gap-2">
-        <Sparkles className="w-3.5 h-3.5 text-[#D97706]" />
-        <span>
-          Lauk at Me By Umma — Seafood Mentah Segar & Kustom Sesuai Jenis Seafood! Hubungi WA: 089667782004
-        </span>
+    <div className="min-h-screen flex flex-col bg-[#FAF6F0] text-[#332219] antialiased font-sans transition-colors duration-200">
+      {/* 1. TOP ANNOUNCEMENT BAR (WITH PRE-ORDER H-1 & SUNDAY OFF NOTICE) */}
+      <div className="bg-[#332219] text-[#FAF6F0] text-xs font-semibold py-2.5 px-4 text-center flex flex-wrap items-center justify-center gap-x-4 gap-y-1 shadow-sm">
+        <div className="flex items-center gap-1.5">
+          <Clock className="w-3.5 h-3.5 text-[#D97706]" />
+          <span>Pemesanan H-1 (Dikirim Besok Hari)</span>
+        </div>
+        <span className="hidden sm:inline text-[#7A6254]">•</span>
+        <div className="flex items-center gap-1.5 text-[#F2ECE1]">
+          <CalendarOff className="w-3.5 h-3.5 text-[#991B1B]" />
+          <span>Hari Minggu OFF / Libur</span>
+        </div>
+        <span className="hidden sm:inline text-[#7A6254]">•</span>
+        <div className="flex items-center gap-1 text-[#D97706] font-bold">
+          <span>WA: 089667782004</span>
+        </div>
       </div>
 
       {/* 2. NAVIGATION BAR */}
-      <header className="sticky top-0 z-30 bg-[#FAF6F0]/95 backdrop-blur-md border-b border-[#E2ECE7] shadow-sm">
+      <header className="sticky top-0 z-30 bg-[#FAF6F0]/95 backdrop-blur-md border-b border-[#E2ECE7] shadow-sm transition-all duration-200">
         <div className="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 group cursor-pointer">
             <img
               src="/logo.png"
               alt="Lauk at Me By Umma Logo"
-              className="w-12 h-12 rounded-full object-cover border-2 border-[#4E6B5D] shadow-sm"
+              className="w-12 h-12 rounded-full object-cover border-2 border-[#4E6B5D] shadow-sm group-hover:scale-105 transition-transform duration-200"
             />
             <div>
               <span className="text-xl font-bold tracking-tight text-[#332219] font-display block leading-none">
@@ -444,7 +456,7 @@ export default function Home() {
               href="https://wa.me/6289667782004"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden md:flex items-center gap-2 bg-[#EBF2EE] text-[#4E6B5D] px-3.5 py-2 rounded-lg text-xs font-semibold hover:bg-[#4E6B5D] hover:text-white transition-all border border-[#E2ECE7]"
+              className="hidden md:flex items-center gap-2 bg-[#EBF2EE] text-[#4E6B5D] px-3.5 py-2 rounded-lg text-xs font-semibold hover:bg-[#4E6B5D] hover:text-white transition-all duration-200 border border-[#E2ECE7]"
             >
               <PhoneCall className="w-3.5 h-3.5" />
               <span>089667782004</span>
@@ -452,12 +464,12 @@ export default function Home() {
 
             <button
               onClick={() => setIsCheckoutOpen(true)}
-              className="relative flex items-center gap-2 bg-[#FFFFFF] border border-[#E2ECE7] hover:border-[#4E6B5D] px-4 py-2.5 rounded-lg shadow-sm text-xs font-bold text-[#332219] transition-all"
+              className="relative flex items-center gap-2 bg-[#FFFFFF] border border-[#E2ECE7] hover:border-[#4E6B5D] active:scale-95 px-4 py-2.5 rounded-lg shadow-sm text-xs font-bold text-[#332219] transition-all duration-200"
             >
               <ShoppingBag className="w-4 h-4 text-[#4E6B5D]" />
               <span className="hidden sm:inline">Pesanan Saya</span>
               {cart.length > 0 && (
-                <span className="bg-[#4E6B5D] text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                <span className="bg-[#4E6B5D] text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center animate-in zoom-in-50 duration-150">
                   {cart.length}
                 </span>
               )}
@@ -466,13 +478,19 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 3. HERO SECTION WITH LOGO BRANDING */}
+      {/* 3. HERO SECTION WITH LOGO BRANDING & SCHEDULE BADGES */}
       <section className="relative overflow-hidden pt-10 pb-14 px-4 border-b border-[#E2ECE7] bg-[#FAF6F0]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-7">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EBF2EE] text-[#4E6B5D] text-xs font-bold mb-4 border border-[#E2ECE7]">
-              <Sparkles className="w-3.5 h-3.5 text-[#D97706]" />
-              <span>Menu & Price List Resmi Lauk at Me By Umma</span>
+            <div className="flex flex-wrap items-center gap-2 mb-4">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EBF2EE] text-[#4E6B5D] text-[11px] font-bold border border-[#E2ECE7]">
+                <Clock className="w-3.5 h-3.5 text-[#D97706]" />
+                <span>Pemesanan H-1</span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF6F0] text-[#991B1B] text-[11px] font-bold border border-[#E2ECE7]">
+                <CalendarOff className="w-3.5 h-3.5" />
+                <span>Minggu OFF / Libur</span>
+              </div>
             </div>
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#332219] leading-[1.2] mb-4 font-display">
@@ -481,13 +499,13 @@ export default function Home() {
 
             <p className="text-sm sm:text-base text-[#523A2D] leading-relaxed mb-6 max-w-xl">
               Melayani penjualan udang vaname, cumi, gurame, bawal, fillet, dan kerang dara segar.
-              Lengkap dengan fasilitas <strong className="text-[#332219]">kustomisasi potongan spesifik</strong> (potong ring cumi, kupas udang, fillet, atau giling tenggiri).
+              Sistem <strong className="text-[#332219]">Pre-Order H-1</strong> (Pesan hari ini, dikirim besok). Hari Minggu toko libur.
             </p>
 
             <div className="flex flex-wrap items-center gap-4">
               <a
                 href="#katalog"
-                className="bg-[#4E6B5D] hover:bg-[#3B5447] text-white font-semibold px-6 py-3.5 rounded-lg text-xs sm:text-sm transition-all shadow-sm flex items-center gap-2"
+                className="bg-[#4E6B5D] hover:bg-[#3B5447] active:scale-95 text-white font-semibold px-6 py-3.5 rounded-lg text-xs sm:text-sm transition-all duration-200 shadow-sm flex items-center gap-2"
               >
                 <span>Lihat Menu & Harga ({PRODUCTS.length} Item)</span>
                 <ChevronRight className="w-4 h-4" />
@@ -500,11 +518,11 @@ export default function Home() {
           </div>
 
           <div className="md:col-span-5 flex justify-center">
-            <div className="bg-[#FFFFFF] p-4 rounded-2xl border border-[#E2ECE7] shadow-md max-w-xs text-center">
+            <div className="bg-[#FFFFFF] p-4 rounded-2xl border border-[#E2ECE7] shadow-md max-w-xs text-center hover:shadow-lg transition-shadow duration-200">
               <img
                 src="/logo.png"
                 alt="Logo Lauk at Me By Umma"
-                className="w-44 h-44 mx-auto rounded-full object-cover border-4 border-[#4E6B5D] mb-3 shadow-inner"
+                className="w-44 h-44 mx-auto rounded-full object-cover border-4 border-[#4E6B5D] mb-3 shadow-inner hover:scale-105 transition-transform duration-200"
               />
               <h3 className="text-base font-bold text-[#332219]">Lauk at Me</h3>
               <p className="text-xs text-[#4E6B5D] font-semibold mb-2">By Umma</p>
@@ -519,7 +537,7 @@ export default function Home() {
       {/* 4. VALUE HIGHLIGHTS */}
       <section className="py-8 px-4 bg-[#FFFDF9] border-b border-[#E2ECE7]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm flex items-center gap-3.5">
+          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5">
             <div className="p-2.5 rounded-lg bg-[#EBF2EE] text-[#4E6B5D] shrink-0">
               <Scissors className="w-5 h-5" />
             </div>
@@ -531,19 +549,19 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm flex items-center gap-3.5">
+          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5">
             <div className="p-2.5 rounded-lg bg-[#EBF2EE] text-[#4E6B5D] shrink-0">
-              <Scale className="w-5 h-5" />
+              <Clock className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-xs font-bold text-[#332219]">Timbangan Akurat</h4>
+              <h4 className="text-xs font-bold text-[#332219]">Pemesanan H-1</h4>
               <p className="text-[11px] text-[#7A6254]">
-                Perhitungan estimasi otomatis berbasis gramasi/kg.
+                Pesan H-1 untuk jaminan kesegaran maksimal. Hari Minggu OFF.
               </p>
             </div>
           </div>
 
-          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm flex items-center gap-3.5">
+          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5">
             <div className="p-2.5 rounded-lg bg-[#EBF2EE] text-[#4E6B5D] shrink-0">
               <MessageCircle className="w-5 h-5" />
             </div>
@@ -581,9 +599,9 @@ export default function Home() {
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all ${
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all duration-200 ${
                   selectedCategory === cat
-                    ? "bg-[#4E6B5D] text-white shadow-sm"
+                    ? "bg-[#4E6B5D] text-white shadow-sm scale-105"
                     : "bg-[#FFFFFF] text-[#523A2D] border border-[#E2ECE7] hover:border-[#4E6B5D]"
                 }`}
               >
@@ -593,19 +611,19 @@ export default function Home() {
           </div>
         </div>
 
-        {/* PRODUCTS GRID WITH LOCAL IMAGES */}
+        {/* PRODUCTS GRID WITH LIGHTWEIGHT CARDS & SMOOTH HOVER TRANSITIONS */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredProducts.map((product) => (
             <div
               key={product.id}
-              className="bg-[#FFFFFF] rounded-xl border border-[#E2ECE7] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+              className="bg-[#FFFFFF] rounded-xl border border-[#E2ECE7] overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between"
             >
               <div>
-                <div className="relative h-52 overflow-hidden bg-[#F4F9F6]">
+                <div className="relative h-52 overflow-hidden bg-[#F4F9F6] group">
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
                   />
                   {product.isCatchOfDay && (
                     <span className="absolute top-3 left-3 bg-[#D97706] text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md shadow-sm">
@@ -644,7 +662,7 @@ export default function Home() {
               <div className="p-4 sm:p-5 pt-0">
                 <button
                   onClick={() => openCustomizeModal(product)}
-                  className="w-full bg-[#4E6B5D] hover:bg-[#3B5447] text-white text-xs font-semibold py-2.5 rounded-lg transition-all flex items-center justify-center gap-2 shadow-sm"
+                  className="w-full bg-[#4E6B5D] hover:bg-[#3B5447] active:scale-98 text-white text-xs font-semibold py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
                 >
                   <Scissors className="w-3.5 h-3.5" />
                   <span>Pilih Berat & Jenis Potongan</span>
@@ -655,13 +673,13 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. MODAL CUSTOMIZATION (CATEGORY SPECIFIC CUT OPTIONS) */}
+      {/* 6. MODAL CUSTOMIZATION (WITH SMOOTH FADE & ZOOM ANIMATION) */}
       {selectedProductForModal && (
-        <div className="fixed inset-0 z-50 bg-[#332219]/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-md w-full p-6 shadow-xl relative animate-in fade-in zoom-in duration-150">
+        <div className="fixed inset-0 z-50 bg-[#332219]/40 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-200">
+          <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-md w-full p-6 shadow-xl relative animate-in fade-in zoom-in-95 duration-200">
             <button
               onClick={() => setSelectedProductForModal(null)}
-              className="absolute top-4 right-4 text-[#7A6254] hover:text-[#332219] p-1 rounded-lg hover:bg-[#FAF6F0]"
+              className="absolute top-4 right-4 text-[#7A6254] hover:text-[#332219] p-1 rounded-lg hover:bg-[#FAF6F0] transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -690,7 +708,7 @@ export default function Home() {
               <div className="flex items-center gap-3 bg-[#FAF6F0] p-2 rounded-xl border border-[#E2ECE7]">
                 <button
                   onClick={() => setModalWeight((w) => Math.max(250, w - 250))}
-                  className="w-8 h-8 rounded-lg bg-white border border-[#E2ECE7] text-[#332219] font-bold flex items-center justify-center hover:bg-[#EBF2EE]"
+                  className="w-8 h-8 rounded-lg bg-white border border-[#E2ECE7] text-[#332219] font-bold flex items-center justify-center hover:bg-[#EBF2EE] active:scale-95 transition-all"
                 >
                   <Minus className="w-4 h-4" />
                 </button>
@@ -704,7 +722,7 @@ export default function Home() {
                 </div>
                 <button
                   onClick={() => setModalWeight((w) => w + 250)}
-                  className="w-8 h-8 rounded-lg bg-white border border-[#E2ECE7] text-[#332219] font-bold flex items-center justify-center hover:bg-[#EBF2EE]"
+                  className="w-8 h-8 rounded-lg bg-white border border-[#E2ECE7] text-[#332219] font-bold flex items-center justify-center hover:bg-[#EBF2EE] active:scale-95 transition-all"
                 >
                   <Plus className="w-4 h-4" />
                 </button>
@@ -721,7 +739,7 @@ export default function Home() {
                   <button
                     key={option}
                     onClick={() => setModalCut(option)}
-                    className={`w-full text-left px-3.5 py-2.5 rounded-lg text-xs font-medium border transition-all flex items-center justify-between ${
+                    className={`w-full text-left px-3.5 py-2.5 rounded-lg text-xs font-medium border transition-all duration-150 flex items-center justify-between ${
                       modalCut === option
                         ? "border-[#4E6B5D] bg-[#EBF2EE] text-[#4E6B5D] font-bold"
                         : "border-[#E2ECE7] bg-white text-[#523A2D] hover:border-[#4E6B5D]"
@@ -746,7 +764,7 @@ export default function Home() {
 
             <button
               onClick={handleAddToCart}
-              className="w-full bg-[#4E6B5D] hover:bg-[#3B5447] text-white font-semibold text-xs sm:text-sm py-3 rounded-lg transition-all shadow-sm"
+              className="w-full bg-[#4E6B5D] hover:bg-[#3B5447] active:scale-98 text-white font-semibold text-xs sm:text-sm py-3 rounded-lg transition-all duration-200 shadow-sm"
             >
               Masukkan ke Pesanan Saya
             </button>
@@ -756,8 +774,8 @@ export default function Home() {
 
       {/* 7. CHECKOUT DRAWER / MODAL */}
       {isCheckoutOpen && (
-        <div className="fixed inset-0 z-50 bg-[#332219]/40 backdrop-blur-sm flex justify-end">
-          <div className="bg-[#FFFFFF] w-full max-w-md h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-200">
+        <div className="fixed inset-0 z-50 bg-[#332219]/40 backdrop-blur-sm flex justify-end transition-opacity duration-200">
+          <div className="bg-[#FFFFFF] w-full max-w-md h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-250">
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-[#E2ECE7] mb-5">
                 <div className="flex items-center gap-2">
@@ -767,16 +785,27 @@ export default function Home() {
                       Daftar Pesanan Lauk at Me
                     </h2>
                     <span className="text-[11px] text-[#7A6254]">
-                      Pemesanan Langsung via WA Admin: 089667782004
+                      WA Admin: 089667782004
                     </span>
                   </div>
                 </div>
                 <button
                   onClick={() => setIsCheckoutOpen(false)}
-                  className="text-[#7A6254] hover:text-[#332219] p-1"
+                  className="text-[#7A6254] hover:text-[#332219] p-1 transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
+              </div>
+
+              {/* H-1 & SUNDAY OFF DISCLAIMER IN DRAWER */}
+              <div className="bg-[#FAF6F0] p-3 rounded-xl border border-[#E2ECE7] mb-4 text-xs space-y-1">
+                <div className="flex items-center gap-1.5 text-[#332219] font-bold">
+                  <Clock className="w-3.5 h-3.5 text-[#D97706]" />
+                  <span>Ketentuan Pemesanan H-1</span>
+                </div>
+                <p className="text-[11px] text-[#7A6254] leading-relaxed">
+                  Pesanan diproses H-1 untuk menjaga kesegaran produk. <strong>Hari Minggu Toko OFF / Libur</strong> (Pesanan Sabtu dikirim Senin).
+                </p>
               </div>
 
               {cart.length === 0 ? (
@@ -796,7 +825,7 @@ export default function Home() {
                     {cart.map((item, idx) => (
                       <div
                         key={idx}
-                        className="bg-[#FAF6F0] p-3 rounded-xl border border-[#E2ECE7] flex items-start justify-between gap-3"
+                        className="bg-[#FAF6F0] p-3 rounded-xl border border-[#E2ECE7] flex items-start justify-between gap-3 hover:border-[#4E6B5D] transition-colors"
                       >
                         <div className="flex-1">
                           <h4 className="text-xs font-bold text-[#332219]">
@@ -828,7 +857,7 @@ export default function Home() {
                       Opsi Kemasan Tambahan
                     </h3>
                     <div className="space-y-2">
-                      <label className="flex items-center justify-between p-3 rounded-lg border border-[#E2ECE7] bg-[#FFFDF9] cursor-pointer text-xs">
+                      <label className="flex items-center justify-between p-3 rounded-lg border border-[#E2ECE7] bg-[#FFFDF9] cursor-pointer text-xs hover:border-[#4E6B5D] transition-colors">
                         <div className="flex items-center gap-2">
                           <input
                             type="checkbox"
@@ -841,7 +870,7 @@ export default function Home() {
                         <span className="text-[#7A6254]">+Rp 5.000</span>
                       </label>
 
-                      <label className="flex items-center justify-between p-3 rounded-lg border border-[#E2ECE7] bg-[#FFFDF9] cursor-pointer text-xs">
+                      <label className="flex items-center justify-between p-3 rounded-lg border border-[#E2ECE7] bg-[#FFFDF9] cursor-pointer text-xs hover:border-[#4E6B5D] transition-colors">
                         <div className="flex items-center gap-2">
                           <input
                             type="checkbox"
@@ -867,7 +896,7 @@ export default function Home() {
                         placeholder="Nama Pemesan"
                         value={customerName}
                         onChange={(e) => setCustomerName(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-white"
+                        className="w-full px-3 py-2 rounded-lg border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-white transition-colors"
                       />
                     </div>
                     <div>
@@ -876,14 +905,14 @@ export default function Home() {
                         value={customerAddress}
                         onChange={(e) => setCustomerAddress(e.target.value)}
                         rows={2}
-                        className="w-full px-3 py-2 rounded-lg border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-white"
+                        className="w-full px-3 py-2 rounded-lg border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-white transition-colors"
                       />
                     </div>
                     <div>
                       <select
                         value={courierOption}
                         onChange={(e) => setCourierOption(e.target.value)}
-                        className="w-full px-3 py-2 rounded-lg border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-white"
+                        className="w-full px-3 py-2 rounded-lg border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-white transition-colors"
                       >
                         <option value="Instant (Gojek/Grab)">Kurir Instant (Gojek / Grab)</option>
                         <option value="Same Day (Pagi Hari)">Kurir Same Day (Pagi Hari)</option>
@@ -909,7 +938,7 @@ export default function Home() {
                   href={generateWhatsAppURL()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full bg-[#166534] hover:bg-[#14532d] text-white font-bold text-xs py-3.5 rounded-lg transition-all flex items-center justify-center gap-2 shadow-sm"
+                  className="w-full bg-[#166534] hover:bg-[#14532d] active:scale-98 text-white font-bold text-xs py-3.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
                 >
                   <PhoneCall className="w-4 h-4" />
                   <span>Kirim Pesanan Ke WA (089667782004)</span>
@@ -932,9 +961,13 @@ export default function Home() {
               />
               <span className="text-base font-bold font-display">Lauk at Me By Umma</span>
             </div>
-            <p className="text-xs text-[#FAF6F0]/70 leading-relaxed">
+            <p className="text-xs text-[#FAF6F0]/70 leading-relaxed mb-3">
               Toko online seafood mentah dan segar. Melayani pembelian udang, cumi, bawal, gurame, fillet, dan kerang dara dengan kustomisasi potongan gratis.
             </p>
+            <div className="inline-flex items-center gap-2 bg-[#FAF6F0]/10 px-3 py-1.5 rounded-lg text-[11px] text-[#D97706] font-semibold border border-[#523A2D]">
+              <Clock className="w-3.5 h-3.5" />
+              <span>Pre-Order H-1 | Hari Minggu OFF / Libur</span>
+            </div>
           </div>
 
           <div>
