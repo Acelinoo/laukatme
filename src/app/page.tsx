@@ -17,7 +17,13 @@ import {
   MessageCircle,
   Clock,
   CalendarOff,
+  Copy,
+  Check,
+  Utensils,
+  Award,
 } from "lucide-react";
+import CountUp from "@/components/CountUp";
+import AnimatedList from "@/components/AnimatedList";
 
 interface Product {
   id: string;
@@ -25,11 +31,15 @@ interface Product {
   category: "Ikan Utuh" | "Udang" | "Kerang" | "Cumi" | "Fillet";
   pricePerKg: number;
   displayPriceText: string;
+  originalPriceText?: string;
+  discountBadge?: string;
   image: string;
   isCatchOfDay?: boolean;
+  isBestSeller?: boolean;
   inStock: boolean;
   minWeightGram: number;
   note?: string;
+  portionEstimate: string;
   availableCutOptions: string[];
 }
 
@@ -81,6 +91,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 500,
     note: "Isi ± 200 pcs per kg. Manis alami & segar.",
+    portionEstimate: "🍽️ 1 kg cukup untuk 4-5 porsi keluarga",
     availableCutOptions: SHRIMP_CUT_OPTIONS,
   },
   {
@@ -93,7 +104,9 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 500,
     isCatchOfDay: true,
+    isBestSeller: true,
     note: "Ukuran medium pas untuk olahan asam manis atau mentega.",
+    portionEstimate: "🍽️ 1 kg cukup untuk 3-4 porsi keluarga",
     availableCutOptions: SHRIMP_CUT_OPTIONS,
   },
   {
@@ -102,11 +115,15 @@ const PRODUCTS: Product[] = [
     category: "Udang",
     pricePerKg: 100000,
     displayPriceText: "Rp 100.000 / kg",
+    originalPriceText: "Rp 115.000",
+    discountBadge: "Hemat 13%",
     image: "/images/udang%20vuname%20besar.png",
     inStock: true,
     minWeightGram: 500,
     isCatchOfDay: true,
+    isBestSeller: true,
     note: "Ukuran besar padat berisi. Sangat populer untuk udang bakar.",
+    portionEstimate: "🍽️ 1 kg cukup untuk 3-4 porsi besar",
     availableCutOptions: SHRIMP_CUT_OPTIONS,
   },
   {
@@ -119,6 +136,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 250,
     note: "Praktis tanpa kulit, bersih siap langsung masak.",
+    portionEstimate: "🍽️ 1 kg cukup untuk 5-6 porsi tumis",
     availableCutOptions: [
       "Bersih Bersih Siap Masak (Gratis)",
       "Buang Urat Kotoran Punggung (Gratis)",
@@ -132,11 +150,15 @@ const PRODUCTS: Product[] = [
     category: "Cumi",
     pricePerKg: 75000,
     displayPriceText: "Rp 75.000 / kg",
+    originalPriceText: "Rp 85.000",
+    discountBadge: "Promo Diskon",
     image: "/images/cumi.png",
     inStock: true,
     minWeightGram: 500,
     isCatchOfDay: true,
+    isBestSeller: true,
     note: "Bisa dipotong ring sedang / kecil (Gratis). Daging kenyal & segar.",
+    portionEstimate: "🍽️ 1 kg cukup untuk 4-5 porsi olahan ring",
     availableCutOptions: SQUID_CUT_OPTIONS,
   },
 
@@ -151,6 +173,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 500,
     note: "Daging kakap bersih tanpa tulang & tanpa duri.",
+    portionEstimate: "🍽️ 1 kg cukup untuk 4-5 porsi fillet steak",
     availableCutOptions: FILLET_CUT_OPTIONS,
   },
   {
@@ -163,6 +186,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 500,
     note: "Daging patin bersih siap goreng krispi atau sup.",
+    portionEstimate: "🍽️ 1 kg cukup untuk 4-5 porsi goreng krispi",
     availableCutOptions: FILLET_CUT_OPTIONS,
   },
 
@@ -178,6 +202,7 @@ const PRODUCTS: Product[] = [
     minWeightGram: 700,
     isCatchOfDay: true,
     note: "Ikan gurame dalam keadaan hidup. Bersih sisik & insang gratis.",
+    portionEstimate: "🍽️ 1 kg berisi 1-2 ekor (3-4 porsi bakar/terbang)",
     availableCutOptions: FISH_CUT_OPTIONS,
   },
   {
@@ -186,10 +211,14 @@ const PRODUCTS: Product[] = [
     category: "Ikan Utuh",
     pricePerKg: 85000,
     displayPriceText: "Rp 80.000 - 90.000 / kg",
+    originalPriceText: "Rp 100.000",
+    discountBadge: "Best Seller",
     image: "/images/ikan%20tenggiri%20super.png",
     inStock: true,
     minWeightGram: 500,
+    isBestSeller: true,
     note: "Kualitas super. Dapat digiling halus (Bahan Pempek / Otak-otak).",
+    portionEstimate: "🍽️ 1 kg giling cukup untuk 40-50 pcs pempek",
     availableCutOptions: TENGGIRI_CUT_OPTIONS,
   },
   {
@@ -202,6 +231,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 500,
     note: "Dapat digiling (Bahan olahan bakso / siomay).",
+    portionEstimate: "🍽️ 1 kg giling cukup untuk 30-40 pcs siomay",
     availableCutOptions: TENGGIRI_CUT_OPTIONS,
   },
   {
@@ -214,6 +244,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 250,
     note: "Teri nasi segar halus pilihan.",
+    portionEstimate: "🍽️ 1 kg cukup untuk 6-8 porsi rempeyek / tumisan",
     availableCutOptions: ["Bersih Cuci Tiriskan (Gratis)"],
   },
   {
@@ -226,6 +257,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 500,
     note: "Ikan patin segar potongan / utuh.",
+    portionEstimate: "🍽️ 1 kg berisi 2-3 ekor (4-5 porsi sup)",
     availableCutOptions: FISH_CUT_OPTIONS,
   },
   {
@@ -238,6 +270,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 500,
     note: "Isi ± 11 ekor per kg. Gurih kaya gizi.",
+    portionEstimate: "🍽️ 1 kg berisi ± 11 ekor (5-6 porsi makan)",
     availableCutOptions: FISH_CUT_OPTIONS,
   },
   {
@@ -250,6 +283,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 500,
     note: "Ikan banjar kembung manis gurih.",
+    portionEstimate: "🍽️ 1 kg berisi ± 10 ekor (4-5 porsi)",
     availableCutOptions: FISH_CUT_OPTIONS,
   },
   {
@@ -258,11 +292,15 @@ const PRODUCTS: Product[] = [
     category: "Ikan Utuh",
     pricePerKg: 180000,
     displayPriceText: "Rp 180.000 / kg",
+    originalPriceText: "Rp 200.000",
+    discountBadge: "Diskon 10%",
     image: "/images/ikan%20bawal%20putih.png",
     inStock: true,
     minWeightGram: 500,
     isCatchOfDay: true,
+    isBestSeller: true,
     note: "Isi 3 - 4 ekor per kg. Kelas restoran & kualitas istimewa.",
+    portionEstimate: "🍽️ 1 kg berisi 3-4 ekor (4 porsi spesial)",
     availableCutOptions: FISH_CUT_OPTIONS,
   },
   {
@@ -275,6 +313,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 500,
     note: "Bawal hitam segar cocok untuk bakar & tauco.",
+    portionEstimate: "🍽️ 1 kg berisi 3-4 ekor (3-4 porsi bakar)",
     availableCutOptions: FISH_CUT_OPTIONS,
   },
   {
@@ -287,6 +326,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 500,
     note: "Isi 3 - 5 ekor per kg. Segar gurih enak digoreng krispi.",
+    portionEstimate: "🍽️ 1 kg berisi 3-5 ekor (4-5 porsi goreng)",
     availableCutOptions: FISH_CUT_OPTIONS,
   },
 
@@ -301,6 +341,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 1000,
     note: "Kerang dara segar muara ukuran kecil.",
+    portionEstimate: "🍽️ 1 kg cukup untuk 2-3 porsi rebus muara",
     availableCutOptions: CLAM_CUT_OPTIONS,
   },
   {
@@ -313,6 +354,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 1000,
     note: "Kerang dara segar muara ukuran sedang.",
+    portionEstimate: "🍽️ 1 kg cukup untuk 2-3 porsi saus padang",
     availableCutOptions: CLAM_CUT_OPTIONS,
   },
   {
@@ -326,6 +368,7 @@ const PRODUCTS: Product[] = [
     minWeightGram: 1000,
     isCatchOfDay: true,
     note: "Kerang dara segar muara ukuran besar padat.",
+    portionEstimate: "🍽️ 1 kg cukup untuk 2-3 porsi rebus besar",
     availableCutOptions: CLAM_CUT_OPTIONS,
   },
 ];
@@ -342,6 +385,7 @@ export default function Home() {
   const [customerName, setCustomerName] = useState<string>("");
   const [customerAddress, setCustomerAddress] = useState<string>("");
   const [courierOption, setCourierOption] = useState<string>("Instant (Gojek/Grab)");
+  const [isCopied, setIsCopied] = useState<boolean>(false);
 
   const categories = ["Semua", "Ikan Utuh", "Udang", "Cumi", "Kerang", "Fillet"];
 
@@ -383,12 +427,10 @@ export default function Home() {
     return itemsTotal + iceGelCost + vacuumCost;
   };
 
-  const generateWhatsAppURL = () => {
-    if (cart.length === 0) return "#";
-    const adminPhone = "6289667782004"; // WA Admin resmi Lauk at Me By Umma
-
+  const buildOrderSummaryText = () => {
+    if (cart.length === 0) return "";
     let message = `*HALO LAUK AT ME BY UMMA — PESANAN SEAFOOD SEGAR*\n\n`;
-    message += `📌 *Sistem Pemesanan:* Pre-Order H-1 (Hari Minggu OFF/Libur)\n\n`;
+    message += `📌 *Sistem Pemesanan:* Pre-Order H-1 (Order sebelum 18:00 WIB | Minggu OFF)\n\n`;
     message += `*Detail Pemesan:*\n`;
     message += `• Nama: ${customerName || "-"}\n`;
     message += `• Alamat: ${customerAddress || "-"}\n`;
@@ -408,18 +450,119 @@ export default function Home() {
     message += `• Kemasan Vakum: ${includeVacuum ? "Ya (+Rp 8.000)" : "Tidak"}\n\n`;
 
     message += `*Estimasi Total Biaya:* Rp ${calculateSubtotal().toLocaleString("id-ID")}\n\n`;
-    message += `_Catatan: Pengiriman dilakukan sesuai ketentuan Pemesanan H-1 (Senin-Sabtu). Total pasti dikonfirmasi Admin via WA setelah timbangan fisik presisi._`;
-
-    return `https://wa.me/${adminPhone}?text=${encodeURIComponent(message)}`;
+    message += `_Catatan: Pengiriman dilakukan H-1 (Senin-Sabtu). Total pasti dikonfirmasi Admin via WA setelah timbangan fisik presisi._`;
+    return message;
   };
+
+  const generateWhatsAppURL = () => {
+    const text = buildOrderSummaryText();
+    if (!text) return "#";
+    const adminPhone = "6289667782004";
+    return `https://wa.me/${adminPhone}?text=${encodeURIComponent(text)}`;
+  };
+
+  const handleCopyOrderSummary = async () => {
+    const text = buildOrderSummaryText();
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      setIsCopied(true);
+      setTimeout(() => setIsCopied(false), 2500);
+    } catch (err) {
+      console.error("Failed to copy order text", err);
+    }
+  };
+
+  const renderProductCard = (product: Product) => (
+    <div
+      key={product.id}
+      className="bg-[#FFFFFF] rounded-xl border border-[#E2ECE7] overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 flex flex-col justify-between h-full"
+    >
+      <div>
+        <div className="relative h-52 overflow-hidden bg-[#F4F9F6] group">
+          <img
+            src={product.image}
+            alt={product.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
+          />
+          <div className="absolute top-3 left-3 flex flex-col gap-1.5 items-start">
+            {product.isCatchOfDay && (
+              <span className="bg-[#D97706] text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md shadow-sm">
+                Catch of the Day
+              </span>
+            )}
+            {product.isBestSeller && (
+              <span className="bg-[#166534] text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md shadow-sm flex items-center gap-1">
+                <Award className="w-3 h-3" /> Best Seller
+              </span>
+            )}
+          </div>
+
+          {product.discountBadge && (
+            <span className="absolute top-3 right-3 bg-[#991B1B] text-white text-[10px] font-bold px-2 py-1 rounded-md shadow-sm">
+              {product.discountBadge}
+            </span>
+          )}
+
+          <span className="absolute bottom-3 right-3 bg-[#FFFFFF]/95 backdrop-blur-sm text-[#166534] text-[11px] font-semibold px-2.5 py-0.5 rounded border border-[#E2ECE7]">
+            Tersedia
+          </span>
+        </div>
+
+        <div className="p-4 sm:p-5">
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[11px] font-bold text-[#6C8276] uppercase tracking-wider">
+              {product.category}
+            </span>
+          </div>
+          <h3 className="text-base font-bold text-[#332219] mb-1">
+            {product.name}
+          </h3>
+
+          {/* PORTION ESTIMATE */}
+          <div className="text-[11px] font-semibold text-[#4E6B5D] mb-2 bg-[#EBF2EE] px-2.5 py-1 rounded-md inline-block">
+            {product.portionEstimate}
+          </div>
+
+          {product.note && (
+            <p className="text-xs text-[#7A6254] mb-3 leading-relaxed bg-[#FAF6F0] p-2 rounded-lg border border-[#E2ECE7]">
+              💡 {product.note}
+            </p>
+          )}
+
+          {/* HARGA CORET / DISCOUNT DISPLAY */}
+          <div className="flex items-baseline gap-2 pt-2 border-t border-[#E2ECE7] mt-3">
+            <span className="text-lg font-bold text-[#332219]">
+              {product.displayPriceText}
+            </span>
+            {product.originalPriceText && (
+              <span className="text-xs text-[#7A6254] line-through">
+                {product.originalPriceText}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="p-4 sm:p-5 pt-0">
+        <button
+          onClick={() => openCustomizeModal(product)}
+          className="w-full bg-[#4E6B5D] hover:bg-[#3B5447] active:scale-98 text-white text-xs font-semibold py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
+        >
+          <Scissors className="w-3.5 h-3.5" />
+          <span>Pilih Berat & Jenis Potongan</span>
+        </button>
+      </div>
+    </div>
+  );
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF6F0] text-[#332219] antialiased font-sans transition-colors duration-200">
-      {/* 1. TOP ANNOUNCEMENT BAR (WITH PRE-ORDER H-1 & SUNDAY OFF NOTICE) */}
+      {/* 1. TOP ANNOUNCEMENT BAR (WITH CUT-OFF TIME & SUNDAY OFF) */}
       <div className="bg-[#332219] text-[#FAF6F0] text-xs font-semibold py-2.5 px-4 text-center flex flex-wrap items-center justify-center gap-x-4 gap-y-1 shadow-sm">
         <div className="flex items-center gap-1.5">
           <Clock className="w-3.5 h-3.5 text-[#D97706]" />
-          <span>Pemesanan H-1 (Dikirim Besok Hari)</span>
+          <span>Pre-Order H-1 (Batas Order 18:00 WIB)</span>
         </div>
         <span className="hidden sm:inline text-[#7A6254]">•</span>
         <div className="flex items-center gap-1.5 text-[#F2ECE1]">
@@ -478,14 +621,14 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 3. HERO SECTION WITH LOGO BRANDING & SCHEDULE BADGES */}
+      {/* 3. HERO SECTION WITH REACT BITS <CountUp /> ANIMATION */}
       <section className="relative overflow-hidden pt-10 pb-14 px-4 border-b border-[#E2ECE7] bg-[#FAF6F0]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-7">
             <div className="flex flex-wrap items-center gap-2 mb-4">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EBF2EE] text-[#4E6B5D] text-[11px] font-bold border border-[#E2ECE7]">
                 <Clock className="w-3.5 h-3.5 text-[#D97706]" />
-                <span>Pemesanan H-1</span>
+                <span>Pemesanan H-1 (Batas 18:00 WIB)</span>
               </div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF6F0] text-[#991B1B] text-[11px] font-bold border border-[#E2ECE7]">
                 <CalendarOff className="w-3.5 h-3.5" />
@@ -499,10 +642,10 @@ export default function Home() {
 
             <p className="text-sm sm:text-base text-[#523A2D] leading-relaxed mb-6 max-w-xl">
               Melayani penjualan udang vaname, cumi, gurame, bawal, fillet, dan kerang dara segar.
-              Sistem <strong className="text-[#332219]">Pre-Order H-1</strong> (Pesan hari ini, dikirim besok). Hari Minggu toko libur.
+              Sistem <strong className="text-[#332219]">Pre-Order H-1</strong> (Pesan sebelum jam 18:00 WIB, dikirim besok pagi). Hari Minggu toko libur.
             </p>
 
-            <div className="flex flex-wrap items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4 mb-6">
               <a
                 href="#katalog"
                 className="bg-[#4E6B5D] hover:bg-[#3B5447] active:scale-95 text-white font-semibold px-6 py-3.5 rounded-lg text-xs sm:text-sm transition-all duration-200 shadow-sm flex items-center gap-2"
@@ -510,9 +653,34 @@ export default function Home() {
                 <span>Lihat Menu & Harga ({PRODUCTS.length} Item)</span>
                 <ChevronRight className="w-4 h-4" />
               </a>
-              <div className="flex items-center gap-2 text-xs font-semibold text-[#7A6254]">
-                <ShieldCheck className="w-4 h-4 text-[#166534]" />
+              <a
+                href="https://wa.me/6289667782004"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="bg-[#FFFFFF] border border-[#E2ECE7] hover:border-[#4E6B5D] text-[#332219] font-semibold px-5 py-3.5 rounded-lg text-xs sm:text-sm transition-all duration-200 shadow-sm flex items-center gap-2"
+              >
+                <PhoneCall className="w-4 h-4 text-[#166534]" />
                 <span>WA Admin: 089667782004</span>
+              </a>
+            </div>
+
+            {/* REACT BITS <CountUp /> STAT BADGE */}
+            <div className="inline-flex items-center gap-3 bg-[#FFFFFF] px-4 py-2.5 rounded-xl border border-[#E2ECE7] shadow-sm">
+              <div className="p-2 rounded-lg bg-[#EBF2EE] text-[#4E6B5D]">
+                <Sparkles className="w-4 h-4 text-[#D97706]" />
+              </div>
+              <div className="text-xs">
+                <span className="text-[#7A6254] block text-[11px]">Kepercayaan Pelanggan Pesisir</span>
+                <span className="text-base font-bold text-[#332219] flex items-center gap-1 font-display">
+                  <CountUp
+                    from={0}
+                    to={10000}
+                    separator="."
+                    duration={2.5}
+                    className="font-bold text-[#4E6B5D]"
+                  />
+                  <span>+ Orderan Terlayani</span>
+                </span>
               </div>
             </div>
           </div>
@@ -554,9 +722,9 @@ export default function Home() {
               <Clock className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-xs font-bold text-[#332219]">Pemesanan H-1</h4>
+              <h4 className="text-xs font-bold text-[#332219]">Pemesanan H-1 (Batas 18:00 WIB)</h4>
               <p className="text-[11px] text-[#7A6254]">
-                Pesan H-1 untuk jaminan kesegaran maksimal. Hari Minggu OFF.
+                Pesan hari ini sebelum jam 18:00 WIB, dikirim besok. Minggu OFF.
               </p>
             </div>
           </div>
@@ -575,7 +743,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. PRODUCT CATALOG SECTION */}
+      {/* 5. PRODUCT CATALOG SECTION WITH REACT BITS <AnimatedList /> IN MOBILE */}
       <section id="katalog" className="py-14 px-4 max-w-6xl mx-auto w-full flex-grow">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
@@ -611,69 +779,24 @@ export default function Home() {
           </div>
         </div>
 
-        {/* PRODUCTS GRID WITH LIGHTWEIGHT CARDS & SMOOTH HOVER TRANSITIONS */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProducts.map((product) => (
-            <div
-              key={product.id}
-              className="bg-[#FFFFFF] rounded-xl border border-[#E2ECE7] overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between"
-            >
-              <div>
-                <div className="relative h-52 overflow-hidden bg-[#F4F9F6] group">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
-                  />
-                  {product.isCatchOfDay && (
-                    <span className="absolute top-3 left-3 bg-[#D97706] text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md shadow-sm">
-                      Catch of the Day
-                    </span>
-                  )}
-                  <span className="absolute bottom-3 right-3 bg-[#FFFFFF]/95 backdrop-blur-sm text-[#166534] text-[11px] font-semibold px-2.5 py-0.5 rounded border border-[#E2ECE7]">
-                    Tersedia
-                  </span>
-                </div>
+        {/* MOBILE VIEW: REACT BITS <AnimatedList /> COMPONENT */}
+        <div className="block md:hidden">
+          <AnimatedList
+            items={filteredProducts}
+            showGradients={true}
+            enableArrowNavigation={true}
+            displayScrollbar={false}
+            renderItem={(product) => renderProductCard(product)}
+          />
+        </div>
 
-                <div className="p-4 sm:p-5">
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-[11px] font-bold text-[#6C8276] uppercase tracking-wider">
-                      {product.category}
-                    </span>
-                  </div>
-                  <h3 className="text-base font-bold text-[#332219] mb-1">
-                    {product.name}
-                  </h3>
-
-                  {product.note && (
-                    <p className="text-xs text-[#7A6254] mb-3 leading-relaxed bg-[#FAF6F0] p-2 rounded-lg border border-[#E2ECE7]">
-                      💡 {product.note}
-                    </p>
-                  )}
-
-                  <div className="flex items-baseline gap-1 pt-2 border-t border-[#E2ECE7] mt-3">
-                    <span className="text-lg font-bold text-[#332219]">
-                      {product.displayPriceText}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="p-4 sm:p-5 pt-0">
-                <button
-                  onClick={() => openCustomizeModal(product)}
-                  className="w-full bg-[#4E6B5D] hover:bg-[#3B5447] active:scale-98 text-white text-xs font-semibold py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
-                >
-                  <Scissors className="w-3.5 h-3.5" />
-                  <span>Pilih Berat & Jenis Potongan</span>
-                </button>
-              </div>
-            </div>
-          ))}
+        {/* DESKTOP VIEW: HIGH PERFORMANCE GRID */}
+        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredProducts.map((product) => renderProductCard(product))}
         </div>
       </section>
 
-      {/* 6. MODAL CUSTOMIZATION (WITH SMOOTH FADE & ZOOM ANIMATION) */}
+      {/* 6. MODAL CUSTOMIZATION */}
       {selectedProductForModal && (
         <div className="fixed inset-0 z-50 bg-[#332219]/40 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-200">
           <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-md w-full p-6 shadow-xl relative animate-in fade-in zoom-in-95 duration-200">
@@ -696,6 +819,9 @@ export default function Home() {
                 </h3>
                 <span className="text-xs text-[#4E6B5D] font-bold">
                   {selectedProductForModal.displayPriceText}
+                </span>
+                <span className="text-[11px] text-[#7A6254] block mt-0.5">
+                  {selectedProductForModal.portionEstimate}
                 </span>
               </div>
             </div>
@@ -772,7 +898,7 @@ export default function Home() {
         </div>
       )}
 
-      {/* 7. CHECKOUT DRAWER / MODAL */}
+      {/* 7. CHECKOUT DRAWER / MODAL WITH COPY ORDER SUMMARY FEATURE */}
       {isCheckoutOpen && (
         <div className="fixed inset-0 z-50 bg-[#332219]/40 backdrop-blur-sm flex justify-end transition-opacity duration-200">
           <div className="bg-[#FFFFFF] w-full max-w-md h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-250">
@@ -801,10 +927,10 @@ export default function Home() {
               <div className="bg-[#FAF6F0] p-3 rounded-xl border border-[#E2ECE7] mb-4 text-xs space-y-1">
                 <div className="flex items-center gap-1.5 text-[#332219] font-bold">
                   <Clock className="w-3.5 h-3.5 text-[#D97706]" />
-                  <span>Ketentuan Pemesanan H-1</span>
+                  <span>Ketentuan Pre-Order H-1</span>
                 </div>
                 <p className="text-[11px] text-[#7A6254] leading-relaxed">
-                  Pesanan diproses H-1 untuk menjaga kesegaran produk. <strong>Hari Minggu Toko OFF / Libur</strong> (Pesanan Sabtu dikirim Senin).
+                  Batas order jam 18:00 WIB untuk dikirim besok. <strong>Hari Minggu Toko OFF / Libur</strong>.
                 </p>
               </div>
 
@@ -924,10 +1050,10 @@ export default function Home() {
               )}
             </div>
 
-            {/* CHECKOUT BUTTON */}
+            {/* CHECKOUT BUTTONS & COPY ORDER SUMMARY */}
             {cart.length > 0 && (
-              <div className="pt-4 border-t border-[#E2ECE7]">
-                <div className="flex items-center justify-between mb-4">
+              <div className="pt-4 border-t border-[#E2ECE7] space-y-2.5">
+                <div className="flex items-center justify-between mb-2">
                   <span className="text-xs text-[#7A6254]">Estimasi Total Biaya:</span>
                   <span className="text-base sm:text-lg font-bold text-[#332219]">
                     Rp {calculateSubtotal().toLocaleString("id-ID")}
@@ -938,11 +1064,29 @@ export default function Home() {
                   href={generateWhatsAppURL()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-full bg-[#166534] hover:bg-[#14532d] active:scale-98 text-white font-bold text-xs py-3.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
+                  className="w-full bg-[#166534] hover:bg-[#14532d] active:scale-98 text-white font-bold text-xs py-3 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
                 >
                   <PhoneCall className="w-4 h-4" />
                   <span>Kirim Pesanan Ke WA (089667782004)</span>
                 </a>
+
+                {/* COPY ORDER TEXT BUTTON */}
+                <button
+                  onClick={handleCopyOrderSummary}
+                  className="w-full bg-[#FFFFFF] hover:bg-[#FAF6F0] border border-[#E2ECE7] text-[#523A2D] font-semibold text-xs py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
+                >
+                  {isCopied ? (
+                    <>
+                      <Check className="w-4 h-4 text-[#166534]" />
+                      <span className="text-[#166534]">Ringkasan Pesanan Disalin!</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-4 h-4 text-[#7A6254]" />
+                      <span>Salin Ringkasan Pesanan</span>
+                    </>
+                  )}
+                </button>
               </div>
             )}
           </div>
@@ -966,7 +1110,7 @@ export default function Home() {
             </p>
             <div className="inline-flex items-center gap-2 bg-[#FAF6F0]/10 px-3 py-1.5 rounded-lg text-[11px] text-[#D97706] font-semibold border border-[#523A2D]">
               <Clock className="w-3.5 h-3.5" />
-              <span>Pre-Order H-1 | Hari Minggu OFF / Libur</span>
+              <span>Pre-Order H-1 (Batas 18:00 WIB) | Minggu OFF</span>
             </div>
           </div>
 
