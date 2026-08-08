@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+:root {
+  /* ==========================================================================
+     Laukatme Coastal / Sandy Beach Design Tokens
+     ========================================================================== */
+
+  /* Sand Beige (Latar Belakang Utama - Krem Pasir) */
+  --sand-beige: #FAF6F0;
+  --sand-beige-light: #FFFDF9;
+  --sand-beige-dark: #F2ECE1;
+
+  /* Deep Ocean Brown (Teks, Judul, & Tipografi Utama - Cokelat Tua) */
+  --deep-ocean-brown: #332219;
+  --deep-ocean-brown-light: #523A2D;
+  --deep-ocean-brown-muted: #7A6254;
+
+  /* Sea Foam White (Kartu Produk & Kontainer - Putih Buih Ombak) */
+  --sea-foam-white: #FFFFFF;
+  --sea-foam-subtle: #F4F9F6;
+  --sea-foam-border: #E2ECE7;
+
+  /* Soft Sage / Ocean Gray (Tombol CTA & Aksen Utama) */
+  --soft-sage: #4E6B5D;
+  --soft-sage-hover: #3B5447;
+  --soft-sage-light: #EBF2EE;
+  --ocean-gray: #6C8276;
+
+  /* Status Badges */
+  --catch-of-day: #D97706; /* Warm Amber */
+  --in-stock: #166534; /* Soft Emerald */
+  --out-of-stock: #991B1B; /* Soft Crimson */
+
+  /* System Semantics */
+  --background: var(--sand-beige);
+  --foreground: var(--deep-ocean-brown);
+  --surface: var(--sea-foam-white);
+  --surface-border: var(--sea-foam-border);
+  --primary: var(--soft-sage);
+  --primary-hover: var(--soft-sage-hover);
+  --primary-foreground: #FFFFFF;
+
+  /* Shadows (Subtle, Layered) */
+  --shadow-coastal-sm: 0 2px 4px rgba(51, 34, 25, 0.04);
+  --shadow-coastal-md: 0 4px 12px rgba(51, 34, 25, 0.06), 0 1px 3px rgba(51, 34, 25, 0.04);
+  --shadow-coastal-lg: 0 12px 24px rgba(51, 34, 25, 0.08), 0 2px 6px rgba(51, 34, 25, 0.04);
+}
+
+@theme inline {
+  --color-sand-beige: var(--sand-beige);
+  --color-sand-beige-light: var(--sand-beige-light);
+  --color-sand-beige-dark: var(--sand-beige-dark);
+
+  --color-deep-ocean-brown: var(--deep-ocean-brown);
+  --color-deep-ocean-brown-light: var(--deep-ocean-brown-light);
+  --color-deep-ocean-brown-muted: var(--deep-ocean-brown-muted);
+
+  --color-sea-foam-white: var(--sea-foam-white);
+  --color-sea-foam-subtle: var(--sea-foam-subtle);
+  --color-sea-foam-border: var(--sea-foam-border);
+
+  --color-soft-sage: var(--soft-sage);
+  --color-soft-sage-hover: var(--soft-sage-hover);
+  --color-soft-sage-light: var(--soft-sage-light);
+  --color-ocean-gray: var(--ocean-gray);
+
+  --color-catch-of-day: var(--catch-of-day);
+  --color-in-stock: var(--in-stock);
+  --color-out-of-stock: var(--out-of-stock);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-surface: var(--surface);
+  --color-surface-border: var(--surface-border);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --font-sans: var(--font-plus-jakarta-sans), system-ui, sans-serif;
+  --font-display: var(--font-plus-jakarta-sans), system-ui, sans-serif;
+
+  --shadow-coastal-sm: var(--shadow-coastal-sm);
+  --shadow-coastal-md: var(--shadow-coastal-md);
+  --shadow-coastal-lg: var(--shadow-coastal-lg);
+
+  --radius-coastal-sm: 6px;
+  --radius-coastal-md: 10px;
+  --radius-coastal-lg: 16px;
+}
+
+body {
+  background-color: var(--sand-beige);
+  color: var(--deep-ocean-brown);
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
