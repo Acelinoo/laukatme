@@ -525,10 +525,11 @@ export default function Home() {
     }, 2700);
   };
 
-  const renderProductCard = (product: Product) => (
+  const renderProductCard = (product: Product, index: number) => (
     <div
       key={product.id}
-      className="bg-[#FFFFFF] rounded-xl border border-[#E2ECE7] overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between h-full"
+      style={{ animationDelay: `${Math.min(index * 65, 450)}ms` }}
+      className="bg-[#FFFFFF] rounded-xl border border-[#E2ECE7] overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between h-full anim-slide-up"
     >
       <div>
         {/* PRODUCT IMAGE WITH CLICKABLE LIGHTBOX POPUP TRIGGER */}
@@ -543,8 +544,8 @@ export default function Home() {
           />
 
           {/* HOVER ZOOM ICON OVERLAY */}
-          <div className="absolute inset-0 bg-[#332219]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
-            <span className="bg-[#FFFFFF]/90 backdrop-blur-sm text-[#332219] text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-md transform scale-90 group-hover:scale-100 transition-transform duration-200">
+          <div className="absolute inset-0 bg-[#332219]/25 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center">
+            <span className="bg-[#FFFFFF]/90 backdrop-blur-sm text-[#332219] text-xs font-bold px-3.5 py-1.5 rounded-full flex items-center gap-1.5 shadow-md transform scale-90 group-hover:scale-100 transition-transform duration-200">
               <ZoomIn className="w-4 h-4 text-[#4E6B5D]" />
               <span>Lihat Foto Dekat</span>
             </span>
@@ -623,8 +624,8 @@ export default function Home() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF6F0] text-[#332219] antialiased font-sans transition-colors duration-200">
-      {/* 1. TOP ANNOUNCEMENT BAR (STAGGERED ON-LOAD ANIMATION 1) */}
-      <div className="bg-[#332219] text-[#FAF6F0] text-xs font-semibold py-2.5 px-4 text-center flex flex-wrap items-center justify-center gap-x-4 gap-y-1 shadow-sm animate-in fade-in slide-in-from-top duration-300">
+      {/* 1. TOP ANNOUNCEMENT BAR (CSS REFRESH ANIMATION: SLIDE DOWN) */}
+      <div className="bg-[#332219] text-[#FAF6F0] text-xs font-semibold py-2.5 px-4 text-center flex flex-wrap items-center justify-center gap-x-4 gap-y-1 shadow-sm anim-slide-down">
         <div className="flex items-center gap-1.5">
           <Clock className="w-3.5 h-3.5 text-[#D97706]" />
           <span>Pre-Order H-1 (Batas Order 18:00 WIB)</span>
@@ -640,8 +641,8 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 2. NAVIGATION BAR (STAGGERED ON-LOAD ANIMATION 2) */}
-      <header className="sticky top-0 z-30 bg-[#FAF6F0]/95 backdrop-blur-md border-b border-[#E2ECE7] shadow-sm transition-all duration-200 animate-in fade-in slide-in-from-top-3 duration-400">
+      {/* 2. NAVIGATION BAR (CSS REFRESH ANIMATION: SLIDE DOWN WITH DELAY) */}
+      <header className="sticky top-0 z-30 bg-[#FAF6F0]/95 backdrop-blur-md border-b border-[#E2ECE7] shadow-sm transition-all duration-200 anim-slide-down anim-delay-150">
         <div className="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3 group cursor-pointer">
             <img
@@ -677,7 +678,7 @@ export default function Home() {
               <ShoppingBag className="w-4 h-4 text-[#4E6B5D]" />
               <span className="hidden sm:inline">Pesanan Saya</span>
               {cart.length > 0 && (
-                <span className="bg-[#4E6B5D] text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center animate-in zoom-in-50 duration-150">
+                <span className="bg-[#4E6B5D] text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
                   {cart.length}
                 </span>
               )}
@@ -686,10 +687,10 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 3. HERO SECTION (STAGGERED ON-LOAD ANIMATIONS 3 & 4) */}
+      {/* 3. HERO SECTION (CSS REFRESH ANIMATIONS: SLIDE LEFT & SLIDE RIGHT) */}
       <section className="relative overflow-hidden pt-10 pb-14 px-4 border-b border-[#E2ECE7] bg-[#FAF6F0]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-          <div className="md:col-span-7 animate-in fade-in slide-in-from-left-6 duration-500">
+          <div className="md:col-span-7 anim-slide-left anim-delay-250">
             <div className="flex flex-wrap items-center gap-2 mb-4">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EBF2EE] text-[#4E6B5D] text-[11px] font-bold border border-[#E2ECE7]">
                 <Clock className="w-3.5 h-3.5 text-[#D97706]" />
@@ -729,8 +730,8 @@ export default function Home() {
               </a>
             </div>
 
-            {/* REACT BITS <CountUp /> STAT BADGE */}
-            <div className="inline-flex items-center gap-3 bg-[#FFFFFF] px-4 py-2.5 rounded-xl border border-[#E2ECE7] shadow-sm animate-in fade-in zoom-in-95 duration-600">
+            {/* REACT BITS <CountUp /> STAT BADGE (ZOOM-IN ANIMATION) */}
+            <div className="inline-flex items-center gap-3 bg-[#FFFFFF] px-4 py-2.5 rounded-xl border border-[#E2ECE7] shadow-sm anim-zoom-in anim-delay-400">
               <div className="p-2 rounded-lg bg-[#EBF2EE] text-[#4E6B5D]">
                 <PackageCheck className="w-4.5 h-4.5 text-[#4E6B5D]" />
               </div>
@@ -747,7 +748,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="md:col-span-5 flex justify-center animate-in fade-in slide-in-from-right-6 zoom-in-95 duration-500">
+          <div className="md:col-span-5 flex justify-center anim-slide-right anim-delay-300">
             <div className="bg-[#FFFFFF] p-4 rounded-2xl border border-[#E2ECE7] shadow-md max-w-xs text-center hover:shadow-lg transition-shadow duration-200">
               <img
                 src="/logo.png"
@@ -764,10 +765,10 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. VALUE HIGHLIGHTS (STAGGERED ON-LOAD ANIMATION 5) */}
+      {/* 4. VALUE HIGHLIGHTS (CSS REFRESH ANIMATION: STAGGERED SLIDE UP CARDS) */}
       <section className="py-8 px-4 bg-[#FFFDF9] border-b border-[#E2ECE7]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5 animate-in fade-in slide-in-from-bottom-3 duration-400">
+          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5 anim-slide-up anim-delay-200">
             <div className="p-2.5 rounded-lg bg-[#EBF2EE] text-[#4E6B5D] shrink-0">
               <Scissors className="w-5 h-5" />
             </div>
@@ -779,7 +780,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5 animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5 anim-slide-up anim-delay-350">
             <div className="p-2.5 rounded-lg bg-[#EBF2EE] text-[#4E6B5D] shrink-0">
               <Clock className="w-5 h-5" />
             </div>
@@ -791,7 +792,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5 animate-in fade-in slide-in-from-bottom-5 duration-600">
+          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5 anim-slide-up anim-delay-500">
             <div className="p-2.5 rounded-lg bg-[#EBF2EE] text-[#4E6B5D] shrink-0">
               <MessageCircle className="w-5 h-5" />
             </div>
@@ -805,9 +806,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. PRODUCT CATALOG SECTION (STAGGERED ON-LOAD ANIMATION 6) */}
-      <section id="katalog" className="py-14 px-4 max-w-6xl mx-auto w-full flex-grow animate-in fade-in slide-in-from-bottom-6 duration-600">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+      {/* 5. PRODUCT CATALOG SECTION (CSS REFRESH ANIMATIONS FOR GRID ITEMS) */}
+      <section id="katalog" className="py-14 px-4 max-w-6xl mx-auto w-full flex-grow">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 anim-slide-down anim-delay-300">
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className="bg-[#4E6B5D] text-white text-[10px] font-bold px-2 py-0.5 rounded">
@@ -848,20 +849,20 @@ export default function Home() {
             showGradients={true}
             enableArrowNavigation={true}
             displayScrollbar={false}
-            renderItem={(product) => renderProductCard(product)}
+            renderItem={(product, idx) => renderProductCard(product, idx)}
           />
         </div>
 
-        {/* DESKTOP VIEW: HIGH PERFORMANCE GRID */}
+        {/* DESKTOP VIEW: STAGGERED ENTRANCE GRID */}
         <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProducts.map((product) => renderProductCard(product))}
+          {filteredProducts.map((product, idx) => renderProductCard(product, idx))}
         </div>
       </section>
 
       {/* 6. IMAGE LIGHTBOX / PREVIEW MODAL WITH SMOOTH ZOOM ANIMATION */}
       {previewProduct && (
-        <div className="fixed inset-0 z-50 bg-[#332219]/70 backdrop-blur-md flex items-center justify-center p-4 transition-opacity duration-250 animate-in fade-in">
-          <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-lg w-full p-5 shadow-2xl relative animate-in zoom-in-90 duration-250">
+        <div className="fixed inset-0 z-50 bg-[#332219]/70 backdrop-blur-md flex items-center justify-center p-4 transition-opacity duration-250 anim-zoom-in">
+          <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-lg w-full p-5 shadow-2xl relative">
             <button
               onClick={() => setPreviewProduct(null)}
               className="absolute top-3 right-3 text-[#7A6254] hover:text-[#332219] p-1.5 rounded-full bg-white/80 hover:bg-white shadow-md z-10 transition-all"
@@ -873,7 +874,7 @@ export default function Home() {
               <img
                 src={previewProduct.image}
                 alt={previewProduct.name}
-                className="w-full h-full object-cover animate-in zoom-in-95 duration-300"
+                className="w-full h-full object-cover anim-zoom-in"
               />
               {previewProduct.discountBadge && (
                 <span className="absolute top-3 left-3 bg-[#991B1B] text-white text-xs font-bold px-3 py-1 rounded-md shadow-md">
@@ -927,7 +928,7 @@ export default function Home() {
       {/* 7. MODAL CUSTOMIZATION */}
       {selectedProductForModal && (
         <div className="fixed inset-0 z-50 bg-[#332219]/40 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-200">
-          <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-md w-full p-6 shadow-xl relative animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-md w-full p-6 shadow-xl relative anim-zoom-in">
             <button
               onClick={() => setSelectedProductForModal(null)}
               className="absolute top-4 right-4 text-[#7A6254] hover:text-[#332219] p-1 rounded-lg hover:bg-[#FAF6F0] transition-colors"
@@ -1029,7 +1030,7 @@ export default function Home() {
       {/* 8. CHECKOUT DRAWER */}
       {isCheckoutOpen && (
         <div className="fixed inset-0 z-50 bg-[#332219]/40 backdrop-blur-sm flex justify-end transition-opacity duration-200">
-          <div className="bg-[#FFFFFF] w-full max-w-md h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto animate-in slide-in-from-right duration-250">
+          <div className="bg-[#FFFFFF] w-full max-w-md h-full shadow-2xl p-6 flex flex-col justify-between overflow-y-auto anim-slide-left">
             <div>
               <div className="flex items-center justify-between pb-4 border-b border-[#E2ECE7] mb-5">
                 <div className="flex items-center gap-2">
@@ -1221,7 +1222,7 @@ export default function Home() {
       {/* 9. PAYMENT METHOD POPUP */}
       {isPaymentModalOpen && (
         <div className="fixed inset-0 z-50 bg-[#332219]/50 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-lg w-full p-6 shadow-2xl relative my-8 animate-in fade-in zoom-in-95 duration-200">
+          <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-lg w-full p-6 shadow-2xl relative my-8 anim-zoom-in">
             {orderProcessingStage === 0 && (
               <button
                 onClick={() => setIsPaymentModalOpen(false)}
@@ -1446,7 +1447,7 @@ export default function Home() {
       )}
 
       {/* 10. FOOTER */}
-      <footer className="bg-[#332219] text-[#FAF6F0] py-10 px-4 border-t border-[#523A2D] mt-16">
+      <footer className="bg-[#332219] text-[#FAF6F0] py-10 px-4 border-t border-[#523A2D] mt-16 anim-slide-up anim-delay-600">
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center gap-2.5 mb-3">
