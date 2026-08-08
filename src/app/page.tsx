@@ -15,7 +15,6 @@ import {
   Minus,
   X,
   MessageCircle,
-  Info,
 } from "lucide-react";
 
 interface Product {
@@ -29,9 +28,44 @@ interface Product {
   inStock: boolean;
   minWeightGram: number;
   note?: string;
-  allowRingCut?: boolean;
-  allowGrindCut?: boolean;
+  availableCutOptions: string[];
 }
+
+// SPECIFIC CUT OPTIONS PER CATEGORY / TYPE
+const SHRIMP_CUT_OPTIONS = [
+  "Utuh Segar Kepala & Kulit (Gratis)",
+  "Kupas Kepala Saja (Gratis)",
+  "Kupas Kulit & Buang Urat Kotoran (Gratis)",
+];
+
+const SQUID_CUT_OPTIONS = [
+  "Utuh Bersih Tinta & Tulang Lunak (Gratis)",
+  "Potong Ring Cumi Sedang (Gratis)",
+  "Potong Ring Cumi Kecil (Gratis)",
+];
+
+const FISH_CUT_OPTIONS = [
+  "Utuh Bersih Sisik, Insang, & Isi Perut (Gratis)",
+  "Potong Steak / Irisan Melintang (Gratis)",
+  "Belah Dua Kipas / Olahan Bakar (Gratis)",
+];
+
+const TENGGIRI_CUT_OPTIONS = [
+  "Utuh Bersih Sisik & Insang (Gratis)",
+  "Potong Steak / Irisan (Gratis)",
+  "Giling Halus Bahan Pempek / Otak-Otak / Bakso (Gratis)",
+];
+
+const FILLET_CUT_OPTIONS = [
+  "Fillet Utuh Bersih Tanpa Duri (Gratis)",
+  "Potong Dadu / Bite Size (Gratis)",
+  "Potong Irisan Steak Fillet (Gratis)",
+];
+
+const CLAM_CUT_OPTIONS = [
+  "Utuh Segar Cuci Bersih Muara (Gratis)",
+  "Rebus Setengah Matang (Gratis)",
+];
 
 const PRODUCTS: Product[] = [
   // UDANG
@@ -45,6 +79,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 500,
     note: "Isi ± 200 pcs per kg. Manis alami & segar.",
+    availableCutOptions: SHRIMP_CUT_OPTIONS,
   },
   {
     id: "p2",
@@ -57,6 +92,7 @@ const PRODUCTS: Product[] = [
     minWeightGram: 500,
     isCatchOfDay: true,
     note: "Ukuran medium pas untuk olahan asam manis atau mentega.",
+    availableCutOptions: SHRIMP_CUT_OPTIONS,
   },
   {
     id: "p3",
@@ -64,11 +100,12 @@ const PRODUCTS: Product[] = [
     category: "Udang",
     pricePerKg: 100000,
     displayPriceText: "Rp 100.000 / kg",
-    image: "https://images.unsplash.com/photo-1559742811-822863c46c83?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=600&q=80",
     inStock: true,
     minWeightGram: 500,
     isCatchOfDay: true,
     note: "Ukuran besar padat berisi. Sangat populer untuk udang bakar.",
+    availableCutOptions: SHRIMP_CUT_OPTIONS,
   },
   {
     id: "p4",
@@ -76,16 +113,20 @@ const PRODUCTS: Product[] = [
     category: "Udang",
     pricePerKg: 110000,
     displayPriceText: "Rp 110.000 / kg",
-    image: "https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1559742811-822863c46c83?auto=format&fit=crop&w=600&q=80",
     inStock: true,
     minWeightGram: 250,
-    note: "Praktis tanpa kulit, bersih siap masak.",
+    note: "Praktis tanpa kulit, bersih siap langsung masak.",
+    availableCutOptions: [
+      "Bersih Bersih Siap Masak (Gratis)",
+      "Buang Urat Kotoran Punggung (Gratis)",
+    ],
   },
 
   // CUMI
   {
     id: "p5",
-    name: "Cumi-Cumi Segar",
+    name: "Cumi-Cumi Segar (1 kg)",
     category: "Cumi",
     pricePerKg: 75000,
     displayPriceText: "Rp 75.000 / kg",
@@ -93,8 +134,8 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 500,
     isCatchOfDay: true,
-    allowRingCut: true,
-    note: "Bisa dipotong ring sedang / kecil (Gratis). Daging kenyal manis.",
+    note: "Bisa dipotong ring sedang / kecil (Gratis). Daging kenyal & segar.",
+    availableCutOptions: SQUID_CUT_OPTIONS,
   },
 
   // FILLET
@@ -108,6 +149,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 500,
     note: "Daging kakap bersih tanpa tulang & tanpa duri.",
+    availableCutOptions: FILLET_CUT_OPTIONS,
   },
   {
     id: "p7",
@@ -119,6 +161,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 500,
     note: "Daging patin bersih siap goreng krispi atau sup.",
+    availableCutOptions: FILLET_CUT_OPTIONS,
   },
 
   // IKAN UTUH
@@ -133,6 +176,7 @@ const PRODUCTS: Product[] = [
     minWeightGram: 700,
     isCatchOfDay: true,
     note: "Ikan gurame dalam keadaan hidup. Bersih sisik & insang gratis.",
+    availableCutOptions: FISH_CUT_OPTIONS,
   },
   {
     id: "p9",
@@ -143,8 +187,8 @@ const PRODUCTS: Product[] = [
     image: "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?auto=format&fit=crop&w=600&q=80",
     inStock: true,
     minWeightGram: 500,
-    allowGrindCut: true,
     note: "Kualitas super. Dapat digiling halus (Bahan Pempek / Otak-otak).",
+    availableCutOptions: TENGGIRI_CUT_OPTIONS,
   },
   {
     id: "p10",
@@ -155,8 +199,8 @@ const PRODUCTS: Product[] = [
     image: "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?auto=format&fit=crop&w=600&q=80",
     inStock: true,
     minWeightGram: 500,
-    allowGrindCut: true,
     note: "Dapat digiling (Bahan olahan bakso / siomay).",
+    availableCutOptions: TENGGIRI_CUT_OPTIONS,
   },
   {
     id: "p11",
@@ -168,6 +212,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 250,
     note: "Teri nasi segar halus pilihan.",
+    availableCutOptions: ["Bersih Cuci Tiriskan (Gratis)"],
   },
   {
     id: "p12",
@@ -175,10 +220,11 @@ const PRODUCTS: Product[] = [
     category: "Ikan Utuh",
     pricePerKg: 30000,
     displayPriceText: "Rp 30.000 / kg",
-    image: "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80",
     inStock: true,
     minWeightGram: 500,
     note: "Ikan patin segar potongan / utuh.",
+    availableCutOptions: FISH_CUT_OPTIONS,
   },
   {
     id: "p13",
@@ -186,10 +232,11 @@ const PRODUCTS: Product[] = [
     category: "Ikan Utuh",
     pricePerKg: 45000,
     displayPriceText: "Rp 45.000 / kg",
-    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?auto=format&fit=crop&w=600&q=80",
     inStock: true,
     minWeightGram: 500,
     note: "Isi ± 11 ekor per kg. Gurih kaya gizi.",
+    availableCutOptions: FISH_CUT_OPTIONS,
   },
   {
     id: "p14",
@@ -201,6 +248,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 500,
     note: "Ikan banjar kembung manis gurih.",
+    availableCutOptions: FISH_CUT_OPTIONS,
   },
   {
     id: "p15",
@@ -208,11 +256,12 @@ const PRODUCTS: Product[] = [
     category: "Ikan Utuh",
     pricePerKg: 180000,
     displayPriceText: "Rp 180.000 / kg",
-    image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=600&q=80",
+    image: "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?auto=format&fit=crop&w=600&q=80",
     inStock: true,
     minWeightGram: 500,
     isCatchOfDay: true,
     note: "Isi 3 - 4 ekor per kg. Kelas restoran & kualitas istimewa.",
+    availableCutOptions: FISH_CUT_OPTIONS,
   },
   {
     id: "p16",
@@ -224,6 +273,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 500,
     note: "Bawal hitam segar cocok untuk bakar & tauco.",
+    availableCutOptions: FISH_CUT_OPTIONS,
   },
   {
     id: "p17",
@@ -235,6 +285,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 500,
     note: "Isi 3 - 5 ekor per kg. Segar gurih enak digoreng krispi.",
+    availableCutOptions: FISH_CUT_OPTIONS,
   },
 
   // KERANG
@@ -248,6 +299,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 1000,
     note: "Kerang dara segar muara ukuran kecil.",
+    availableCutOptions: CLAM_CUT_OPTIONS,
   },
   {
     id: "p19",
@@ -259,6 +311,7 @@ const PRODUCTS: Product[] = [
     inStock: true,
     minWeightGram: 1000,
     note: "Kerang dara segar muara ukuran sedang.",
+    availableCutOptions: CLAM_CUT_OPTIONS,
   },
   {
     id: "p20",
@@ -271,15 +324,8 @@ const PRODUCTS: Product[] = [
     minWeightGram: 1000,
     isCatchOfDay: true,
     note: "Kerang dara segar muara ukuran besar padat.",
+    availableCutOptions: CLAM_CUT_OPTIONS,
   },
-];
-
-const DEFAULT_CUT_OPTIONS = [
-  "Utuh Bersih Sisik & Insang (Gratis)",
-  "Potong Steak / Irisan (Gratis)",
-  "Fillet Bersih (Gratis)",
-  "Potong Cumi Ring (Gratis)",
-  "Giling Halus Bahan Pempek/Bakso (Gratis)",
 ];
 
 export default function Home() {
@@ -287,7 +333,7 @@ export default function Home() {
   const [cart, setCart] = useState<{ product: Product; weightGram: number; cutOption: string }[]>([]);
   const [selectedProductForModal, setSelectedProductForModal] = useState<Product | null>(null);
   const [modalWeight, setModalWeight] = useState<number>(1000);
-  const [modalCut, setModalCut] = useState<string>(DEFAULT_CUT_OPTIONS[0]);
+  const [modalCut, setModalCut] = useState<string>("");
   const [isCheckoutOpen, setIsCheckoutOpen] = useState<boolean>(false);
   const [includeIceGel, setIncludeIceGel] = useState<boolean>(true);
   const [includeVacuum, setIncludeVacuum] = useState<boolean>(false);
@@ -305,13 +351,7 @@ export default function Home() {
   const openCustomizeModal = (product: Product) => {
     setSelectedProductForModal(product);
     setModalWeight(product.minWeightGram);
-    if (product.allowRingCut) {
-      setModalCut("Potong Cumi Ring (Gratis)");
-    } else if (product.allowGrindCut) {
-      setModalCut("Giling Halus Bahan Pempek/Bakso (Gratis)");
-    } else {
-      setModalCut(DEFAULT_CUT_OPTIONS[0]);
-    }
+    setModalCut(product.availableCutOptions[0] || "Utuh Bersih (Gratis)");
   };
 
   const handleAddToCart = () => {
@@ -343,7 +383,7 @@ export default function Home() {
 
   const generateWhatsAppURL = () => {
     if (cart.length === 0) return "#";
-    const adminPhone = "6289667782004"; // WA Admin resmi dari Price List image
+    const adminPhone = "6289667782004"; // WA Admin resmi Lauk at Me By Umma
 
     let message = `*HALO LAUK AT ME BY UMMA — PESANAN SEAFOOD SEGAR*\n\n`;
     message += `*Detail Pemesan:*\n`;
@@ -355,7 +395,7 @@ export default function Home() {
     cart.forEach((item, index) => {
       const itemPrice = (item.product.pricePerKg * item.weightGram) / 1000;
       message += `${index + 1}. *${item.product.name}*\n`;
-      message += `   - Jumlah/Berat: ${item.weightGram} gram (${(item.weightGram / 1000).toFixed(1)} kg)\n`;
+      message += `   - Jumlah/Berat: ${item.weightGram} gram (${(item.weightGram / 1000).toFixed(2)} kg)\n`;
       message += `   - Spesifikasi Potongan: ${item.cutOption}\n`;
       message += `   - Estimasi Harga: Rp ${itemPrice.toLocaleString("id-ID")}\n\n`;
     });
@@ -376,7 +416,7 @@ export default function Home() {
       <div className="bg-[#332219] text-[#FAF6F0] text-xs font-semibold py-2.5 px-4 text-center flex items-center justify-center gap-2">
         <Sparkles className="w-3.5 h-3.5 text-[#D97706]" />
         <span>
-          Lauk at Me By Umma — Seafood Mentah Segar & Kustomisasi Potongan Bebas Biaya! Hubungi WA: 089667782004
+          Lauk at Me By Umma — Seafood Mentah Segar & Kustom Sesuai Jenis Seafood! Hubungi WA: 089667782004
         </span>
       </div>
 
@@ -388,10 +428,6 @@ export default function Home() {
               src="/logo.png"
               alt="Lauk at Me By Umma Logo"
               className="w-12 h-12 rounded-full object-cover border-2 border-[#4E6B5D] shadow-sm"
-              onError={(e) => {
-                // Fallback icon if logo file is loading
-                (e.target as HTMLElement).style.display = "none";
-              }}
             />
             <div>
               <span className="text-xl font-bold tracking-tight text-[#332219] font-display block leading-none">
@@ -436,7 +472,7 @@ export default function Home() {
           <div className="md:col-span-7">
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EBF2EE] text-[#4E6B5D] text-xs font-bold mb-4 border border-[#E2ECE7]">
               <Sparkles className="w-3.5 h-3.5 text-[#D97706]" />
-              <span>Menu & Daftar Harga Resmi Lauk at Me By Umma</span>
+              <span>Menu & Price List Resmi Lauk at Me By Umma</span>
             </div>
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#332219] leading-[1.2] mb-4 font-display">
@@ -445,7 +481,7 @@ export default function Home() {
 
             <p className="text-sm sm:text-base text-[#523A2D] leading-relaxed mb-6 max-w-xl">
               Melayani penjualan udang vaname, cumi, gurame, bawal, fillet, dan kerang dara segar.
-              Lengkap dengan fasilitas <strong className="text-[#332219]">kustomisasi gratis</strong> (potong ring, fillet, atau giling).
+              Lengkap dengan fasilitas <strong className="text-[#332219]">kustomisasi potongan spesifik</strong> (potong ring cumi, kupas udang, fillet, atau giling tenggiri).
             </p>
 
             <div className="flex flex-wrap items-center gap-4">
@@ -488,9 +524,9 @@ export default function Home() {
               <Scissors className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="text-xs font-bold text-[#332219]">Free Custom Cut</h4>
+              <h4 className="text-xs font-bold text-[#332219]">Kustom Potongan Spesifik</h4>
               <p className="text-[11px] text-[#7A6254]">
-                Gratis potong ring cumi, fillet, atau giling tenggiri.
+                Potongan disesuaikan jenis seafood (kupas udang, ring cumi, dll).
               </p>
             </div>
           </div>
@@ -521,7 +557,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. PRODUCT CATALOG SECTION (ALL 20 ITEMS FROM PRICE LIST) */}
+      {/* 5. PRODUCT CATALOG SECTION */}
       <section id="katalog" className="py-14 px-4 max-w-6xl mx-auto w-full flex-grow">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
           <div>
@@ -565,11 +601,16 @@ export default function Home() {
               className="bg-[#FFFFFF] rounded-xl border border-[#E2ECE7] overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
             >
               <div>
-                <div className="relative h-44 overflow-hidden bg-[#F4F9F6]">
+                <div className="relative h-48 overflow-hidden bg-[#F4F9F6]">
                   <img
                     src={product.image}
                     alt={product.name}
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      // Fallback image if remote url fails
+                      (e.target as HTMLImageElement).src =
+                        "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?auto=format&fit=crop&w=600&q=80";
+                    }}
                   />
                   {product.isCatchOfDay && (
                     <span className="absolute top-3 left-3 bg-[#D97706] text-white text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md shadow-sm">
@@ -611,7 +652,7 @@ export default function Home() {
                   className="w-full bg-[#4E6B5D] hover:bg-[#3B5447] text-white text-xs font-semibold py-2.5 rounded-lg transition-all flex items-center justify-center gap-2 shadow-sm"
                 >
                   <Scissors className="w-3.5 h-3.5" />
-                  <span>Pilih Berat & Kustom Potongan</span>
+                  <span>Pilih Berat & Jenis Potongan</span>
                 </button>
               </div>
             </div>
@@ -619,7 +660,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 6. MODAL CUSTOMIZATION */}
+      {/* 6. MODAL CUSTOMIZATION (CATEGORY SPECIFIC CUT OPTIONS) */}
       {selectedProductForModal && (
         <div className="fixed inset-0 z-50 bg-[#332219]/40 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-md w-full p-6 shadow-xl relative animate-in fade-in zoom-in duration-150">
@@ -630,11 +671,15 @@ export default function Home() {
               <X className="w-5 h-5" />
             </button>
 
-            <div className="flex items-center gap-3 mb-4">
+            <div className="flex items-center gap-3.5 mb-4">
               <img
                 src={selectedProductForModal.image}
                 alt={selectedProductForModal.name}
-                className="w-14 h-14 rounded-lg object-cover border border-[#E2ECE7]"
+                className="w-14 h-14 rounded-lg object-cover border border-[#E2ECE7] shrink-0"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src =
+                    "https://images.unsplash.com/photo-1534483509719-3feaee7c30da?auto=format&fit=crop&w=600&q=80";
+                }}
               />
               <div>
                 <h3 className="text-base font-bold text-[#332219]">
@@ -675,13 +720,13 @@ export default function Home() {
               </div>
             </div>
 
-            {/* CUT OPTION SELECTOR */}
+            {/* CUT OPTION SELECTOR (SPECIFIC TO THIS PRODUCT) */}
             <div className="mb-6">
               <label className="text-xs font-bold text-[#332219] block mb-2">
-                2. Spesifikasi Jenis Potongan (Gratis)
+                2. Spesifikasi Jenis Potongan ({selectedProductForModal.category})
               </label>
               <div className="space-y-2">
-                {DEFAULT_CUT_OPTIONS.map((option) => (
+                {selectedProductForModal.availableCutOptions.map((option) => (
                   <button
                     key={option}
                     onClick={() => setModalCut(option)}
@@ -693,7 +738,7 @@ export default function Home() {
                   >
                     <span>{option}</span>
                     {modalCut === option && (
-                      <CheckCircle2 className="w-4 h-4 text-[#4E6B5D]" />
+                      <CheckCircle2 className="w-4 h-4 text-[#4E6B5D] shrink-0" />
                     )}
                   </button>
                 ))}
