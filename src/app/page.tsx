@@ -405,15 +405,15 @@ export default function Home() {
   const [isAccountCopied, setIsAccountCopied] = useState<boolean>(false);
   const [orderProcessingStage, setOrderProcessingStage] = useState<number>(0);
 
-  // LIGHTNING-FAST 120MS LOADING SCREEN TRANSITION FOR MAXIMUM MOBILE LIGHTHOUSE SCORE
+  // LIGHTNING-FAST 100MS LOADING SCREEN TRANSITION FOR MAXIMUM ACCESSIBILITY & PERFORMANCE
   useEffect(() => {
     const exitTimer = setTimeout(() => {
       setIsLoadingExiting(true);
-    }, 120);
+    }, 100);
 
     const removeTimer = setTimeout(() => {
       setIsLoadingVisible(false);
-    }, 550);
+    }, 450);
 
     return () => {
       clearTimeout(exitTimer);
@@ -552,12 +552,11 @@ export default function Home() {
     >
       <div>
         {/* PRODUCT IMAGE WITH WEBP OPTIMIZATION & LAZY LOADING */}
-        <div
+        <button
+          type="button"
           onClick={() => setPreviewProduct(product)}
-          className="relative h-52 overflow-hidden bg-[#F4F9F6] group cursor-pointer"
+          className="relative h-52 w-full text-left overflow-hidden bg-[#F4F9F6] group cursor-pointer block border-0 p-0"
           aria-label={`Buka foto dekat ${product.name}`}
-          role="button"
-          tabIndex={0}
         >
           <Image
             src={product.image}
@@ -601,11 +600,11 @@ export default function Home() {
           <span className="absolute bottom-3 right-3 bg-[#FFFFFF]/95 backdrop-blur-sm text-[#166534] text-[11px] font-semibold px-2.5 py-0.5 rounded border border-[#E2ECE7]">
             Tersedia
           </span>
-        </div>
+        </button>
 
         <div className="p-4 sm:p-5">
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[11px] font-bold text-[#6C8276] uppercase tracking-wider">
+            <span className="text-[11px] font-bold text-[#4E6B5D] uppercase tracking-wider">
               {product.category}
             </span>
           </div>
@@ -614,12 +613,12 @@ export default function Home() {
           </h3>
 
           {/* PORTION ESTIMATE */}
-          <div className="text-[11px] font-semibold text-[#4E6B5D] mb-2 bg-[#EBF2EE] px-2.5 py-1 rounded-md inline-block">
+          <div className="text-[11px] font-semibold text-[#3B5447] mb-2 bg-[#EBF2EE] px-2.5 py-1 rounded-md inline-block">
             {product.portionEstimate}
           </div>
 
           {product.note && (
-            <p className="text-xs text-[#7A6254] mb-3 leading-relaxed bg-[#FAF6F0] p-2 rounded-lg border border-[#E2ECE7]">
+            <p className="text-xs text-[#523A2D] mb-3 leading-relaxed bg-[#FAF6F0] p-2 rounded-lg border border-[#E2ECE7]">
               💡 {product.note}
             </p>
           )}
@@ -630,7 +629,7 @@ export default function Home() {
               {product.displayPriceText}
             </span>
             {product.originalPriceText && (
-              <span className="text-xs text-[#7A6254] line-through">
+              <span className="text-xs text-[#523A2D] line-through">
                 {product.originalPriceText}
               </span>
             )}
@@ -640,6 +639,7 @@ export default function Home() {
 
       <div className="p-4 sm:p-5 pt-0">
         <button
+          type="button"
           onClick={() => openCustomizeModal(product)}
           aria-label={`Pilih berat dan jenis potongan ${product.name}`}
           className="w-full bg-[#4E6B5D] hover:bg-[#3B5447] active:scale-98 text-white text-xs font-semibold py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
@@ -691,17 +691,17 @@ export default function Home() {
       )}
 
       {/* 1. TOP ANNOUNCEMENT BAR */}
-      <aside aria-label="Pengumuman Jam Operasional" className="bg-[#332219] text-[#FAF6F0] text-xs font-semibold py-2.5 px-4 text-center flex flex-wrap items-center justify-center gap-x-4 gap-y-1 shadow-sm anim-slide-down">
+      <aside aria-label="Pengumuman Jam Operasional Toko" className="bg-[#332219] text-[#FAF6F0] text-xs font-semibold py-2.5 px-4 text-center flex flex-wrap items-center justify-center gap-x-4 gap-y-1 shadow-sm anim-slide-down">
         <div className="flex items-center gap-1.5">
           <Clock className="w-3.5 h-3.5 text-[#D97706]" />
           <span>Pre-Order H-1 (Batas Order 18:00 WIB)</span>
         </div>
-        <span className="hidden sm:inline text-[#7A6254]">•</span>
+        <span className="hidden sm:inline text-[#FAF6F0]/60">•</span>
         <div className="flex items-center gap-1.5 text-[#F2ECE1]">
           <CalendarOff className="w-3.5 h-3.5 text-[#991B1B]" />
           <span>Hari Minggu OFF / Libur</span>
         </div>
-        <span className="hidden sm:inline text-[#7A6254]">•</span>
+        <span className="hidden sm:inline text-[#FAF6F0]/60">•</span>
         <div className="flex items-center gap-1 text-[#D97706] font-bold">
           <span>WA: 089667782004</span>
         </div>
@@ -743,6 +743,7 @@ export default function Home() {
             </a>
 
             <button
+              type="button"
               onClick={() => setIsCheckoutOpen(true)}
               aria-label="Buka Daftar Pesanan Saya"
               className="relative flex items-center gap-2 bg-[#FFFFFF] border border-[#E2ECE7] hover:border-[#4E6B5D] active:scale-95 px-4 py-2.5 rounded-lg shadow-sm text-xs font-bold text-[#332219] transition-all duration-200"
@@ -835,7 +836,7 @@ export default function Home() {
                 />
                 <h3 className="text-base font-bold text-[#332219]">Lauk at Me</h3>
                 <p className="text-xs text-[#4E6B5D] font-semibold mb-2">By Umma</p>
-                <p className="text-[11px] text-[#7A6254] leading-normal">
+                <p className="text-[11px] text-[#523A2D] leading-normal">
                   Penyedia Bahan Seafood Mentah & Segar Kualitas Terjamin
                 </p>
               </div>
@@ -852,7 +853,7 @@ export default function Home() {
               </div>
               <div>
                 <h4 className="text-xs font-bold text-[#332219]">Kustom Potongan Spesifik</h4>
-                <p className="text-[11px] text-[#7A6254]">
+                <p className="text-[11px] text-[#523A2D]">
                   Potongan disesuaikan jenis seafood (kupas udang, ring cumi, dll).
                 </p>
               </div>
@@ -864,7 +865,7 @@ export default function Home() {
               </div>
               <div>
                 <h4 className="text-xs font-bold text-[#332219]">Pemesanan H-1 (Batas 18:00 WIB)</h4>
-                <p className="text-[11px] text-[#7A6254]">
+                <p className="text-[11px] text-[#523A2D]">
                   Pesan hari ini sebelum jam 18:00 WIB, dikirim besok. Minggu OFF.
                 </p>
               </div>
@@ -876,7 +877,7 @@ export default function Home() {
               </div>
               <div>
                 <h4 className="text-xs font-bold text-[#332219]">Order WA Fast Response</h4>
-                <p className="text-[11px] text-[#7A6254]">
+                <p className="text-[11px] text-[#523A2D]">
                   Pesan terformat otomatis dikirim ke 089667782004.
                 </p>
               </div>
@@ -896,16 +897,17 @@ export default function Home() {
               <h2 className="text-2xl sm:text-3xl font-bold text-[#332219] tracking-tight font-display">
                 Menu Seafood Lauk at Me By Umma
               </h2>
-              <p className="text-xs text-[#7A6254] mt-1">
+              <p className="text-xs text-[#523A2D] mt-1">
                 Pilih produk dan tentukan gramasi yang Anda butuhkan (Klik gambar untuk zoom detail foto).
               </p>
             </div>
 
             {/* CATEGORY FILTER BAR */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-2 md:pb-0 scrollbar-none" role="tablist" aria-label="Kategori Seafood">
-              <Filter className="w-4 h-4 text-[#7A6254] shrink-0 mr-1 hidden sm:block" />
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-2 md:pb-0 scrollbar-none" aria-label="Kategori Seafood">
+              <Filter className="w-4 h-4 text-[#523A2D] shrink-0 mr-1 hidden sm:block" />
               {categories.map((cat) => (
                 <button
+                  type="button"
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
                   aria-pressed={selectedCategory === cat}
@@ -945,9 +947,10 @@ export default function Home() {
         <div className="fixed inset-0 z-50 bg-[#332219]/70 backdrop-blur-md flex items-center justify-center p-4 transition-opacity duration-250 anim-zoom-in">
           <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-lg w-full p-5 shadow-2xl relative">
             <button
+              type="button"
               onClick={() => setPreviewProduct(null)}
               aria-label="Tutup preview foto"
-              className="absolute top-3 right-3 text-[#7A6254] hover:text-[#332219] p-1.5 rounded-full bg-white/80 hover:bg-white shadow-md z-10 transition-all"
+              className="absolute top-3 right-3 text-[#523A2D] hover:text-[#332219] p-1.5 rounded-full bg-white/80 hover:bg-white shadow-md z-10 transition-all"
             >
               <X className="w-5 h-5" />
             </button>
@@ -982,19 +985,20 @@ export default function Home() {
                   {previewProduct.displayPriceText}
                 </span>
                 {previewProduct.originalPriceText && (
-                  <span className="text-xs text-[#7A6254] line-through block">
+                  <span className="text-xs text-[#523A2D] line-through block">
                     {previewProduct.originalPriceText}
                   </span>
                 )}
               </div>
             </div>
 
-            <div className="text-xs text-[#7A6254] mb-4 bg-[#FAF6F0] p-2.5 rounded-lg border border-[#E2ECE7]">
+            <div className="text-xs text-[#523A2D] mb-4 bg-[#FAF6F0] p-2.5 rounded-lg border border-[#E2ECE7]">
               {previewProduct.portionEstimate} • {previewProduct.note}
             </div>
 
             <div className="flex items-center gap-3">
               <button
+                type="button"
                 onClick={() => {
                   const prod = previewProduct;
                   setPreviewProduct(null);
@@ -1015,9 +1019,10 @@ export default function Home() {
         <div className="fixed inset-0 z-50 bg-[#332219]/40 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity duration-200">
           <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-md w-full p-6 shadow-xl relative anim-zoom-in">
             <button
+              type="button"
               onClick={() => setSelectedProductForModal(null)}
               aria-label="Tutup kustomisasi produk"
-              className="absolute top-4 right-4 text-[#7A6254] hover:text-[#332219] p-1 rounded-lg hover:bg-[#FAF6F0] transition-colors"
+              className="absolute top-4 right-4 text-[#523A2D] hover:text-[#332219] p-1 rounded-lg hover:bg-[#FAF6F0] transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
@@ -1038,7 +1043,7 @@ export default function Home() {
                 <span className="text-xs text-[#4E6B5D] font-bold">
                   {selectedProductForModal.displayPriceText}
                 </span>
-                <span className="text-[11px] text-[#7A6254] block mt-0.5">
+                <span className="text-[11px] text-[#523A2D] block mt-0.5">
                   {selectedProductForModal.portionEstimate}
                 </span>
               </div>
@@ -1051,6 +1056,7 @@ export default function Home() {
               </label>
               <div className="flex items-center gap-3 bg-[#FAF6F0] p-2 rounded-xl border border-[#E2ECE7]">
                 <button
+                  type="button"
                   onClick={() => setModalWeight((w) => Math.max(250, w - 250))}
                   aria-label="Kurangi berat pesanan"
                   className="w-8 h-8 rounded-lg bg-white border border-[#E2ECE7] text-[#332219] font-bold flex items-center justify-center hover:bg-[#EBF2EE] active:scale-95 transition-all"
@@ -1061,11 +1067,12 @@ export default function Home() {
                   <span className="text-lg font-bold text-[#332219] block">
                     {modalWeight} gram
                   </span>
-                  <span className="text-[11px] text-[#7A6254]">
+                  <span className="text-[11px] text-[#523A2D]">
                     ({(modalWeight / 1000).toFixed(2)} kg)
                   </span>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setModalWeight((w) => w + 250)}
                   aria-label="Tambah berat pesanan"
                   className="w-8 h-8 rounded-lg bg-white border border-[#E2ECE7] text-[#332219] font-bold flex items-center justify-center hover:bg-[#EBF2EE] active:scale-95 transition-all"
@@ -1083,6 +1090,7 @@ export default function Home() {
               <div className="space-y-2">
                 {selectedProductForModal.availableCutOptions.map((option) => (
                   <button
+                    type="button"
                     key={option}
                     onClick={() => setModalCut(option)}
                     aria-label={`Pilih opsi potongan ${option}`}
@@ -1103,13 +1111,14 @@ export default function Home() {
 
             {/* PRICE SUMMARY */}
             <div className="bg-[#FAF6F0] p-3.5 rounded-xl border border-[#E2ECE7] mb-5 flex items-center justify-between">
-              <span className="text-xs text-[#7A6254]">Estimasi Harga Item:</span>
+              <span className="text-xs text-[#523A2D]">Estimasi Harga Item:</span>
               <span className="text-base font-bold text-[#332219]">
                 Rp {((selectedProductForModal.pricePerKg * modalWeight) / 1000).toLocaleString("id-ID")}
               </span>
             </div>
 
             <button
+              type="button"
               onClick={handleAddToCart}
               className="w-full bg-[#4E6B5D] hover:bg-[#3B5447] active:scale-98 text-white font-semibold text-xs sm:text-sm py-3 rounded-lg transition-all duration-200 shadow-sm"
             >
@@ -1131,15 +1140,16 @@ export default function Home() {
                     <h2 className="text-base font-bold text-[#332219]">
                       Daftar Pesanan Lauk at Me
                     </h2>
-                    <span className="text-[11px] text-[#7A6254]">
+                    <span className="text-[11px] text-[#523A2D]">
                       WA Admin: 089667782004
                     </span>
                   </div>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setIsCheckoutOpen(false)}
                   aria-label="Tutup daftar pesanan"
-                  className="text-[#7A6254] hover:text-[#332219] p-1 transition-colors"
+                  className="text-[#523A2D] hover:text-[#332219] p-1 transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -1151,7 +1161,7 @@ export default function Home() {
                   <Clock className="w-3.5 h-3.5 text-[#D97706]" />
                   <span>Ketentuan Pre-Order H-1</span>
                 </div>
-                <p className="text-[11px] text-[#7A6254] leading-relaxed">
+                <p className="text-[11px] text-[#523A2D] leading-relaxed">
                   Batas order jam 18:00 WIB untuk dikirim besok. <strong>Hari Minggu Toko OFF / Libur</strong>.
                 </p>
               </div>
@@ -1162,7 +1172,7 @@ export default function Home() {
                   <p className="text-xs font-bold text-[#332219] mb-1">
                     Pesanan Anda Masih Kosong
                   </p>
-                  <p className="text-[11px] text-[#7A6254]">
+                  <p className="text-[11px] text-[#523A2D]">
                     Silakan pilih seafood segar dari katalog di sebelah kiri.
                   </p>
                 </div>
@@ -1179,7 +1189,7 @@ export default function Home() {
                           <h4 className="text-xs font-bold text-[#332219]">
                             {item.product.name}
                           </h4>
-                          <span className="text-[11px] text-[#7A6254] block">
+                          <span className="text-[11px] text-[#523A2D] block">
                             Berat: {item.weightGram}g ({(item.weightGram / 1000).toFixed(2)} kg)
                           </span>
                           <span className="text-[11px] text-[#4E6B5D] font-medium block">
@@ -1190,6 +1200,7 @@ export default function Home() {
                           </span>
                         </div>
                         <button
+                          type="button"
                           onClick={() => removeFromCart(idx)}
                           aria-label={`Hapus ${item.product.name} dari keranjang`}
                           className="text-[#991B1B] text-xs font-semibold hover:underline p-1"
@@ -1216,7 +1227,7 @@ export default function Home() {
                           />
                           <span className="text-[#332219] font-medium">Ice Gel Ekstra</span>
                         </div>
-                        <span className="text-[#7A6254]">+Rp 5.000</span>
+                        <span className="text-[#523A2D]">+Rp 5.000</span>
                       </label>
 
                       <label className="flex items-center justify-between p-3 rounded-lg border border-[#E2ECE7] bg-[#FFFDF9] cursor-pointer text-xs hover:border-[#4E6B5D] transition-colors">
@@ -1229,7 +1240,7 @@ export default function Home() {
                           />
                           <span className="text-[#332219] font-medium">Kemasan Vakum Kedap</span>
                         </div>
-                        <span className="text-[#7A6254]">+Rp 8.000</span>
+                        <span className="text-[#523A2D]">+Rp 8.000</span>
                       </label>
                     </div>
                   </div>
@@ -1240,36 +1251,33 @@ export default function Home() {
                       Data Pengiriman Pelanggan
                     </h3>
                     <div>
-                      <label htmlFor="customerNameInput" className="sr-only">Nama Pemesan</label>
+                      <label htmlFor="customerNameInput" className="text-[11px] font-bold text-[#332219] block mb-1">Nama Pemesan</label>
                       <input
                         id="customerNameInput"
                         type="text"
                         placeholder="Nama Pemesan"
                         value={customerName}
                         onChange={(e) => setCustomerName(e.target.value)}
-                        aria-label="Nama pemesan"
                         className="w-full px-3 py-2 rounded-lg border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-white transition-colors"
                       />
                     </div>
                     <div>
-                      <label htmlFor="customerAddressInput" className="sr-only">Alamat Lengkap Pengiriman</label>
+                      <label htmlFor="customerAddressInput" className="text-[11px] font-bold text-[#332219] block mb-1">Alamat Lengkap Pengiriman</label>
                       <textarea
                         id="customerAddressInput"
                         placeholder="Alamat Lengkap Pengiriman"
                         value={customerAddress}
                         onChange={(e) => setCustomerAddress(e.target.value)}
-                        aria-label="Alamat lengkap pengiriman"
                         rows={2}
                         className="w-full px-3 py-2 rounded-lg border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-white transition-colors"
                       />
                     </div>
                     <div>
-                      <label htmlFor="courierOptionSelect" className="sr-only">Opsi Kurir Pengiriman</label>
+                      <label htmlFor="courierOptionSelect" className="text-[11px] font-bold text-[#332219] block mb-1">Opsi Kurir Pengiriman</label>
                       <select
                         id="courierOptionSelect"
                         value={courierOption}
                         onChange={(e) => setCourierOption(e.target.value)}
-                        aria-label="Opsi kurir pengiriman"
                         className="w-full px-3 py-2 rounded-lg border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-white transition-colors"
                       >
                         <option value="Instant (Gojek/Grab)">Kurir Instant (Gojek / Grab)</option>
@@ -1286,13 +1294,14 @@ export default function Home() {
             {cart.length > 0 && (
               <div className="pt-4 border-t border-[#E2ECE7] space-y-2.5">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-xs text-[#7A6254]">Estimasi Total Biaya:</span>
+                  <span className="text-xs text-[#523A2D]">Estimasi Total Biaya:</span>
                   <span className="text-base sm:text-lg font-bold text-[#332219]">
                     Rp {calculateSubtotal().toLocaleString("id-ID")}
                   </span>
                 </div>
 
                 <button
+                  type="button"
                   onClick={() => setIsPaymentModalOpen(true)}
                   className="w-full bg-[#166534] hover:bg-[#14532d] active:scale-98 text-white font-bold text-sm py-3.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
                 >
@@ -1301,6 +1310,7 @@ export default function Home() {
                 </button>
 
                 <button
+                  type="button"
                   onClick={handleCopyOrderSummary}
                   className="w-full bg-[#FFFFFF] hover:bg-[#FAF6F0] border border-[#E2ECE7] text-[#523A2D] font-semibold text-xs py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
                 >
@@ -1311,7 +1321,7 @@ export default function Home() {
                     </>
                   ) : (
                     <>
-                      <Copy className="w-4 h-4 text-[#7A6254]" />
+                      <Copy className="w-4 h-4 text-[#523A2D]" />
                       <span>Salin Ringkasan Pesanan</span>
                     </>
                   )}
@@ -1328,9 +1338,10 @@ export default function Home() {
           <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-lg w-full p-6 shadow-2xl relative my-8 anim-zoom-in">
             {orderProcessingStage === 0 && (
               <button
+                type="button"
                 onClick={() => setIsPaymentModalOpen(false)}
                 aria-label="Tutup modal metode pembayaran"
-                className="absolute top-4 right-4 text-[#7A6254] hover:text-[#332219] p-1 rounded-lg hover:bg-[#FAF6F0] transition-colors"
+                className="absolute top-4 right-4 text-[#523A2D] hover:text-[#332219] p-1 rounded-lg hover:bg-[#FAF6F0] transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1359,7 +1370,7 @@ export default function Home() {
                       📲 Membuka WhatsApp...
                     </h3>
                   )}
-                  <p className="text-xs text-[#7A6254]">
+                  <p className="text-xs text-[#523A2D]">
                     Mohon tunggu sebentar, Anda akan diarahkan ke WhatsApp Admin.
                   </p>
                 </div>
@@ -1386,7 +1397,7 @@ export default function Home() {
                     <h3 className="text-base font-bold text-[#332219]">
                       Detail & Metode Pembayaran
                     </h3>
-                    <span className="text-xs text-[#7A6254]">
+                    <span className="text-xs text-[#523A2D]">
                       Konfirmasi pesanan dan pilih opsi pembayaran Anda
                     </span>
                   </div>
@@ -1404,7 +1415,7 @@ export default function Home() {
                       <div key={idx} className="text-xs flex items-center justify-between">
                         <div>
                           <span className="font-semibold text-[#332219]">{item.product.name}</span>
-                          <span className="text-[11px] text-[#7A6254] block">
+                          <span className="text-[11px] text-[#523A2D] block">
                             {item.weightGram}g • {item.cutOption}
                           </span>
                         </div>
@@ -1422,6 +1433,7 @@ export default function Home() {
                   </label>
                   <div className="grid grid-cols-2 gap-3">
                     <button
+                      type="button"
                       onClick={() => setSelectedPaymentMethod("BCA")}
                       aria-label="Pilih metode Transfer Bank BCA"
                       className={`p-3 rounded-xl border text-left transition-all flex flex-col justify-between ${
@@ -1437,10 +1449,11 @@ export default function Home() {
                         )}
                       </div>
                       <span className="text-xs font-bold">Transfer BCA</span>
-                      <span className="text-[10px] text-[#7A6254] font-normal">810-551-3964</span>
+                      <span className="text-[10px] text-[#523A2D] font-normal">810-551-3964</span>
                     </button>
 
                     <button
+                      type="button"
                       onClick={() => setSelectedPaymentMethod("QRIS")}
                       aria-label="Pilih metode QRIS All Payment"
                       className={`p-3 rounded-xl border text-left transition-all flex flex-col justify-between ${
@@ -1456,7 +1469,7 @@ export default function Home() {
                         )}
                       </div>
                       <span className="text-xs font-bold">QRIS All Payment</span>
-                      <span className="text-[10px] text-[#7A6254] font-normal">Scan Kode QR</span>
+                      <span className="text-[10px] text-[#523A2D] font-normal">Scan Kode QR</span>
                     </button>
                   </div>
                 </div>
@@ -1475,6 +1488,7 @@ export default function Home() {
                           810-551-3964
                         </span>
                         <button
+                          type="button"
                           onClick={handleCopyAccount}
                           aria-label="Salin nomor rekening BCA"
                           className="bg-[#FFFFFF] border border-[#E2ECE7] hover:border-[#4E6B5D] text-[#332219] text-xs font-semibold px-2.5 py-1 rounded flex items-center gap-1 transition-all"
@@ -1486,7 +1500,7 @@ export default function Home() {
                             </>
                           ) : (
                             <>
-                              <Copy className="w-3.5 h-3.5 text-[#7A6254]" />
+                              <Copy className="w-3.5 h-3.5 text-[#523A2D]" />
                               <span>Salin Rekening</span>
                             </>
                           )}
@@ -1519,7 +1533,7 @@ export default function Home() {
                           <text x="100" y="105" fontSize="12" fontWeight="bold" textAnchor="middle" fill="#FFFFFF">QRIS</text>
                         </svg>
                       </div>
-                      <span className="text-[11px] text-[#7A6254] block mt-2 font-medium">
+                      <span className="text-[11px] text-[#523A2D] block mt-2 font-medium">
                         Lauk at Me — QRIS Resmi
                       </span>
                     </div>
@@ -1537,12 +1551,12 @@ export default function Home() {
                     placeholder="Contoh: Minta diantar sebelum jam 10 pagi, atau bungkus pisah"
                     value={specialNotes}
                     onChange={(e) => setSpecialNotes(e.target.value)}
-                    aria-label="Catatan khusus pesanan"
                     className="w-full px-3 py-2 rounded-lg border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-white"
                   />
                 </div>
 
                 <button
+                  type="button"
                   onClick={handleProceedOrderWithAnimation}
                   className="w-full bg-[#166534] hover:bg-[#14532d] active:scale-98 text-white font-bold text-sm py-3.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
                 >
@@ -1570,7 +1584,7 @@ export default function Home() {
               />
               <span className="text-base font-bold font-display">Lauk at Me By Umma</span>
             </div>
-            <p className="text-xs text-[#FAF6F0]/70 leading-relaxed mb-3">
+            <p className="text-xs text-[#FAF6F0] leading-relaxed mb-3">
               Toko online seafood mentah dan segar. Melayani pembelian udang, cumi, bawal, gurame, fillet, dan kerang dara dengan kustomisasi potongan gratis.
             </p>
             <div className="inline-flex items-center gap-2 bg-[#FAF6F0]/10 px-3 py-1.5 rounded-lg text-[11px] text-[#D97706] font-semibold border border-[#523A2D]">
@@ -1583,7 +1597,7 @@ export default function Home() {
             <h4 className="text-xs font-bold text-[#FAF6F0] uppercase tracking-wider mb-3">
               Hubungi Admin WhatsApp
             </h4>
-            <p className="text-xs text-[#FAF6F0]/70 mb-2">
+            <p className="text-xs text-[#FAF6F0] mb-2">
               Nomor Pemesanan & Pertanyaan Stok:
             </p>
             <a
@@ -1602,19 +1616,19 @@ export default function Home() {
             <h4 className="text-xs font-bold text-[#FAF6F0] uppercase tracking-wider mb-3">
               Portal Manajemen (/admin)
             </h4>
-            <p className="text-xs text-[#FAF6F0]/70 mb-3">
+            <p className="text-xs text-[#FAF6F0] mb-3">
               Halaman tersembunyi pengelolaan produk & upload foto.
             </p>
             <a
               href="/admin"
-              className="inline-block text-xs font-semibold text-[#6C8276] hover:text-white underline"
+              className="inline-block text-xs font-semibold text-[#FAF6F0] hover:text-white underline"
             >
               Akses Portal Admin →
             </a>
           </div>
         </div>
 
-        <div className="max-w-6xl mx-auto pt-6 mt-8 border-t border-[#523A2D] text-center text-[11px] text-[#FAF6F0]/50">
+        <div className="max-w-6xl mx-auto pt-6 mt-8 border-t border-[#523A2D] text-center text-[11px] text-[#FAF6F0]">
           © {new Date().getFullYear()} Lauk at Me By Umma. Hak Cipta Dilindungi.
         </div>
       </footer>
