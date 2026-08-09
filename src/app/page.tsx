@@ -1,14 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import {
   ShoppingBag,
-  ShieldCheck,
   ChevronRight,
   Filter,
   CheckCircle2,
   PhoneCall,
-  Scale,
   Scissors,
   Plus,
   Minus,
@@ -379,7 +378,7 @@ const PRODUCTS: Product[] = [
 ];
 
 export default function Home() {
-  // LOADING SCREEN STATES
+  // FAST ACCELERATED LOADING SCREEN STATES FOR LIGHTHOUSE PERFORMANCE
   const [isLoadingVisible, setIsLoadingVisible] = useState(true);
   const [isLoadingExiting, setIsLoadingExiting] = useState(false);
 
@@ -406,15 +405,15 @@ export default function Home() {
   const [isAccountCopied, setIsAccountCopied] = useState<boolean>(false);
   const [orderProcessingStage, setOrderProcessingStage] = useState<number>(0);
 
-  // INITIAL LOADING SCREEN TIMER
+  // OPTIMIZED INITIAL LOADING SCREEN TIMER (500MS EXIT FOR 90+ LIGHTHOUSE PERFORMANCE)
   useEffect(() => {
     const exitTimer = setTimeout(() => {
       setIsLoadingExiting(true);
-    }, 1800);
+    }, 450);
 
     const removeTimer = setTimeout(() => {
       setIsLoadingVisible(false);
-    }, 2650);
+    }, 1100);
 
     return () => {
       clearTimeout(exitTimer);
@@ -546,9 +545,9 @@ export default function Home() {
   };
 
   const renderProductCard = (product: Product, index: number) => (
-    <div
+    <article
       key={product.id}
-      style={{ animationDelay: `${Math.min(index * 65, 450)}ms` }}
+      style={{ animationDelay: `${Math.min(index * 40, 300)}ms` }}
       className="bg-[#FFFFFF] rounded-xl border border-[#E2ECE7] overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between h-full anim-slide-up"
     >
       <div>
@@ -556,12 +555,18 @@ export default function Home() {
         <div
           onClick={() => setPreviewProduct(product)}
           className="relative h-52 overflow-hidden bg-[#F4F9F6] group cursor-pointer"
+          aria-label={`Buka foto dekat ${product.name}`}
+          role="button"
+          tabIndex={0}
         >
-          <img
+          <Image
             src={product.image}
-            alt={product.name}
-            loading={index < 4 ? "eager" : "lazy"}
-            decoding="async"
+            alt={`Foto ${product.name} segar Lauk at Me`}
+            width={400}
+            height={300}
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority={index < 3}
+            loading={index < 3 ? "eager" : "lazy"}
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ease-out"
           />
 
@@ -635,34 +640,38 @@ export default function Home() {
       <div className="p-4 sm:p-5 pt-0">
         <button
           onClick={() => openCustomizeModal(product)}
+          aria-label={`Pilih berat dan jenis potongan ${product.name}`}
           className="w-full bg-[#4E6B5D] hover:bg-[#3B5447] active:scale-98 text-white text-xs font-semibold py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-sm"
         >
           <Scissors className="w-3.5 h-3.5" />
           <span>Pilih Berat & Jenis Potongan</span>
         </button>
       </div>
-    </div>
+    </article>
   );
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF6F0] text-[#332219] antialiased font-sans transition-colors duration-200 relative">
       {/* ==========================================================================
-         0. INITIAL LOADING SCREEN WITH FADE-IN ON OPEN & SLIDE UP / FADE OUT ON EXIT
+         0. INITIAL LOADING SCREEN WITH FAST EXIT TRANSITION (HIGH PERFORMANCE)
          ========================================================================== */}
       {isLoadingVisible && (
         <div
           className={`fixed inset-0 z-50 bg-[#FAF6F0] flex flex-col items-center justify-center p-6 text-center shadow-2xl ${
             isLoadingExiting
               ? "loading-overlay-exiting"
-              : "loading-overlay-active animate-in fade-in zoom-in-95 duration-400"
+              : "loading-overlay-active animate-in fade-in zoom-in-95 duration-300"
           }`}
         >
           <div className="relative mb-6">
             <div className="absolute -inset-3 bg-[#4E6B5D]/20 rounded-full blur-xl animate-pulse"></div>
-            <img
+            <Image
               src="/logo.png"
               alt="Lauk at Me Logo Loading"
-              className="w-28 h-28 sm:w-36 sm:h-36 rounded-full object-cover border-4 border-[#4E6B5D] relative shadow-lg animate-in zoom-in-90 duration-500"
+              width={144}
+              height={144}
+              priority
+              className="w-28 h-28 sm:w-36 sm:h-36 rounded-full object-cover border-4 border-[#4E6B5D] relative shadow-lg"
             />
           </div>
 
@@ -680,7 +689,7 @@ export default function Home() {
       )}
 
       {/* 1. TOP ANNOUNCEMENT BAR */}
-      <div className="bg-[#332219] text-[#FAF6F0] text-xs font-semibold py-2.5 px-4 text-center flex flex-wrap items-center justify-center gap-x-4 gap-y-1 shadow-sm anim-slide-down">
+      <aside aria-label="Pengumuman Jam Operasional" className="bg-[#332219] text-[#FAF6F0] text-xs font-semibold py-2.5 px-4 text-center flex flex-wrap items-center justify-center gap-x-4 gap-y-1 shadow-sm anim-slide-down">
         <div className="flex items-center gap-1.5">
           <Clock className="w-3.5 h-3.5 text-[#D97706]" />
           <span>Pre-Order H-1 (Batas Order 18:00 WIB)</span>
@@ -694,15 +703,18 @@ export default function Home() {
         <div className="flex items-center gap-1 text-[#D97706] font-bold">
           <span>WA: 089667782004</span>
         </div>
-      </div>
+      </aside>
 
       {/* 2. NAVIGATION BAR */}
       <header className="sticky top-0 z-30 bg-[#FAF6F0]/95 backdrop-blur-md border-b border-[#E2ECE7] shadow-sm transition-all duration-200 anim-slide-down anim-delay-150">
         <div className="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3 group cursor-pointer">
-            <img
+            <Image
               src="/logo.png"
               alt="Lauk at Me By Umma Logo"
+              width={48}
+              height={48}
+              priority
               className="w-12 h-12 rounded-full object-cover border-2 border-[#4E6B5D] shadow-sm group-hover:scale-105 transition-transform duration-200"
             />
             <div>
@@ -720,6 +732,7 @@ export default function Home() {
               href="https://wa.me/6289667782004"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Hubungi WhatsApp Admin 089667782004"
               className="hidden md:flex items-center gap-2 bg-[#EBF2EE] text-[#4E6B5D] px-3.5 py-2 rounded-lg text-xs font-semibold hover:bg-[#4E6B5D] hover:text-white transition-all duration-200 border border-[#E2ECE7]"
             >
               <PhoneCall className="w-3.5 h-3.5" />
@@ -728,6 +741,7 @@ export default function Home() {
 
             <button
               onClick={() => setIsCheckoutOpen(true)}
+              aria-label="Buka Daftar Pesanan Saya"
               className="relative flex items-center gap-2 bg-[#FFFFFF] border border-[#E2ECE7] hover:border-[#4E6B5D] active:scale-95 px-4 py-2.5 rounded-lg shadow-sm text-xs font-bold text-[#332219] transition-all duration-200"
             >
               <ShoppingBag className="w-4 h-4 text-[#4E6B5D]" />
@@ -742,177 +756,184 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 3. HERO SECTION */}
-      <section className="relative overflow-hidden pt-10 pb-14 px-4 border-b border-[#E2ECE7] bg-[#FAF6F0]">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-          <div className="md:col-span-7 anim-slide-left anim-delay-250">
-            <div className="flex flex-wrap items-center gap-2 mb-4">
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EBF2EE] text-[#4E6B5D] text-[11px] font-bold border border-[#E2ECE7]">
-                <Clock className="w-3.5 h-3.5 text-[#D97706]" />
-                <span>Pemesanan H-1 (Batas 18:00 WIB)</span>
+      <main className="flex-grow">
+        {/* 3. HERO SECTION */}
+        <section className="relative overflow-hidden pt-10 pb-14 px-4 border-b border-[#E2ECE7] bg-[#FAF6F0]">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            <div className="md:col-span-7 anim-slide-left anim-delay-250">
+              <div className="flex flex-wrap items-center gap-2 mb-4">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EBF2EE] text-[#4E6B5D] text-[11px] font-bold border border-[#E2ECE7]">
+                  <Clock className="w-3.5 h-3.5 text-[#D97706]" />
+                  <span>Pemesanan H-1 (Batas 18:00 WIB)</span>
+                </div>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF6F0] text-[#991B1B] text-[11px] font-bold border border-[#E2ECE7]">
+                  <CalendarOff className="w-3.5 h-3.5" />
+                  <span>Minggu OFF / Libur</span>
+                </div>
               </div>
-              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FAF6F0] text-[#991B1B] text-[11px] font-bold border border-[#E2ECE7]">
-                <CalendarOff className="w-3.5 h-3.5" />
-                <span>Minggu OFF / Libur</span>
+
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#332219] leading-[1.2] mb-4 font-display">
+                Pilihan Seafood Segar Pesisir, Praktis Siap Olah Dapur
+              </h1>
+
+              <p className="text-sm sm:text-base text-[#523A2D] leading-relaxed mb-6 max-w-xl">
+                Melayani penjualan udang vaname, cumi, gurame, bawal, fillet, dan kerang dara segar.
+                Sistem <strong className="text-[#332219]">Pre-Order H-1</strong> (Pesan sebelum jam 18:00 WIB, dikirim besok pagi). Hari Minggu toko libur.
+              </p>
+
+              <div className="flex flex-wrap items-center gap-4 mb-6">
+                <a
+                  href="#katalog"
+                  className="bg-[#4E6B5D] hover:bg-[#3B5447] active:scale-95 text-white font-semibold px-6 py-3.5 rounded-lg text-xs sm:text-sm transition-all duration-200 shadow-sm flex items-center gap-2"
+                >
+                  <span>Lihat Menu & Harga ({PRODUCTS.length} Item)</span>
+                  <ChevronRight className="w-4 h-4" />
+                </a>
+                <a
+                  href="https://wa.me/6289667782004"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Hubungi WhatsApp Admin 089667782004"
+                  className="bg-[#FFFFFF] border border-[#E2ECE7] hover:border-[#4E6B5D] text-[#332219] font-semibold px-5 py-3.5 rounded-lg text-xs sm:text-sm transition-all duration-200 shadow-sm flex items-center gap-2"
+                >
+                  <PhoneCall className="w-4 h-4 text-[#166534]" />
+                  <span>WA Admin: 089667782004</span>
+                </a>
+              </div>
+
+              {/* REACT BITS <CountUp /> STAT BADGE */}
+              <div className="inline-flex items-center gap-3 bg-[#FFFFFF] px-4 py-2.5 rounded-xl border border-[#E2ECE7] shadow-sm anim-zoom-in anim-delay-400">
+                <div className="p-2 rounded-lg bg-[#EBF2EE] text-[#4E6B5D]">
+                  <PackageCheck className="w-4.5 h-4.5 text-[#4E6B5D]" />
+                </div>
+                <div className="text-xs sm:text-sm font-bold text-[#332219] flex items-center gap-1.5 font-display">
+                  <CountUp
+                    from={0}
+                    to={10000}
+                    separator="."
+                    duration={2.5}
+                    className="font-bold text-[#4E6B5D]"
+                  />
+                  <span>+ Orderan Terlayani Sejak 2023</span>
+                </div>
               </div>
             </div>
 
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-[#332219] leading-[1.2] mb-4 font-display">
-              Pilihan Seafood Segar Pesisir, Praktis Siap Olah Dapur
-            </h1>
-
-            <p className="text-sm sm:text-base text-[#523A2D] leading-relaxed mb-6 max-w-xl">
-              Melayani penjualan udang vaname, cumi, gurame, bawal, fillet, dan kerang dara segar.
-              Sistem <strong className="text-[#332219]">Pre-Order H-1</strong> (Pesan sebelum jam 18:00 WIB, dikirim besok pagi). Hari Minggu toko libur.
-            </p>
-
-            <div className="flex flex-wrap items-center gap-4 mb-6">
-              <a
-                href="#katalog"
-                className="bg-[#4E6B5D] hover:bg-[#3B5447] active:scale-95 text-white font-semibold px-6 py-3.5 rounded-lg text-xs sm:text-sm transition-all duration-200 shadow-sm flex items-center gap-2"
-              >
-                <span>Lihat Menu & Harga ({PRODUCTS.length} Item)</span>
-                <ChevronRight className="w-4 h-4" />
-              </a>
-              <a
-                href="https://wa.me/6289667782004"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="bg-[#FFFFFF] border border-[#E2ECE7] hover:border-[#4E6B5D] text-[#332219] font-semibold px-5 py-3.5 rounded-lg text-xs sm:text-sm transition-all duration-200 shadow-sm flex items-center gap-2"
-              >
-                <PhoneCall className="w-4 h-4 text-[#166534]" />
-                <span>WA Admin: 089667782004</span>
-              </a>
-            </div>
-
-            {/* REACT BITS <CountUp /> STAT BADGE */}
-            <div className="inline-flex items-center gap-3 bg-[#FFFFFF] px-4 py-2.5 rounded-xl border border-[#E2ECE7] shadow-sm anim-zoom-in anim-delay-400">
-              <div className="p-2 rounded-lg bg-[#EBF2EE] text-[#4E6B5D]">
-                <PackageCheck className="w-4.5 h-4.5 text-[#4E6B5D]" />
-              </div>
-              <div className="text-xs sm:text-sm font-bold text-[#332219] flex items-center gap-1.5 font-display">
-                <CountUp
-                  from={0}
-                  to={10000}
-                  separator="."
-                  duration={2.5}
-                  className="font-bold text-[#4E6B5D]"
+            <div className="md:col-span-5 flex justify-center anim-slide-right anim-delay-300">
+              <div className="bg-[#FFFFFF] p-4 rounded-2xl border border-[#E2ECE7] shadow-md max-w-xs text-center hover:shadow-lg transition-shadow duration-200">
+                <Image
+                  src="/logo.png"
+                  alt="Logo Lauk at Me By Umma"
+                  width={176}
+                  height={176}
+                  priority
+                  className="w-44 h-44 mx-auto rounded-full object-cover border-4 border-[#4E6B5D] mb-3 shadow-inner hover:scale-105 transition-transform duration-200"
                 />
-                <span>+ Orderan Terlayani Sejak 2023</span>
+                <h3 className="text-base font-bold text-[#332219]">Lauk at Me</h3>
+                <p className="text-xs text-[#4E6B5D] font-semibold mb-2">By Umma</p>
+                <p className="text-[11px] text-[#7A6254] leading-normal">
+                  Penyedia Bahan Seafood Mentah & Segar Kualitas Terjamin
+                </p>
               </div>
             </div>
           </div>
+        </section>
 
-          <div className="md:col-span-5 flex justify-center anim-slide-right anim-delay-300">
-            <div className="bg-[#FFFFFF] p-4 rounded-2xl border border-[#E2ECE7] shadow-md max-w-xs text-center hover:shadow-lg transition-shadow duration-200">
-              <img
-                src="/logo.png"
-                alt="Logo Lauk at Me By Umma"
-                className="w-44 h-44 mx-auto rounded-full object-cover border-4 border-[#4E6B5D] mb-3 shadow-inner hover:scale-105 transition-transform duration-200"
-              />
-              <h3 className="text-base font-bold text-[#332219]">Lauk at Me</h3>
-              <p className="text-xs text-[#4E6B5D] font-semibold mb-2">By Umma</p>
-              <p className="text-[11px] text-[#7A6254] leading-normal">
-                Penyedia Bahan Seafood Mentah & Segar Kualitas Terjamin
-              </p>
+        {/* 4. VALUE HIGHLIGHTS */}
+        <section className="py-8 px-4 bg-[#FFFDF9] border-b border-[#E2ECE7]">
+          <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5 anim-slide-up anim-delay-200">
+              <div className="p-2.5 rounded-lg bg-[#EBF2EE] text-[#4E6B5D] shrink-0">
+                <Scissors className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-[#332219]">Kustom Potongan Spesifik</h4>
+                <p className="text-[11px] text-[#7A6254]">
+                  Potongan disesuaikan jenis seafood (kupas udang, ring cumi, dll).
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5 anim-slide-up anim-delay-350">
+              <div className="p-2.5 rounded-lg bg-[#EBF2EE] text-[#4E6B5D] shrink-0">
+                <Clock className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-[#332219]">Pemesanan H-1 (Batas 18:00 WIB)</h4>
+                <p className="text-[11px] text-[#7A6254]">
+                  Pesan hari ini sebelum jam 18:00 WIB, dikirim besok. Minggu OFF.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5 anim-slide-up anim-delay-500">
+              <div className="p-2.5 rounded-lg bg-[#EBF2EE] text-[#4E6B5D] shrink-0">
+                <MessageCircle className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="text-xs font-bold text-[#332219]">Order WA Fast Response</h4>
+                <p className="text-[11px] text-[#7A6254]">
+                  Pesan terformat otomatis dikirim ke 089667782004.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* 4. VALUE HIGHLIGHTS */}
-      <section className="py-8 px-4 bg-[#FFFDF9] border-b border-[#E2ECE7]">
-        <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5 anim-slide-up anim-delay-200">
-            <div className="p-2.5 rounded-lg bg-[#EBF2EE] text-[#4E6B5D] shrink-0">
-              <Scissors className="w-5 h-5" />
-            </div>
+        {/* 5. PRODUCT CATALOG SECTION */}
+        <section id="katalog" className="py-14 px-4 max-w-6xl mx-auto w-full flex-grow">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 anim-slide-down anim-delay-300">
             <div>
-              <h4 className="text-xs font-bold text-[#332219]">Kustom Potongan Spesifik</h4>
-              <p className="text-[11px] text-[#7A6254]">
-                Potongan disesuaikan jenis seafood (kupas udang, ring cumi, dll).
+              <div className="flex items-center gap-2 mb-1">
+                <span className="bg-[#4E6B5D] text-white text-[10px] font-bold px-2 py-0.5 rounded">
+                  Daftar Price List Resmi
+                </span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-bold text-[#332219] tracking-tight font-display">
+                Menu Seafood Lauk at Me By Umma
+              </h2>
+              <p className="text-xs text-[#7A6254] mt-1">
+                Pilih produk dan tentukan gramasi yang Anda butuhkan (Klik gambar untuk zoom detail foto).
               </p>
             </div>
-          </div>
 
-          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5 anim-slide-up anim-delay-350">
-            <div className="p-2.5 rounded-lg bg-[#EBF2EE] text-[#4E6B5D] shrink-0">
-              <Clock className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-xs font-bold text-[#332219]">Pemesanan H-1 (Batas 18:00 WIB)</h4>
-              <p className="text-[11px] text-[#7A6254]">
-                Pesan hari ini sebelum jam 18:00 WIB, dikirim besok. Minggu OFF.
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5 anim-slide-up anim-delay-500">
-            <div className="p-2.5 rounded-lg bg-[#EBF2EE] text-[#4E6B5D] shrink-0">
-              <MessageCircle className="w-5 h-5" />
-            </div>
-            <div>
-              <h4 className="text-xs font-bold text-[#332219]">Order WA Fast Response</h4>
-              <p className="text-[11px] text-[#7A6254]">
-                Pesan terformat otomatis dikirim ke 089667782004.
-              </p>
+            {/* CATEGORY FILTER BAR */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
+              <Filter className="w-4 h-4 text-[#7A6254] shrink-0 mr-1 hidden sm:block" />
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setSelectedCategory(cat)}
+                  aria-label={`Filter kategori ${cat}`}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all duration-200 ${
+                    selectedCategory === cat
+                      ? "bg-[#4E6B5D] text-white shadow-sm scale-105"
+                      : "bg-[#FFFFFF] text-[#523A2D] border border-[#E2ECE7] hover:border-[#4E6B5D]"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
             </div>
           </div>
-        </div>
-      </section>
 
-      {/* 5. PRODUCT CATALOG SECTION */}
-      <section id="katalog" className="py-14 px-4 max-w-6xl mx-auto w-full flex-grow">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 anim-slide-down anim-delay-300">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="bg-[#4E6B5D] text-white text-[10px] font-bold px-2 py-0.5 rounded">
-                Daftar Price List Resmi
-              </span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-[#332219] tracking-tight font-display">
-              Menu Seafood Lauk at Me By Umma
-            </h2>
-            <p className="text-xs text-[#7A6254] mt-1">
-              Pilih produk dan tentukan gramasi yang Anda butuhkan (Klik gambar untuk zoom detail foto).
-            </p>
+          {/* MOBILE VIEW: REACT BITS <AnimatedList /> COMPONENT */}
+          <div className="block md:hidden">
+            <AnimatedList
+              items={filteredProducts}
+              showGradients={true}
+              enableArrowNavigation={true}
+              displayScrollbar={false}
+              renderItem={(product, idx) => renderProductCard(product, idx)}
+            />
           </div>
 
-          {/* CATEGORY FILTER BAR */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
-            <Filter className="w-4 h-4 text-[#7A6254] shrink-0 mr-1 hidden sm:block" />
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all duration-200 ${
-                  selectedCategory === cat
-                    ? "bg-[#4E6B5D] text-white shadow-sm scale-105"
-                    : "bg-[#FFFFFF] text-[#523A2D] border border-[#E2ECE7] hover:border-[#4E6B5D]"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+          {/* DESKTOP VIEW: STAGGERED ENTRANCE GRID */}
+          <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredProducts.map((product, idx) => renderProductCard(product, idx))}
           </div>
-        </div>
-
-        {/* MOBILE VIEW: REACT BITS <AnimatedList /> COMPONENT */}
-        <div className="block md:hidden">
-          <AnimatedList
-            items={filteredProducts}
-            showGradients={true}
-            enableArrowNavigation={true}
-            displayScrollbar={false}
-            renderItem={(product, idx) => renderProductCard(product, idx)}
-          />
-        </div>
-
-        {/* DESKTOP VIEW: STAGGERED ENTRANCE GRID */}
-        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProducts.map((product, idx) => renderProductCard(product, idx))}
-        </div>
-      </section>
+        </section>
+      </main>
 
       {/* 6. IMAGE LIGHTBOX / PREVIEW MODAL WITH SMOOTH ZOOM ANIMATION */}
       {previewProduct && (
@@ -920,15 +941,18 @@ export default function Home() {
           <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-lg w-full p-5 shadow-2xl relative">
             <button
               onClick={() => setPreviewProduct(null)}
+              aria-label="Tutup preview foto"
               className="absolute top-3 right-3 text-[#7A6254] hover:text-[#332219] p-1.5 rounded-full bg-white/80 hover:bg-white shadow-md z-10 transition-all"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="relative h-72 sm:h-80 w-full rounded-xl overflow-hidden mb-4 bg-[#FAF6F0] border border-[#E2ECE7]">
-              <img
+              <Image
                 src={previewProduct.image}
-                alt={previewProduct.name}
+                alt={`Preview foto ${previewProduct.name}`}
+                width={600}
+                height={400}
                 className="w-full h-full object-cover anim-zoom-in"
               />
               {previewProduct.discountBadge && (
@@ -986,15 +1010,18 @@ export default function Home() {
           <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-md w-full p-6 shadow-xl relative anim-zoom-in">
             <button
               onClick={() => setSelectedProductForModal(null)}
+              aria-label="Tutup kustomisasi produk"
               className="absolute top-4 right-4 text-[#7A6254] hover:text-[#332219] p-1 rounded-lg hover:bg-[#FAF6F0] transition-colors"
             >
               <X className="w-5 h-5" />
             </button>
 
             <div className="flex items-center gap-3.5 mb-4">
-              <img
+              <Image
                 src={selectedProductForModal.image}
                 alt={selectedProductForModal.name}
+                width={64}
+                height={64}
                 className="w-16 h-16 rounded-lg object-cover border border-[#E2ECE7] shrink-0"
               />
               <div>
@@ -1018,6 +1045,7 @@ export default function Home() {
               <div className="flex items-center gap-3 bg-[#FAF6F0] p-2 rounded-xl border border-[#E2ECE7]">
                 <button
                   onClick={() => setModalWeight((w) => Math.max(250, w - 250))}
+                  aria-label="Kurangi berat pesanan"
                   className="w-8 h-8 rounded-lg bg-white border border-[#E2ECE7] text-[#332219] font-bold flex items-center justify-center hover:bg-[#EBF2EE] active:scale-95 transition-all"
                 >
                   <Minus className="w-4 h-4" />
@@ -1032,6 +1060,7 @@ export default function Home() {
                 </div>
                 <button
                   onClick={() => setModalWeight((w) => w + 250)}
+                  aria-label="Tambah berat pesanan"
                   className="w-8 h-8 rounded-lg bg-white border border-[#E2ECE7] text-[#332219] font-bold flex items-center justify-center hover:bg-[#EBF2EE] active:scale-95 transition-all"
                 >
                   <Plus className="w-4 h-4" />
@@ -1049,6 +1078,7 @@ export default function Home() {
                   <button
                     key={option}
                     onClick={() => setModalCut(option)}
+                    aria-label={`Pilih opsi potongan ${option}`}
                     className={`w-full text-left px-3.5 py-2.5 rounded-lg text-xs font-medium border transition-all duration-150 flex items-center justify-between ${
                       modalCut === option
                         ? "border-[#4E6B5D] bg-[#EBF2EE] text-[#4E6B5D] font-bold"
@@ -1101,6 +1131,7 @@ export default function Home() {
                 </div>
                 <button
                   onClick={() => setIsCheckoutOpen(false)}
+                  aria-label="Tutup daftar pesanan"
                   className="text-[#7A6254] hover:text-[#332219] p-1 transition-colors"
                 >
                   <X className="w-5 h-5" />
@@ -1153,6 +1184,7 @@ export default function Home() {
                         </div>
                         <button
                           onClick={() => removeFromCart(idx)}
+                          aria-label={`Hapus ${item.product.name} dari keranjang`}
                           className="text-[#991B1B] text-xs font-semibold hover:underline p-1"
                         >
                           Hapus
@@ -1206,6 +1238,7 @@ export default function Home() {
                         placeholder="Nama Pemesan"
                         value={customerName}
                         onChange={(e) => setCustomerName(e.target.value)}
+                        aria-label="Nama pemesan"
                         className="w-full px-3 py-2 rounded-lg border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-white transition-colors"
                       />
                     </div>
@@ -1214,6 +1247,7 @@ export default function Home() {
                         placeholder="Alamat Lengkap Pengiriman"
                         value={customerAddress}
                         onChange={(e) => setCustomerAddress(e.target.value)}
+                        aria-label="Alamat lengkap pengiriman"
                         rows={2}
                         className="w-full px-3 py-2 rounded-lg border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-white transition-colors"
                       />
@@ -1222,6 +1256,7 @@ export default function Home() {
                       <select
                         value={courierOption}
                         onChange={(e) => setCourierOption(e.target.value)}
+                        aria-label="Opsi kurir pengiriman"
                         className="w-full px-3 py-2 rounded-lg border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-white transition-colors"
                       >
                         <option value="Instant (Gojek/Grab)">Kurir Instant (Gojek / Grab)</option>
@@ -1281,6 +1316,7 @@ export default function Home() {
             {orderProcessingStage === 0 && (
               <button
                 onClick={() => setIsPaymentModalOpen(false)}
+                aria-label="Tutup modal metode pembayaran"
                 className="absolute top-4 right-4 text-[#7A6254] hover:text-[#332219] p-1 rounded-lg hover:bg-[#FAF6F0] transition-colors"
               >
                 <X className="w-5 h-5" />
@@ -1374,6 +1410,7 @@ export default function Home() {
                   <div className="grid grid-cols-2 gap-3">
                     <button
                       onClick={() => setSelectedPaymentMethod("BCA")}
+                      aria-label="Pilih metode Transfer Bank BCA"
                       className={`p-3 rounded-xl border text-left transition-all flex flex-col justify-between ${
                         selectedPaymentMethod === "BCA"
                           ? "border-[#4E6B5D] bg-[#EBF2EE] text-[#4E6B5D] font-bold shadow-sm"
@@ -1392,6 +1429,7 @@ export default function Home() {
 
                     <button
                       onClick={() => setSelectedPaymentMethod("QRIS")}
+                      aria-label="Pilih metode QRIS All Payment"
                       className={`p-3 rounded-xl border text-left transition-all flex flex-col justify-between ${
                         selectedPaymentMethod === "QRIS"
                           ? "border-[#4E6B5D] bg-[#EBF2EE] text-[#4E6B5D] font-bold shadow-sm"
@@ -1425,6 +1463,7 @@ export default function Home() {
                         </span>
                         <button
                           onClick={handleCopyAccount}
+                          aria-label="Salin nomor rekening BCA"
                           className="bg-[#FFFFFF] border border-[#E2ECE7] hover:border-[#4E6B5D] text-[#332219] text-xs font-semibold px-2.5 py-1 rounded flex items-center gap-1 transition-all"
                         >
                           {isAccountCopied ? (
@@ -1447,7 +1486,7 @@ export default function Home() {
                         Scan QRIS (Gopay / OVO / Dana / ShopeePay / BCA Mobile)
                       </span>
                       <div className="bg-white p-3 rounded-xl border border-[#E2ECE7] inline-block shadow-sm">
-                        <svg className="w-40 h-40 mx-auto" viewBox="0 0 200 200">
+                        <svg className="w-40 h-40 mx-auto" viewBox="0 0 200 200" aria-label="Kode QRIS Lauk at Me">
                           <rect width="200" height="200" fill="#ffffff" rx="8" />
                           <path d="M10 10 h60 v60 h-60 z" fill="#000000" />
                           <path d="M20 20 h40 v40 h-40 z" fill="#ffffff" />
@@ -1484,6 +1523,7 @@ export default function Home() {
                     placeholder="Contoh: Minta diantar sebelum jam 10 pagi, atau bungkus pisah"
                     value={specialNotes}
                     onChange={(e) => setSpecialNotes(e.target.value)}
+                    aria-label="Catatan khusus pesanan"
                     className="w-full px-3 py-2 rounded-lg border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-white"
                   />
                 </div>
@@ -1506,9 +1546,11 @@ export default function Home() {
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center gap-2.5 mb-3">
-              <img
+              <Image
                 src="/logo.png"
                 alt="Lauk at Me Logo Footer"
+                width={32}
+                height={32}
                 className="w-8 h-8 rounded-full border border-[#4E6B5D] object-cover"
               />
               <span className="text-base font-bold font-display">Lauk at Me By Umma</span>
@@ -1533,6 +1575,7 @@ export default function Home() {
               href="https://wa.me/6289667782004"
               target="_blank"
               rel="noopener noreferrer"
+              aria-label="Hubungi WhatsApp Admin 089667782004"
               className="inline-flex items-center gap-2 text-xs font-bold text-[#D97706] hover:underline"
             >
               <PhoneCall className="w-3.5 h-3.5" />
