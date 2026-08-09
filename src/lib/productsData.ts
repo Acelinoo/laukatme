@@ -345,7 +345,7 @@ export const INITIAL_PRODUCTS: Product[] = [
   },
 ];
 
-const STORAGE_KEY = "laukatme_products_v1";
+const STORAGE_KEY = "laukatme_products_v2";
 
 export function loadStoredProducts(): Product[] {
   if (typeof window === "undefined") return INITIAL_PRODUCTS;
@@ -354,7 +354,16 @@ export function loadStoredProducts(): Product[] {
     if (!raw) return INITIAL_PRODUCTS;
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed) && parsed.length > 0) {
-      return parsed;
+      // ENSURE CUMI IMAGE PATH IS ALWAYS PROPERLY FORMATTED
+      return parsed.map((item: Product) => {
+        if (item.id === "p5" || item.name.toLowerCase().includes("cumi")) {
+          return {
+            ...item,
+            image: item.image || "/images/cumi.webp",
+          };
+        }
+        return item;
+      });
     }
   } catch (err) {
     console.error("Error reading stored products", err);
