@@ -378,7 +378,7 @@ const PRODUCTS: Product[] = [
 ];
 
 export default function Home() {
-  // FAST ACCELERATED LOADING SCREEN STATES FOR LIGHTHOUSE PERFORMANCE
+  // ULTRA-FAST ACCELERATED LOADING SCREEN STATES FOR LIGHTHOUSE 95+ PERFORMANCE
   const [isLoadingVisible, setIsLoadingVisible] = useState(true);
   const [isLoadingExiting, setIsLoadingExiting] = useState(false);
 
@@ -405,15 +405,15 @@ export default function Home() {
   const [isAccountCopied, setIsAccountCopied] = useState<boolean>(false);
   const [orderProcessingStage, setOrderProcessingStage] = useState<number>(0);
 
-  // OPTIMIZED INITIAL LOADING SCREEN TIMER (500MS EXIT FOR 90+ LIGHTHOUSE PERFORMANCE)
+  // LIGHTNING-FAST 120MS LOADING SCREEN TRANSITION FOR MAXIMUM MOBILE LIGHTHOUSE SCORE
   useEffect(() => {
     const exitTimer = setTimeout(() => {
       setIsLoadingExiting(true);
-    }, 450);
+    }, 120);
 
     const removeTimer = setTimeout(() => {
       setIsLoadingVisible(false);
-    }, 1100);
+    }, 550);
 
     return () => {
       clearTimeout(exitTimer);
@@ -547,7 +547,7 @@ export default function Home() {
   const renderProductCard = (product: Product, index: number) => (
     <article
       key={product.id}
-      style={{ animationDelay: `${Math.min(index * 40, 300)}ms` }}
+      style={{ animationDelay: `${Math.min(index * 30, 240)}ms` }}
       className="bg-[#FFFFFF] rounded-xl border border-[#E2ECE7] overflow-hidden shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-200 flex flex-col justify-between h-full anim-slide-up"
     >
       <div>
@@ -562,8 +562,9 @@ export default function Home() {
           <Image
             src={product.image}
             alt={`Foto ${product.name} segar Lauk at Me`}
-            width={400}
-            height={300}
+            width={320}
+            height={240}
+            quality={75}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             priority={index < 3}
             loading={index < 3 ? "eager" : "lazy"}
@@ -653,14 +654,14 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF6F0] text-[#332219] antialiased font-sans transition-colors duration-200 relative">
       {/* ==========================================================================
-         0. INITIAL LOADING SCREEN WITH FAST EXIT TRANSITION (HIGH PERFORMANCE)
+         0. INITIAL LOADING SCREEN WITH ULTRA-FAST EXIT TRANSITION (HIGH PERFORMANCE)
          ========================================================================== */}
       {isLoadingVisible && (
         <div
           className={`fixed inset-0 z-50 bg-[#FAF6F0] flex flex-col items-center justify-center p-6 text-center shadow-2xl ${
             isLoadingExiting
               ? "loading-overlay-exiting"
-              : "loading-overlay-active animate-in fade-in zoom-in-95 duration-300"
+              : "loading-overlay-active animate-in fade-in zoom-in-95 duration-200"
           }`}
         >
           <div className="relative mb-6">
@@ -671,6 +672,7 @@ export default function Home() {
               width={144}
               height={144}
               priority
+              quality={80}
               className="w-28 h-28 sm:w-36 sm:h-36 rounded-full object-cover border-4 border-[#4E6B5D] relative shadow-lg"
             />
           </div>
@@ -715,6 +717,7 @@ export default function Home() {
               width={48}
               height={48}
               priority
+              quality={80}
               className="w-12 h-12 rounded-full object-cover border-2 border-[#4E6B5D] shadow-sm group-hover:scale-105 transition-transform duration-200"
             />
             <div>
@@ -827,6 +830,7 @@ export default function Home() {
                   width={176}
                   height={176}
                   priority
+                  quality={80}
                   className="w-44 h-44 mx-auto rounded-full object-cover border-4 border-[#4E6B5D] mb-3 shadow-inner hover:scale-105 transition-transform duration-200"
                 />
                 <h3 className="text-base font-bold text-[#332219]">Lauk at Me</h3>
@@ -898,12 +902,13 @@ export default function Home() {
             </div>
 
             {/* CATEGORY FILTER BAR */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-2 md:pb-0 scrollbar-none">
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-2 md:pb-0 scrollbar-none" role="tablist" aria-label="Kategori Seafood">
               <Filter className="w-4 h-4 text-[#7A6254] shrink-0 mr-1 hidden sm:block" />
               {categories.map((cat) => (
                 <button
                   key={cat}
                   onClick={() => setSelectedCategory(cat)}
+                  aria-pressed={selectedCategory === cat}
                   aria-label={`Filter kategori ${cat}`}
                   className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold shrink-0 transition-all duration-200 ${
                     selectedCategory === cat
@@ -953,6 +958,7 @@ export default function Home() {
                 alt={`Preview foto ${previewProduct.name}`}
                 width={600}
                 height={400}
+                quality={85}
                 className="w-full h-full object-cover anim-zoom-in"
               />
               {previewProduct.discountBadge && (
@@ -1022,6 +1028,7 @@ export default function Home() {
                 alt={selectedProductForModal.name}
                 width={64}
                 height={64}
+                quality={80}
                 className="w-16 h-16 rounded-lg object-cover border border-[#E2ECE7] shrink-0"
               />
               <div>
@@ -1233,7 +1240,9 @@ export default function Home() {
                       Data Pengiriman Pelanggan
                     </h3>
                     <div>
+                      <label htmlFor="customerNameInput" className="sr-only">Nama Pemesan</label>
                       <input
+                        id="customerNameInput"
                         type="text"
                         placeholder="Nama Pemesan"
                         value={customerName}
@@ -1243,7 +1252,9 @@ export default function Home() {
                       />
                     </div>
                     <div>
+                      <label htmlFor="customerAddressInput" className="sr-only">Alamat Lengkap Pengiriman</label>
                       <textarea
+                        id="customerAddressInput"
                         placeholder="Alamat Lengkap Pengiriman"
                         value={customerAddress}
                         onChange={(e) => setCustomerAddress(e.target.value)}
@@ -1253,7 +1264,9 @@ export default function Home() {
                       />
                     </div>
                     <div>
+                      <label htmlFor="courierOptionSelect" className="sr-only">Opsi Kurir Pengiriman</label>
                       <select
+                        id="courierOptionSelect"
                         value={courierOption}
                         onChange={(e) => setCourierOption(e.target.value)}
                         aria-label="Opsi kurir pengiriman"
@@ -1514,11 +1527,12 @@ export default function Home() {
                 </div>
 
                 <div className="mb-6">
-                  <label className="text-xs font-bold text-[#332219] block mb-1.5 flex items-center gap-1.5">
+                  <label htmlFor="specialNotesInput" className="text-xs font-bold text-[#332219] mb-1.5 flex items-center gap-1.5">
                     <FileText className="w-3.5 h-3.5 text-[#4E6B5D]" />
                     <span>Catatan Khusus Pesanan (Opsional)</span>
                   </label>
                   <input
+                    id="specialNotesInput"
                     type="text"
                     placeholder="Contoh: Minta diantar sebelum jam 10 pagi, atau bungkus pisah"
                     value={specialNotes}
@@ -1551,6 +1565,7 @@ export default function Home() {
                 alt="Lauk at Me Logo Footer"
                 width={32}
                 height={32}
+                quality={80}
                 className="w-8 h-8 rounded-full border border-[#4E6B5D] object-cover"
               />
               <span className="text-base font-bold font-display">Lauk at Me By Umma</span>
