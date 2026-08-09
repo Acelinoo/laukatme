@@ -15,176 +15,22 @@ import {
   CheckCircle2,
   XCircle,
   Package,
-  Award,
   Clock,
   Sparkles,
   ArrowLeft,
   X,
-  Check,
   Building2,
   Save,
-  RefreshCw,
   SlidersHorizontal,
   Store,
+  RotateCcw,
 } from "lucide-react";
-
-interface Product {
-  id: string;
-  name: string;
-  category: "Ikan Utuh" | "Udang" | "Kerang" | "Cumi" | "Fillet";
-  pricePerKg: number;
-  displayPriceText: string;
-  originalPriceText?: string;
-  discountBadge?: string;
-  image: string;
-  isCatchOfDay?: boolean;
-  isBestSeller?: boolean;
-  inStock: boolean;
-  minWeightGram: number;
-  note?: string;
-  portionEstimate: string;
-  availableCutOptions: string[];
-}
-
-const INITIAL_PRODUCTS: Product[] = [
-  {
-    id: "p1",
-    name: "Udang Vaname Kecil",
-    category: "Udang",
-    pricePerKg: 55000,
-    displayPriceText: "Rp 55.000 / kg",
-    image: "/images/udang%20vuname%20kecil.webp",
-    inStock: true,
-    minWeightGram: 500,
-    note: "Isi ± 200 pcs per kg. Manis alami & segar.",
-    portionEstimate: "🍽️ 1 kg cukup untuk 4-5 porsi keluarga",
-    availableCutOptions: [
-      "Utuh Segar Kepala & Kulit (Gratis)",
-      "Kupas Kepala Saja (Gratis)",
-      "Kupas Kulit & Buang Urat Kotoran (Gratis)",
-    ],
-  },
-  {
-    id: "p2",
-    name: "Udang Vaname Sedang (M)",
-    category: "Udang",
-    pricePerKg: 80000,
-    displayPriceText: "Rp 80.000 / kg",
-    image: "/images/udang%20vuname%20sedang.webp",
-    inStock: true,
-    minWeightGram: 500,
-    isCatchOfDay: true,
-    isBestSeller: true,
-    note: "Ukuran medium pas untuk olahan asam manis atau mentega.",
-    portionEstimate: "🍽️ 1 kg cukup untuk 3-4 porsi keluarga",
-    availableCutOptions: [
-      "Utuh Segar Kepala & Kulit (Gratis)",
-      "Kupas Kepala Saja (Gratis)",
-      "Kupas Kulit & Buang Urat Kotoran (Gratis)",
-    ],
-  },
-  {
-    id: "p3",
-    name: "Udang Vaname Besar (L)",
-    category: "Udang",
-    pricePerKg: 100000,
-    displayPriceText: "Rp 100.000 / kg",
-    originalPriceText: "Rp 115.000",
-    discountBadge: "Hemat 13%",
-    image: "/images/udang%20vuname%20besar.webp",
-    inStock: true,
-    minWeightGram: 500,
-    isCatchOfDay: true,
-    isBestSeller: true,
-    note: "Ukuran besar padat berisi. Sangat populer untuk udang bakar.",
-    portionEstimate: "🍽️ 1 kg cukup untuk 3-4 porsi besar",
-    availableCutOptions: [
-      "Utuh Segar Kepala & Kulit (Gratis)",
-      "Kupas Kepala Saja (Gratis)",
-      "Kupas Kulit & Buang Urat Kotoran (Gratis)",
-    ],
-  },
-  {
-    id: "p5",
-    name: "Cumi-Cumi Segar (1 kg)",
-    category: "Cumi",
-    pricePerKg: 75000,
-    displayPriceText: "Rp 75.000 / kg",
-    originalPriceText: "Rp 85.000",
-    discountBadge: "Promo Diskon",
-    image: "/images/cumi.webp",
-    inStock: true,
-    minWeightGram: 500,
-    isCatchOfDay: true,
-    isBestSeller: true,
-    note: "Bisa dipotong ring sedang / kecil (Gratis). Daging kenyal & segar.",
-    portionEstimate: "🍽️ 1 kg cukup untuk 4-5 porsi olahan ring",
-    availableCutOptions: [
-      "Utuh Bersih Tinta & Tulang Lunak (Gratis)",
-      "Potong Ring Cumi Sedang (Gratis)",
-      "Potong Ring Cumi Kecil (Gratis)",
-    ],
-  },
-  {
-    id: "p8",
-    name: "Gurame Hidup",
-    category: "Ikan Utuh",
-    pricePerKg: 65000,
-    displayPriceText: "Rp 65.000 / kg",
-    image: "/images/ikan%20gurame.webp",
-    inStock: true,
-    minWeightGram: 700,
-    isCatchOfDay: true,
-    note: "Ikan gurame dalam keadaan hidup. Bersih sisik & insang gratis.",
-    portionEstimate: "🍽️ 1 kg berisi 1-2 ekor (3-4 porsi bakar/terbang)",
-    availableCutOptions: [
-      "Utuh Bersih Sisik, Insang, & Isi Perut (Gratis)",
-      "Potong Steak / Irisan Melintang (Gratis)",
-      "Belah Dua Kipas / Olahan Bakar (Gratis)",
-    ],
-  },
-  {
-    id: "p9",
-    name: "Tenggiri Super",
-    category: "Ikan Utuh",
-    pricePerKg: 85000,
-    displayPriceText: "Rp 80.000 - 90.000 / kg",
-    originalPriceText: "Rp 100.000",
-    discountBadge: "Best Seller",
-    image: "/images/ikan%20tenggiri%20super.webp",
-    inStock: true,
-    minWeightGram: 500,
-    isBestSeller: true,
-    note: "Kualitas super. Dapat digiling halus (Bahan Pempek / Otak-otak).",
-    portionEstimate: "🍽️ 1 kg giling cukup untuk 40-50 pcs pempek",
-    availableCutOptions: [
-      "Utuh Bersih Sisik & Insang (Gratis)",
-      "Potong Steak / Irisan (Gratis)",
-      "Giling Halus Bahan Pempek / Otak-Otak / Bakso (Gratis)",
-    ],
-  },
-  {
-    id: "p15",
-    name: "Bawal Putih",
-    category: "Ikan Utuh",
-    pricePerKg: 180000,
-    displayPriceText: "Rp 180.000 / kg",
-    originalPriceText: "Rp 200.000",
-    discountBadge: "Diskon 10%",
-    image: "/images/ikan%20bawal%20putih.webp",
-    inStock: true,
-    minWeightGram: 500,
-    isCatchOfDay: true,
-    isBestSeller: true,
-    note: "Isi 3 - 4 ekor per kg. Kelas restoran & kualitas istimewa.",
-    portionEstimate: "🍽️ 1 kg berisi 3-4 ekor (4 porsi spesial)",
-    availableCutOptions: [
-      "Utuh Bersih Sisik, Insang, & Isi Perut (Gratis)",
-      "Potong Steak / Irisan Melintang (Gratis)",
-      "Belah Dua Kipas / Olahan Bakar (Gratis)",
-    ],
-  },
-];
+import {
+  Product,
+  INITIAL_PRODUCTS,
+  loadStoredProducts,
+  saveStoredProducts,
+} from "@/lib/productsData";
 
 const DEFAULT_PASSCODE = "umma123";
 
@@ -194,7 +40,7 @@ export default function AdminPage() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [authError, setAuthError] = useState<string>("");
 
-  const [products, setProducts] = useState<Product[]>(INITIAL_PRODUCTS);
+  const [products, setProducts] = useState<Product[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedCategory, setSelectedCategory] = useState<string>("Semua");
 
@@ -221,6 +67,11 @@ export default function AdminPage() {
 
   const [notification, setNotification] = useState<string | null>(null);
 
+  // LOAD PRODUCTS FROM LOCAL STORAGE
+  useEffect(() => {
+    setProducts(loadStoredProducts());
+  }, []);
+
   // CHECK LOCAL STORAGE FOR SAVED SESSION
   useEffect(() => {
     const savedAuth = sessionStorage.getItem("laukatme_admin_auth");
@@ -228,6 +79,11 @@ export default function AdminPage() {
       setIsAuthenticated(true);
     }
   }, []);
+
+  const updateAndSaveProducts = (newProducts: Product[]) => {
+    setProducts(newProducts);
+    saveStoredProducts(newProducts);
+  };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -251,6 +107,13 @@ export default function AdminPage() {
     setTimeout(() => {
       setNotification(null);
     }, 3000);
+  };
+
+  const handleResetCatalogToDefault = () => {
+    if (confirm("Reset seluruh katalog ke data awal default?")) {
+      updateAndSaveProducts(INITIAL_PRODUCTS);
+      triggerNotification("✓ Katalog produk berhasil di-reset ke default!");
+    }
   };
 
   const handleOpenAddModal = () => {
@@ -298,29 +161,29 @@ export default function AdminPage() {
       .map((c) => c.trim())
       .filter((c) => c.length > 0);
 
+    let updatedList: Product[];
+
     if (editingProduct) {
       // UPDATE EXISTING
-      setProducts((prev) =>
-        prev.map((p) =>
-          p.id === editingProduct.id
-            ? {
-                ...p,
-                name: formName,
-                category: formCategory,
-                pricePerKg: Number(formPrice),
-                displayPriceText: formDisplayPriceText,
-                originalPriceText: formOriginalPriceText || undefined,
-                discountBadge: formDiscountBadge || undefined,
-                image: formImage,
-                inStock: formInStock,
-                isCatchOfDay: formCatchOfDay,
-                isBestSeller: formBestSeller,
-                portionEstimate: formPortionEstimate,
-                note: formNote,
-                availableCutOptions: cuts.length > 0 ? cuts : ["Utuh Bersih (Gratis)"],
-              }
-            : p
-        )
+      updatedList = products.map((p) =>
+        p.id === editingProduct.id
+          ? {
+              ...p,
+              name: formName,
+              category: formCategory,
+              pricePerKg: Number(formPrice),
+              displayPriceText: formDisplayPriceText,
+              originalPriceText: formOriginalPriceText || undefined,
+              discountBadge: formDiscountBadge || undefined,
+              image: formImage,
+              inStock: formInStock,
+              isCatchOfDay: formCatchOfDay,
+              isBestSeller: formBestSeller,
+              portionEstimate: formPortionEstimate,
+              note: formNote,
+              availableCutOptions: cuts.length > 0 ? cuts : ["Utuh Bersih (Gratis)"],
+            }
+          : p
       );
       triggerNotification(`✓ Produk "${formName}" berhasil diperbarui!`);
     } else {
@@ -342,31 +205,32 @@ export default function AdminPage() {
         note: formNote,
         availableCutOptions: cuts.length > 0 ? cuts : ["Utuh Bersih (Gratis)"],
       };
-      setProducts((prev) => [newProduct, ...prev]);
-      triggerNotification(`✓ Produk baru "${formName}" berhasil ditambahkan!`);
+      updatedList = [newProduct, ...products];
+      triggerNotification(`✓ Produk baru "${formName}" berhasil ditambahkan & langsung tampil di web!`);
     }
 
+    updateAndSaveProducts(updatedList);
     setIsModalOpen(false);
   };
 
   const toggleStockStatus = (productId: string) => {
-    setProducts((prev) =>
-      prev.map((p) => {
-        if (p.id === productId) {
-          const updated = !p.inStock;
-          triggerNotification(
-            `Stok "${p.name}" diubah jadi ${updated ? "TERSEDIA" : "HABIS"}`
-          );
-          return { ...p, inStock: updated };
-        }
-        return p;
-      })
-    );
+    const updatedList = products.map((p) => {
+      if (p.id === productId) {
+        const updated = !p.inStock;
+        triggerNotification(
+          `Stok "${p.name}" diubah jadi ${updated ? "TERSEDIA" : "HABIS"}`
+        );
+        return { ...p, inStock: updated };
+      }
+      return p;
+    });
+    updateAndSaveProducts(updatedList);
   };
 
   const handleDeleteProduct = (productId: string, productName: string) => {
     if (confirm(`Apakah Anda yakin ingin menghapus produk "${productName}"?`)) {
-      setProducts((prev) => prev.filter((p) => p.id !== productId));
+      const updatedList = products.filter((p) => p.id !== productId);
+      updateAndSaveProducts(updatedList);
       triggerNotification(`✓ Produk "${productName}" berhasil dihapus.`);
     }
   };
@@ -382,9 +246,7 @@ export default function AdminPage() {
     return matchesCategory && matchesSearch;
   });
 
-  // ==========================================================================
-  // 1. LOGIN PASSWORD LOCK SCREEN
-  // ==========================================================================
+  // 1. LOGIN LOCK SCREEN
   if (!isAuthenticated) {
     return (
       <div className="min-h-screen bg-[#FAF6F0] flex flex-col items-center justify-center p-4 antialiased text-[#332219]">
@@ -472,9 +334,7 @@ export default function AdminPage() {
     );
   }
 
-  // ==========================================================================
   // 2. AUTHENTICATED ADMIN DASHBOARD
-  // ==========================================================================
   return (
     <div className="min-h-screen bg-[#FAF6F0] text-[#332219] antialiased flex flex-col">
       {/* NOTIFICATION TOAST */}
@@ -513,12 +373,21 @@ export default function AdminPage() {
           </div>
 
           <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleResetCatalogToDefault}
+              className="hidden md:flex items-center gap-1.5 bg-[#FAF6F0] hover:bg-[#EBF2EE] text-[#523A2D] border border-[#E2ECE7] text-xs font-semibold px-3.5 py-2 rounded-lg transition-colors"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Reset Data Default</span>
+            </button>
+
             <Link
               href="/"
               target="_blank"
-              className="hidden sm:flex items-center gap-1.5 bg-[#FAF6F0] hover:bg-[#EBF2EE] text-[#332219] border border-[#E2ECE7] text-xs font-semibold px-3.5 py-2 rounded-lg transition-colors"
+              className="flex items-center gap-1.5 bg-[#4E6B5D] hover:bg-[#3B5447] text-white text-xs font-semibold px-3.5 py-2 rounded-lg transition-colors shadow-sm"
             >
-              <Store className="w-4 h-4 text-[#4E6B5D]" />
+              <Store className="w-4 h-4" />
               <span>Lihat Website Toko</span>
             </Link>
 
@@ -983,7 +852,7 @@ export default function AdminPage() {
                   className="flex-1 bg-[#4E6B5D] hover:bg-[#3B5447] text-white text-xs font-bold py-3 rounded-xl transition-colors shadow-sm flex items-center justify-center gap-1.5"
                 >
                   <Save className="w-4 h-4" />
-                  <span>Simpan Perubahan</span>
+                  <span>Simpan & Tampilkan di Web</span>
                 </button>
               </div>
             </form>
