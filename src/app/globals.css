@@ -97,6 +97,7 @@ body {
   padding: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
 /* ==========================================================================
@@ -186,3 +187,16 @@ body {
 .anim-delay-400 { animation-delay: 400ms; }
 .anim-delay-500 { animation-delay: 500ms; }
 .anim-delay-600 { animation-delay: 600ms; }
+
+/* Smooth Loading Screen Slide Up & Fade Out Transition */
+.loading-overlay-active {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.loading-overlay-exiting {
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: transform 0.85s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.85s ease-in-out;
+  pointer-events: none;
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ShoppingBag,
   ShieldCheck,
@@ -379,6 +379,10 @@ const PRODUCTS: Product[] = [
 ];
 
 export default function Home() {
+  // LOADING SCREEN STATES
+  const [isLoadingVisible, setIsLoadingVisible] = useState(true);
+  const [isLoadingExiting, setIsLoadingExiting] = useState(false);
+
   const [selectedCategory, setSelectedCategory] = useState<string>("Semua");
   const [cart, setCart] = useState<{ product: Product; weightGram: number; cutOption: string }[]>([]);
   const [selectedProductForModal, setSelectedProductForModal] = useState<Product | null>(null);
@@ -401,6 +405,22 @@ export default function Home() {
   const [specialNotes, setSpecialNotes] = useState<string>("");
   const [isAccountCopied, setIsAccountCopied] = useState<boolean>(false);
   const [orderProcessingStage, setOrderProcessingStage] = useState<number>(0);
+
+  // INITIAL LOADING SCREEN TIMER
+  useEffect(() => {
+    const exitTimer = setTimeout(() => {
+      setIsLoadingExiting(true);
+    }, 1800);
+
+    const removeTimer = setTimeout(() => {
+      setIsLoadingVisible(false);
+    }, 2650);
+
+    return () => {
+      clearTimeout(exitTimer);
+      clearTimeout(removeTimer);
+    };
+  }, []);
 
   const categories = ["Semua", "Ikan Utuh", "Udang", "Cumi", "Kerang", "Fillet"];
 
@@ -623,8 +643,39 @@ export default function Home() {
   );
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF6F0] text-[#332219] antialiased font-sans transition-colors duration-200">
-      {/* 1. TOP ANNOUNCEMENT BAR (CSS REFRESH ANIMATION: SLIDE DOWN) */}
+    <div className="min-h-screen flex flex-col bg-[#FAF6F0] text-[#332219] antialiased font-sans transition-colors duration-200 relative">
+      {/* ==========================================================================
+         0. INITIAL LOADING SCREEN WITH SLIDE UP & FADE OUT TRANSITION
+         ========================================================================== */}
+      {isLoadingVisible && (
+        <div
+          className={`fixed inset-0 z-50 bg-[#FAF6F0] flex flex-col items-center justify-center p-6 text-center shadow-2xl ${
+            isLoadingExiting ? "loading-overlay-exiting" : "loading-overlay-active"
+          }`}
+        >
+          <div className="relative mb-6">
+            <div className="absolute -inset-3 bg-[#4E6B5D]/20 rounded-full blur-xl animate-pulse"></div>
+            <img
+              src="/logo.png"
+              alt="Lauk at Me Logo Loading"
+              className="w-28 h-28 sm:w-36 sm:h-36 rounded-full object-cover border-4 border-[#4E6B5D] relative shadow-lg animate-in zoom-in-90 duration-500"
+            />
+          </div>
+
+          <h2 className="text-2xl sm:text-3xl font-bold text-[#332219] tracking-tight font-display mb-1">
+            Selamat datang di Laukatme
+          </h2>
+          <p className="text-xs sm:text-sm font-semibold text-[#4E6B5D] tracking-wide mb-6">
+            By Umma • Seafood Mentah & Segar Pesisir
+          </p>
+
+          <div className="w-48 bg-[#E2ECE7] h-1.5 rounded-full overflow-hidden relative">
+            <div className="bg-[#4E6B5D] h-full rounded-full animate-pulse w-full"></div>
+          </div>
+        </div>
+      )}
+
+      {/* 1. TOP ANNOUNCEMENT BAR */}
       <div className="bg-[#332219] text-[#FAF6F0] text-xs font-semibold py-2.5 px-4 text-center flex flex-wrap items-center justify-center gap-x-4 gap-y-1 shadow-sm anim-slide-down">
         <div className="flex items-center gap-1.5">
           <Clock className="w-3.5 h-3.5 text-[#D97706]" />
@@ -641,7 +692,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 2. NAVIGATION BAR (CSS REFRESH ANIMATION: SLIDE DOWN WITH DELAY) */}
+      {/* 2. NAVIGATION BAR */}
       <header className="sticky top-0 z-30 bg-[#FAF6F0]/95 backdrop-blur-md border-b border-[#E2ECE7] shadow-sm transition-all duration-200 anim-slide-down anim-delay-150">
         <div className="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3 group cursor-pointer">
@@ -687,7 +738,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* 3. HERO SECTION (CSS REFRESH ANIMATIONS: SLIDE LEFT & SLIDE RIGHT) */}
+      {/* 3. HERO SECTION */}
       <section className="relative overflow-hidden pt-10 pb-14 px-4 border-b border-[#E2ECE7] bg-[#FAF6F0]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
           <div className="md:col-span-7 anim-slide-left anim-delay-250">
@@ -730,7 +781,7 @@ export default function Home() {
               </a>
             </div>
 
-            {/* REACT BITS <CountUp /> STAT BADGE (ZOOM-IN ANIMATION) */}
+            {/* REACT BITS <CountUp /> STAT BADGE */}
             <div className="inline-flex items-center gap-3 bg-[#FFFFFF] px-4 py-2.5 rounded-xl border border-[#E2ECE7] shadow-sm anim-zoom-in anim-delay-400">
               <div className="p-2 rounded-lg bg-[#EBF2EE] text-[#4E6B5D]">
                 <PackageCheck className="w-4.5 h-4.5 text-[#4E6B5D]" />
@@ -765,7 +816,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 4. VALUE HIGHLIGHTS (CSS REFRESH ANIMATION: STAGGERED SLIDE UP CARDS) */}
+      {/* 4. VALUE HIGHLIGHTS */}
       <section className="py-8 px-4 bg-[#FFFDF9] border-b border-[#E2ECE7]">
         <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm hover:shadow transition-shadow duration-200 flex items-center gap-3.5 anim-slide-up anim-delay-200">
@@ -806,7 +857,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 5. PRODUCT CATALOG SECTION (CSS REFRESH ANIMATIONS FOR GRID ITEMS) */}
+      {/* 5. PRODUCT CATALOG SECTION */}
       <section id="katalog" className="py-14 px-4 max-w-6xl mx-auto w-full flex-grow">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4 anim-slide-down anim-delay-300">
           <div>
