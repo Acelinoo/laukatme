@@ -13,7 +13,24 @@ export const metadata: Metadata = {
   title: "Laukatme — Seafood Mentah & Segar Langsung Dari Nelayan",
   description:
     "Toko online seafood mentah dan segar dengan kustomisasi jenis potongan gratis dan pengiriman cepat via WhatsApp. Kualitas terjamin dari pesisir pantai.",
-  keywords: ["seafood segar", "ikan segar", "udang", "cumi", "kerang", "fillet ikan", "kustomisasi potongan", "Laukatme"],
+  keywords: [
+    "seafood segar",
+    "ikan segar",
+    "udang",
+    "cumi",
+    "kerang",
+    "fillet ikan",
+    "kustomisasi potongan",
+    "Laukatme",
+  ],
+  icons: {
+    icon: [
+      { url: "/logo.png", type: "image/png" },
+      { url: "/icon.png", type: "image/png" },
+    ],
+    shortcut: "/logo.png",
+    apple: "/logo.png",
+  },
 };
 
 export default function RootLayout({
@@ -23,7 +40,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" className={`${plusJakartaSans.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-sand-beige text-deep-ocean-brown font-sans">
+      <body className="min-h-full flex flex-col bg-[#FAF6F0] text-[#332219] font-sans">
         {children}
       </body>
     </html>
