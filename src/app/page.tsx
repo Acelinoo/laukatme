@@ -223,11 +223,11 @@ export default function Home() {
 
     setTimeout(() => {
       setOrderProcessingStage(2);
-    }, 900);
+    }, 700);
 
     setTimeout(() => {
       setOrderProcessingStage(3);
-    }, 1800);
+    }, 1400);
 
     setTimeout(() => {
       const text = buildOrderSummaryText();
@@ -236,8 +236,10 @@ export default function Home() {
       setOrderProcessingStage(0);
       setIsPaymentModalOpen(false);
       setIsCheckoutOpen(false);
-      window.open(waUrl, "_blank");
-    }, 2700);
+
+      // DIRECT LOCATION REDIRECT WORKS ON MOBILE BROWSERS TO LAUNCH WHATSAPP NATIVELY
+      window.location.href = waUrl;
+    }, 2100);
   };
 
   const renderProductCard = (product: Product, index: number) => (
