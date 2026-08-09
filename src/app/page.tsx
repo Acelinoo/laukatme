@@ -25,6 +25,9 @@ import {
   FileText,
   ArrowRight,
   ZoomIn,
+  Truck,
+  Store,
+  Sparkles,
 } from "lucide-react";
 import CountUp from "@/components/CountUp";
 import AnimatedList from "@/components/AnimatedList";
@@ -395,6 +398,10 @@ export default function Home() {
   const [courierOption, setCourierOption] = useState<string>("Instant (Gojek/Grab)");
   const [isCopied, setIsCopied] = useState<boolean>(false);
 
+  // ADD TO CART TOAST & ANIMATION STATE
+  const [cartToast, setCartToast] = useState<string | null>(null);
+  const [isCartBouncing, setIsCartBouncing] = useState<boolean>(false);
+
   // IMAGE LIGHTBOX POPUP STATE
   const [previewProduct, setPreviewProduct] = useState<Product | null>(null);
 
@@ -405,7 +412,7 @@ export default function Home() {
   const [isAccountCopied, setIsAccountCopied] = useState<boolean>(false);
   const [orderProcessingStage, setOrderProcessingStage] = useState<number>(0);
 
-  // LIGHTNING-FAST 100MS LOADING SCREEN TRANSITION FOR MAXIMUM ACCESSIBILITY & PERFORMANCE
+  // LIGHTNING-FAST 100MS LOADING SCREEN TRANSITION
   useEffect(() => {
     const exitTimer = setTimeout(() => {
       setIsLoadingExiting(true);
@@ -436,6 +443,9 @@ export default function Home() {
 
   const handleAddToCart = () => {
     if (!selectedProductForModal) return;
+    const addedProductName = selectedProductForModal.name;
+    const weightAdded = modalWeight;
+
     setCart((prev) => [
       ...prev,
       {
@@ -445,6 +455,15 @@ export default function Home() {
       },
     ]);
     setSelectedProductForModal(null);
+
+    // TRIGGER CART BOUNCE ANIMATION & SUCCESS TOAST
+    setIsCartBouncing(true);
+    setTimeout(() => setIsCartBouncing(false), 600);
+
+    setCartToast(`✓ ${addedProductName} (${weightAdded}g) berhasil masuk ke pesanan!`);
+    setTimeout(() => {
+      setCartToast(null);
+    }, 3000);
   };
 
   const removeFromCart = (index: number) => {
@@ -690,6 +709,14 @@ export default function Home() {
         </div>
       )}
 
+      {/* SUCCESS TOAST NOTIFICATION WHEN ITEM IS ADDED TO CART */}
+      {cartToast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-[#166534] text-white px-5 py-3 rounded-full shadow-2xl text-xs font-bold flex items-center gap-2 animate-in slide-in-from-bottom-4 zoom-in-95 duration-300 border border-white/20">
+          <Sparkles className="w-4 h-4 text-[#D97706]" />
+          <span>{cartToast}</span>
+        </div>
+      )}
+
       {/* 1. TOP ANNOUNCEMENT BAR */}
       <aside aria-label="Pengumuman Jam Operasional Toko" className="bg-[#332219] text-[#FAF6F0] text-xs font-semibold py-2.5 px-4 text-center flex flex-wrap items-center justify-center gap-x-4 gap-y-1 shadow-sm anim-slide-down">
         <div className="flex items-center gap-1.5">
@@ -746,12 +773,14 @@ export default function Home() {
               type="button"
               onClick={() => setIsCheckoutOpen(true)}
               aria-label="Buka Daftar Pesanan Saya"
-              className="relative flex items-center gap-2 bg-[#FFFFFF] border border-[#E2ECE7] hover:border-[#4E6B5D] active:scale-95 px-4 py-2.5 rounded-lg shadow-sm text-xs font-bold text-[#332219] transition-all duration-200"
+              className={`relative flex items-center gap-2 bg-[#FFFFFF] border border-[#E2ECE7] hover:border-[#4E6B5D] active:scale-95 px-4 py-2.5 rounded-lg shadow-sm text-xs font-bold text-[#332219] transition-all duration-200 ${
+                isCartBouncing ? "scale-110 border-[#4E6B5D] ring-2 ring-[#4E6B5D]/30" : ""
+              }`}
             >
               <ShoppingBag className="w-4 h-4 text-[#4E6B5D]" />
               <span className="hidden sm:inline">Pesanan Saya</span>
               {cart.length > 0 && (
-                <span className="bg-[#4E6B5D] text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                <span className="bg-[#4E6B5D] text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center animate-in zoom-in duration-200">
                   {cart.length}
                 </span>
               )}
@@ -1120,9 +1149,10 @@ export default function Home() {
             <button
               type="button"
               onClick={handleAddToCart}
-              className="w-full bg-[#4E6B5D] hover:bg-[#3B5447] active:scale-98 text-white font-semibold text-xs sm:text-sm py-3 rounded-lg transition-all duration-200 shadow-sm"
+              className="w-full bg-[#4E6B5D] hover:bg-[#3B5447] active:scale-98 text-white font-semibold text-xs sm:text-sm py-3 rounded-lg transition-all duration-200 shadow-sm flex items-center justify-center gap-2"
             >
-              Masukkan ke Pesanan Saya
+              <Check className="w-4 h-4" />
+              <span>Masukkan ke Pesanan Saya</span>
             </button>
           </div>
         </div>
@@ -1245,7 +1275,7 @@ export default function Home() {
                     </div>
                   </div>
 
-                  {/* CUSTOMER INFO FORM */}
+                  {/* CUSTOMER INFO FORM WITH COURIER DETAIL NOTICES */}
                   <div className="mb-5 pt-3 border-t border-[#E2ECE7] space-y-3">
                     <h3 className="text-xs font-bold text-[#332219] mb-1">
                       Data Pengiriman Pelanggan
@@ -1284,6 +1314,36 @@ export default function Home() {
                         <option value="Same Day (Pagi Hari)">Kurir Same Day (Pagi Hari)</option>
                         <option value="Ambil Langsung di Toko">Ambil Langsung di Toko</option>
                       </select>
+                    </div>
+
+                    {/* COURIER COST & LOCATION INFORMATION NOTICE */}
+                    <div className="bg-[#EBF2EE] p-3 rounded-lg border border-[#E2ECE7] text-xs space-y-1">
+                      {courierOption === "Instant (Gojek/Grab)" && (
+                        <div className="flex items-start gap-2 text-[#3B5447]">
+                          <Truck className="w-4 h-4 text-[#4E6B5D] shrink-0 mt-0.5" />
+                          <span className="leading-relaxed">
+                            <strong>Kurir Instant (Gojek / Grab):</strong> Biaya ongkir ditentukan & dibayarkan sesuai tarif kurir berdasarkan lokasi pengiriman Anda.
+                          </span>
+                        </div>
+                      )}
+
+                      {courierOption === "Same Day (Pagi Hari)" && (
+                        <div className="flex items-start gap-2 text-[#3B5447]">
+                          <Truck className="w-4 h-4 text-[#4E6B5D] shrink-0 mt-0.5" />
+                          <span className="leading-relaxed">
+                            <strong>Kurir Same Day (Pagi Hari):</strong> Biaya ongkir sesuai lokasi pengiriman kurir same day. Pengiriman dilakukan pagi hari.
+                          </span>
+                        </div>
+                      )}
+
+                      {courierOption === "Ambil Langsung di Toko" && (
+                        <div className="flex items-start gap-2 text-[#166534]">
+                          <Store className="w-4 h-4 text-[#166534] shrink-0 mt-0.5" />
+                          <span className="leading-relaxed font-semibold">
+                            <strong>Ambil Langsung di Toko:</strong> Bebas Ongkir (Gratis)! Anda dapat mengambil pesanan langsung di lokasi toko kami.
+                          </span>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </>
