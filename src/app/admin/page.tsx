@@ -24,6 +24,8 @@ import {
   SlidersHorizontal,
   Store,
   RotateCcw,
+  Tag,
+  Scissors,
 } from "lucide-react";
 import {
   Product,
@@ -334,123 +336,134 @@ export default function AdminPage() {
     );
   }
 
-  // 2. AUTHENTICATED ADMIN DASHBOARD
+  // 2. AUTHENTICATED RESPONSIVE ADMIN DASHBOARD
   return (
     <div className="min-h-screen bg-[#FAF6F0] text-[#332219] antialiased flex flex-col">
       {/* NOTIFICATION TOAST */}
       {notification && (
-        <div className="fixed top-5 right-5 z-50 bg-[#166534] text-white px-5 py-3 rounded-xl shadow-2xl text-xs font-bold flex items-center gap-2 animate-in slide-in-from-top-4 duration-200 border border-white/20">
-          <Sparkles className="w-4 h-4 text-[#D97706]" />
+        <div className="fixed top-4 left-4 right-4 sm:left-auto sm:right-5 z-50 bg-[#166534] text-white px-5 py-3.5 rounded-xl shadow-2xl text-xs font-bold flex items-center gap-2 animate-in slide-in-from-top-4 duration-200 border border-white/20">
+          <Sparkles className="w-4 h-4 text-[#D97706] shrink-0" />
           <span>{notification}</span>
         </div>
       )}
 
-      {/* HEADER NAVBAR */}
+      {/* RESPONSIVE HEADER NAVBAR */}
       <header className="bg-[#FFFFFF] border-b border-[#E2ECE7] sticky top-0 z-30 shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Image
-              src="/logo.png"
-              alt="Lauk at Me Admin Logo"
-              width={48}
-              height={48}
-              quality={80}
-              className="w-12 h-12 rounded-full object-cover border-2 border-[#4E6B5D] shadow-sm"
-            />
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-bold text-[#332219] font-display">
-                  Dashboard Admin
-                </span>
-                <span className="bg-[#EBF2EE] text-[#4E6B5D] text-[10px] font-bold px-2 py-0.5 rounded border border-[#E2ECE7]">
-                  Portal Terkelola
+        <div className="max-w-7xl mx-auto px-4 py-3 sm:py-0 sm:h-20 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <div className="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-start">
+            <div className="flex items-center gap-3">
+              <Image
+                src="/logo.png"
+                alt="Lauk at Me Admin Logo"
+                width={40}
+                height={40}
+                quality={80}
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover border-2 border-[#4E6B5D] shadow-sm"
+              />
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-base sm:text-lg font-bold text-[#332219] font-display">
+                    Dashboard Admin
+                  </span>
+                  <span className="bg-[#EBF2EE] text-[#4E6B5D] text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded border border-[#E2ECE7]">
+                    By Umma
+                  </span>
+                </div>
+                <span className="text-[11px] text-[#523A2D] font-semibold block sm:inline">
+                  Pengelolaan Toko Seafood
                 </span>
               </div>
-              <span className="text-xs text-[#523A2D] font-semibold">
-                Lauk at Me By Umma
-              </span>
             </div>
+
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="sm:hidden flex items-center gap-1 bg-[#FEE2E2] text-[#991B1B] text-[11px] font-bold px-2.5 py-1.5 rounded-lg border border-[#FCA5A5]"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Keluar</span>
+            </button>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
             <button
               type="button"
               onClick={handleResetCatalogToDefault}
-              className="hidden md:flex items-center gap-1.5 bg-[#FAF6F0] hover:bg-[#EBF2EE] text-[#523A2D] border border-[#E2ECE7] text-xs font-semibold px-3.5 py-2 rounded-lg transition-colors"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-1 bg-[#FAF6F0] hover:bg-[#EBF2EE] text-[#523A2D] border border-[#E2ECE7] text-xs font-semibold px-3 py-2 rounded-lg transition-colors"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>Reset Data Default</span>
+              <span>Reset</span>
             </button>
 
             <Link
               href="/"
               target="_blank"
-              className="flex items-center gap-1.5 bg-[#4E6B5D] hover:bg-[#3B5447] text-white text-xs font-semibold px-3.5 py-2 rounded-lg transition-colors shadow-sm"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-1 bg-[#4E6B5D] hover:bg-[#3B5447] text-white text-xs font-semibold px-3 py-2 rounded-lg transition-colors shadow-sm"
             >
               <Store className="w-4 h-4" />
-              <span>Lihat Website Toko</span>
+              <span>Lihat Toko</span>
             </Link>
 
             <button
               type="button"
               onClick={handleLogout}
-              className="flex items-center gap-1.5 bg-[#FEE2E2] hover:bg-[#FCA5A5] text-[#991B1B] text-xs font-bold px-3.5 py-2 rounded-lg transition-colors border border-[#FCA5A5]"
+              className="hidden sm:flex items-center gap-1.5 bg-[#FEE2E2] hover:bg-[#FCA5A5] text-[#991B1B] text-xs font-bold px-3.5 py-2 rounded-lg transition-colors border border-[#FCA5A5]"
             >
               <LogOut className="w-4 h-4" />
-              <span className="hidden sm:inline">Keluar</span>
+              <span>Keluar</span>
             </button>
           </div>
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-4 py-8 w-full flex-grow">
-        {/* STATS OVERVIEW CARDS */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <div className="bg-[#FFFFFF] p-5 rounded-2xl border border-[#E2ECE7] shadow-sm flex items-center justify-between">
+      <main className="max-w-7xl mx-auto px-4 py-6 sm:py-8 w-full flex-grow">
+        {/* RESPONSIVE STATS OVERVIEW CARDS */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+          <div className="bg-[#FFFFFF] p-3.5 sm:p-5 rounded-2xl border border-[#E2ECE7] shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-xs font-bold text-[#523A2D] uppercase tracking-wider block mb-1">
-                Total Produk Seafood
+              <span className="text-[10px] sm:text-xs font-bold text-[#523A2D] uppercase tracking-wider block mb-0.5 sm:mb-1">
+                Total Produk
               </span>
-              <span className="text-2xl font-bold text-[#332219]">
+              <span className="text-lg sm:text-2xl font-bold text-[#332219]">
                 {products.length} Item
               </span>
             </div>
-            <div className="p-3 bg-[#EBF2EE] text-[#4E6B5D] rounded-xl">
-              <Package className="w-6 h-6" />
+            <div className="p-2.5 sm:p-3 bg-[#EBF2EE] text-[#4E6B5D] rounded-xl shrink-0">
+              <Package className="w-4 h-4 sm:w-6 sm:h-6" />
             </div>
           </div>
 
-          <div className="bg-[#FFFFFF] p-5 rounded-2xl border border-[#E2ECE7] shadow-sm flex items-center justify-between">
+          <div className="bg-[#FFFFFF] p-3.5 sm:p-5 rounded-2xl border border-[#E2ECE7] shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-xs font-bold text-[#523A2D] uppercase tracking-wider block mb-1">
-                Stok Tersedia
+              <span className="text-[10px] sm:text-xs font-bold text-[#523A2D] uppercase tracking-wider block mb-0.5 sm:mb-1">
+                Stok Ready
               </span>
-              <span className="text-2xl font-bold text-[#166534]">
+              <span className="text-lg sm:text-2xl font-bold text-[#166534]">
                 {products.filter((p) => p.inStock).length} Item
               </span>
             </div>
-            <div className="p-3 bg-[#DCFCE7] text-[#166534] rounded-xl">
-              <CheckCircle2 className="w-6 h-6" />
+            <div className="p-2.5 sm:p-3 bg-[#DCFCE7] text-[#166534] rounded-xl shrink-0">
+              <CheckCircle2 className="w-4 h-4 sm:w-6 sm:h-6" />
             </div>
           </div>
 
-          <div className="bg-[#FFFFFF] p-5 rounded-2xl border border-[#E2ECE7] shadow-sm flex items-center justify-between">
+          <div className="bg-[#FFFFFF] p-3.5 sm:p-5 rounded-2xl border border-[#E2ECE7] shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-xs font-bold text-[#523A2D] uppercase tracking-wider block mb-1">
-                Catch of the Day
+              <span className="text-[10px] sm:text-xs font-bold text-[#523A2D] uppercase tracking-wider block mb-0.5 sm:mb-1">
+                Catch of Day
               </span>
-              <span className="text-2xl font-bold text-[#D97706]">
+              <span className="text-lg sm:text-2xl font-bold text-[#D97706]">
                 {products.filter((p) => p.isCatchOfDay).length} Item
               </span>
             </div>
-            <div className="p-3 bg-[#FEF3C7] text-[#D97706] rounded-xl">
-              <Sparkles className="w-6 h-6" />
+            <div className="p-2.5 sm:p-3 bg-[#FEF3C7] text-[#D97706] rounded-xl shrink-0">
+              <Sparkles className="w-4 h-4 sm:w-6 sm:h-6" />
             </div>
           </div>
 
-          <div className="bg-[#FFFFFF] p-5 rounded-2xl border border-[#E2ECE7] shadow-sm flex items-center justify-between">
+          <div className="bg-[#FFFFFF] p-3.5 sm:p-5 rounded-2xl border border-[#E2ECE7] shadow-sm flex items-center justify-between">
             <div>
-              <span className="text-xs font-bold text-[#523A2D] uppercase tracking-wider block mb-1">
+              <span className="text-[10px] sm:text-xs font-bold text-[#523A2D] uppercase tracking-wider block mb-0.5 sm:mb-1">
                 Status Toko
               </span>
               <button
@@ -464,24 +477,24 @@ export default function AdminPage() {
                     }`
                   );
                 }}
-                className={`text-xs font-bold px-3 py-1 rounded-full flex items-center gap-1.5 transition-colors mt-1 ${
+                className={`text-[10px] sm:text-xs font-bold px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-full flex items-center gap-1 transition-colors mt-0.5 ${
                   isPreorderOpen
                     ? "bg-[#DCFCE7] text-[#166534] border border-[#86EFAC]"
                     : "bg-[#FEE2E2] text-[#991B1B] border border-[#FCA5A5]"
                 }`}
               >
-                <Clock className="w-3.5 h-3.5" />
-                <span>{isPreorderOpen ? "Pre-Order BUKA" : "Toko LIBUR"}</span>
+                <Clock className="w-3 h-3" />
+                <span>{isPreorderOpen ? "BUKA" : "LIBUR"}</span>
               </button>
             </div>
-            <div className="p-3 bg-[#FAF6F0] text-[#332219] rounded-xl border border-[#E2ECE7]">
-              <Building2 className="w-6 h-6" />
+            <div className="p-2.5 sm:p-3 bg-[#FAF6F0] text-[#332219] rounded-xl border border-[#E2ECE7] shrink-0">
+              <Building2 className="w-4 h-4 sm:w-6 sm:h-6" />
             </div>
           </div>
         </div>
 
         {/* CONTROLS BAR: SEARCH, FILTER, AND ADD NEW PRODUCT */}
-        <div className="bg-[#FFFFFF] p-4 rounded-2xl border border-[#E2ECE7] shadow-sm mb-6 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="bg-[#FFFFFF] p-4 rounded-2xl border border-[#E2ECE7] shadow-sm mb-6 flex flex-col md:flex-row items-center justify-between gap-3 sm:gap-4">
           <div className="flex flex-col sm:flex-row items-center gap-3 w-full md:w-auto flex-1">
             {/* SEARCH INPUT */}
             <div className="relative w-full sm:w-64">
@@ -491,12 +504,12 @@ export default function AdminPage() {
                 placeholder="Cari nama produk..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-4 py-2 rounded-xl border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-[#FAF6F0]"
+                className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-[#FAF6F0]"
               />
             </div>
 
             {/* CATEGORY FILTER */}
-            <div className="flex items-center gap-1 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-none">
+            <div className="flex items-center gap-1.5 overflow-x-auto w-full sm:w-auto pb-1 sm:pb-0 scrollbar-none">
               <SlidersHorizontal className="w-4 h-4 text-[#523A2D] shrink-0 mr-1 hidden lg:block" />
               {categories.map((cat) => (
                 <button
@@ -518,15 +531,111 @@ export default function AdminPage() {
           <button
             type="button"
             onClick={handleOpenAddModal}
-            className="w-full md:w-auto bg-[#4E6B5D] hover:bg-[#3B5447] text-white text-xs font-bold px-4 py-2.5 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 shrink-0"
+            className="w-full md:w-auto bg-[#4E6B5D] hover:bg-[#3B5447] text-white text-xs font-bold px-4 py-3 rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 shrink-0"
           >
             <Plus className="w-4 h-4" />
-            <span>Tambah Produk Seafood Baru</span>
+            <span>Tambah Produk Baru</span>
           </button>
         </div>
 
-        {/* PRODUCTS MANAGEMENT TABLE */}
-        <div className="bg-[#FFFFFF] rounded-2xl border border-[#E2ECE7] shadow-sm overflow-hidden">
+        {/* MOBILE VIEW: RESPONSIVE CARDS GRID */}
+        <div className="block md:hidden space-y-3 mb-6">
+          <div className="flex items-center justify-between px-1 mb-2">
+            <span className="text-xs font-bold text-[#332219]">
+              Daftar Produk ({filteredProducts.length})
+            </span>
+          </div>
+
+          {filteredProducts.length === 0 ? (
+            <div className="bg-white p-8 rounded-2xl text-center border border-[#E2ECE7]">
+              <Package className="w-10 h-10 text-[#523A2D]/30 mx-auto mb-2" />
+              <p className="text-xs font-bold text-[#332219]">Tidak ada produk ditemukan</p>
+            </div>
+          ) : (
+            filteredProducts.map((product) => (
+              <div
+                key={product.id}
+                className="bg-[#FFFFFF] p-4 rounded-xl border border-[#E2ECE7] shadow-sm flex flex-col justify-between gap-3"
+              >
+                <div className="flex items-start gap-3">
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    width={64}
+                    height={64}
+                    quality={75}
+                    className="w-16 h-16 rounded-lg object-cover border border-[#E2ECE7] shrink-0"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between gap-1 mb-0.5">
+                      <span className="text-[10px] font-bold text-[#4E6B5D] uppercase">
+                        {product.category}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => toggleStockStatus(product.id)}
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1 ${
+                          product.inStock
+                            ? "bg-[#DCFCE7] text-[#166534]"
+                            : "bg-[#FEE2E2] text-[#991B1B]"
+                        }`}
+                      >
+                        {product.inStock ? "Tersedia" : "Habis"}
+                      </button>
+                    </div>
+
+                    <h3 className="text-xs font-bold text-[#332219] truncate">
+                      {product.name}
+                    </h3>
+                    <span className="text-xs font-bold text-[#166534] block">
+                      {product.displayPriceText}
+                    </span>
+                    <span className="text-[10px] text-[#523A2D] block mt-0.5">
+                      {product.portionEstimate}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between pt-2.5 border-t border-[#E2ECE7] gap-2">
+                  <div className="flex flex-wrap gap-1">
+                    {product.isCatchOfDay && (
+                      <span className="bg-[#FEF3C7] text-[#D97706] text-[9px] font-bold px-2 py-0.5 rounded">
+                        Catch Day
+                      </span>
+                    )}
+                    {product.isBestSeller && (
+                      <span className="bg-[#DCFCE7] text-[#166534] text-[9px] font-bold px-2 py-0.5 rounded">
+                        Best Seller
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleOpenEditModal(product)}
+                      className="px-3 py-1.5 bg-[#EBF2EE] text-[#4E6B5D] text-xs font-bold rounded-lg border border-[#E2ECE7] flex items-center gap-1"
+                    >
+                      <Edit2 className="w-3.5 h-3.5" />
+                      <span>Edit</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteProduct(product.id, product.name)}
+                      className="px-3 py-1.5 bg-[#FEE2E2] text-[#991B1B] text-xs font-bold rounded-lg border border-[#FCA5A5] flex items-center gap-1"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                      <span>Hapus</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* DESKTOP VIEW: PRODUCTS MANAGEMENT TABLE */}
+        <div className="hidden md:block bg-[#FFFFFF] rounded-2xl border border-[#E2ECE7] shadow-sm overflow-hidden">
           <div className="p-4 sm:p-5 border-b border-[#E2ECE7] flex items-center justify-between bg-[#FFFDF9]">
             <h2 className="text-sm font-bold text-[#332219] flex items-center gap-2">
               <Package className="w-4 h-4 text-[#4E6B5D]" />
@@ -672,10 +781,10 @@ export default function AdminPage() {
         </div>
       </main>
 
-      {/* EDIT / ADD PRODUCT MODAL */}
+      {/* RESPONSIVE EDIT / ADD PRODUCT MODAL */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-[#332219]/50 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-lg w-full p-6 shadow-2xl relative my-8 anim-zoom-in">
+        <div className="fixed inset-0 z-50 bg-[#332219]/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
+          <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl relative my-4 sm:my-8 anim-zoom-in max-h-[90vh] overflow-y-auto">
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
@@ -685,11 +794,11 @@ export default function AdminPage() {
               <X className="w-5 h-5" />
             </button>
 
-            <h3 className="text-base font-bold text-[#332219] mb-4 pb-3 border-b border-[#E2ECE7]">
+            <h3 className="text-sm sm:text-base font-bold text-[#332219] mb-4 pb-3 border-b border-[#E2ECE7]">
               {editingProduct ? "Edit Detail Produk Seafood" : "Tambah Produk Seafood Baru"}
             </h3>
 
-            <form onSubmit={handleSaveProduct} className="space-y-4">
+            <form onSubmit={handleSaveProduct} className="space-y-3.5">
               <div>
                 <label className="text-xs font-bold text-[#332219] block mb-1">
                   Nama Produk Seafood
@@ -704,7 +813,7 @@ export default function AdminPage() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs font-bold text-[#332219] block mb-1">
                     Kategori Seafood
@@ -712,7 +821,7 @@ export default function AdminPage() {
                   <select
                     value={formCategory}
                     onChange={(e) => setFormCategory(e.target.value as Product["category"])}
-                    className="w-full px-3 py-2 rounded-xl border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-[#FAF6F0]"
+                    className="w-full px-3 py-2.5 rounded-xl border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-[#FAF6F0]"
                   >
                     <option value="Ikan Utuh">Ikan Utuh</option>
                     <option value="Udang">Udang</option>
@@ -732,12 +841,12 @@ export default function AdminPage() {
                     placeholder="80000"
                     value={formPrice}
                     onChange={(e) => setFormPrice(Number(e.target.value))}
-                    className="w-full px-3.5 py-2 rounded-xl border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-[#FAF6F0]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-[#FAF6F0]"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs font-bold text-[#332219] block mb-1">
                     Teks Tampilan Harga
@@ -748,7 +857,7 @@ export default function AdminPage() {
                     placeholder="Rp 80.000 / kg"
                     value={formDisplayPriceText}
                     onChange={(e) => setFormDisplayPriceText(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-xl border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-[#FAF6F0]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-[#FAF6F0]"
                   />
                 </div>
 
@@ -761,7 +870,7 @@ export default function AdminPage() {
                     placeholder="Diskon 10% / Promo"
                     value={formDiscountBadge}
                     onChange={(e) => setFormDiscountBadge(e.target.value)}
-                    className="w-full px-3.5 py-2 rounded-xl border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-[#FAF6F0]"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-[#FAF6F0]"
                   />
                 </div>
               </div>
@@ -776,7 +885,7 @@ export default function AdminPage() {
                   placeholder="/images/udang%20vuname%20sedang.webp"
                   value={formImage}
                   onChange={(e) => setFormImage(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-[#FAF6F0]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-[#FAF6F0]"
                 />
               </div>
 
@@ -789,7 +898,7 @@ export default function AdminPage() {
                   placeholder="🍽️ 1 kg cukup untuk 3-4 porsi"
                   value={formPortionEstimate}
                   onChange={(e) => setFormPortionEstimate(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-xl border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-[#FAF6F0]"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-[#FAF6F0]"
                 />
               </div>
 
@@ -807,28 +916,28 @@ export default function AdminPage() {
               </div>
 
               {/* TOGGLES */}
-              <div className="flex flex-wrap items-center gap-4 bg-[#FAF6F0] p-3 rounded-xl border border-[#E2ECE7]">
-                <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-[#332219]">
+              <div className="flex flex-wrap items-center gap-3 bg-[#FAF6F0] p-3 rounded-xl border border-[#E2ECE7]">
+                <label className="flex items-center gap-1.5 cursor-pointer text-xs font-semibold text-[#332219]">
                   <input
                     type="checkbox"
                     checked={formInStock}
                     onChange={(e) => setFormInStock(e.target.checked)}
                     className="rounded text-[#4E6B5D]"
                   />
-                  <span>Stok Tersedia</span>
+                  <span>Stok Ready</span>
                 </label>
 
-                <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-[#D97706]">
+                <label className="flex items-center gap-1.5 cursor-pointer text-xs font-semibold text-[#D97706]">
                   <input
                     type="checkbox"
                     checked={formCatchOfDay}
                     onChange={(e) => setFormCatchOfDay(e.target.checked)}
                     className="rounded text-[#D97706]"
                   />
-                  <span>Catch of the Day</span>
+                  <span>Catch Day</span>
                 </label>
 
-                <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold text-[#166534]">
+                <label className="flex items-center gap-1.5 cursor-pointer text-xs font-semibold text-[#166534]">
                   <input
                     type="checkbox"
                     checked={formBestSeller}
@@ -852,7 +961,7 @@ export default function AdminPage() {
                   className="flex-1 bg-[#4E6B5D] hover:bg-[#3B5447] text-white text-xs font-bold py-3 rounded-xl transition-colors shadow-sm flex items-center justify-center gap-1.5"
                 >
                   <Save className="w-4 h-4" />
-                  <span>Simpan & Tampilkan di Web</span>
+                  <span>Simpan & Tampilkan</span>
                 </button>
               </div>
             </form>
