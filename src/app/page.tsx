@@ -645,12 +645,14 @@ export default function Home() {
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF6F0] text-[#332219] antialiased font-sans transition-colors duration-200 relative">
       {/* ==========================================================================
-         0. INITIAL LOADING SCREEN WITH SLIDE UP & FADE OUT TRANSITION
+         0. INITIAL LOADING SCREEN WITH FADE-IN ON OPEN & SLIDE UP / FADE OUT ON EXIT
          ========================================================================== */}
       {isLoadingVisible && (
         <div
           className={`fixed inset-0 z-50 bg-[#FAF6F0] flex flex-col items-center justify-center p-6 text-center shadow-2xl ${
-            isLoadingExiting ? "loading-overlay-exiting" : "loading-overlay-active"
+            isLoadingExiting
+              ? "loading-overlay-exiting"
+              : "loading-overlay-active animate-in fade-in zoom-in-95 duration-400"
           }`}
         >
           <div className="relative mb-6">
@@ -666,7 +668,7 @@ export default function Home() {
             Selamat datang di Laukatme
           </h2>
           <p className="text-xs sm:text-sm font-semibold text-[#4E6B5D] tracking-wide mb-6">
-            By Umma • Seafood Mentah & Segar Pesisir
+            By Umma
           </p>
 
           <div className="w-48 bg-[#E2ECE7] h-1.5 rounded-full overflow-hidden relative">
