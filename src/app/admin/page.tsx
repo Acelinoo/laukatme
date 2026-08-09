@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -24,8 +24,9 @@ import {
   SlidersHorizontal,
   Store,
   RotateCcw,
+  Upload,
+  ImageIcon,
   Tag,
-  Scissors,
 } from "lucide-react";
 import {
   Product,
@@ -35,6 +36,17 @@ import {
 } from "@/lib/productsData";
 
 const DEFAULT_PASSCODE = "umma123";
+
+const PRESET_IMAGES = [
+  { label: "Udang Vaname", path: "/images/udang%20vuname%20sedang.webp" },
+  { label: "Cumi-Cumi", path: "/images/cumi.webp" },
+  { label: "Ikan Gurame", path: "/images/ikan%20gurame.webp" },
+  { label: "Tenggiri Super", path: "/images/ikan%20tenggiri%20super.webp" },
+  { label: "Bawal Putih", path: "/images/ikan%20bawal%20putih.webp" },
+  { label: "Kakap Fillet", path: "/images/ikan%20kakap%20fillet.webp" },
+  { label: "Kerang Dara", path: "/images/kerang%20dara%20besar.webp" },
+  { label: "Ikan Nila", path: "/images/ikan%20nila.webp" },
+];
 
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
@@ -66,6 +78,9 @@ export default function AdminPage() {
   const [formPortionEstimate, setFormPortionEstimate] = useState("🍽️ 1 kg cukup untuk 3-4 porsi");
   const [formNote, setFormNote] = useState("");
   const [formCutOptions, setFormCutOptions] = useState<string>("Utuh Bersih (Gratis)\nPotong Steak (Gratis)");
+
+  const [imageUploadType, setImageUploadType] = useState<"preset" | "gallery" | "url">("gallery");
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [notification, setNotification] = useState<string | null>(null);
 
@@ -118,6 +133,35 @@ export default function AdminPage() {
     }
   };
 
+  // HANDLE FILE UPLOAD FROM MOBILE PHONE GALLERY OR CAMERA
+  const handleImageFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new window.Image();
+      img.src = event.target?.result as string;
+      img.onload = () => {
+        // COMPRESS IMAGE ON CANVAS FOR LIGHTWEIGHT STORAGE
+        const canvas = document.createElement("canvas");
+        const MAX_WIDTH = 600;
+        const scaleSize = MAX_WIDTH / img.width;
+        canvas.width = Math.min(img.width, MAX_WIDTH);
+        canvas.height = img.height * (canvas.width / img.width);
+
+        const ctx = canvas.getContext("2d");
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.82);
+          setFormImage(compressedDataUrl);
+          triggerNotification("✓ Foto dari galeri berhasil diunggah!");
+        }
+      };
+    };
+    reader.readAsDataURL(file);
+  };
+
   const handleOpenAddModal = () => {
     setEditingProduct(null);
     setFormName("");
@@ -133,6 +177,7 @@ export default function AdminPage() {
     setFormPortionEstimate("🍽️ 1 kg cukup untuk 3-4 porsi");
     setFormNote("Produk mentah segar pilihan");
     setFormCutOptions("Utuh Bersih Sisik & Insang (Gratis)\nPotong Steak (Gratis)");
+    setImageUploadType("gallery");
     setIsModalOpen(true);
   };
 
@@ -151,6 +196,7 @@ export default function AdminPage() {
     setFormPortionEstimate(product.portionEstimate || "");
     setFormNote(product.note || "");
     setFormCutOptions(product.availableCutOptions.join("\n"));
+    setImageUploadType(product.image.startsWith("data:") ? "gallery" : "preset");
     setIsModalOpen(true);
   };
 
@@ -208,7 +254,7 @@ export default function AdminPage() {
         availableCutOptions: cuts.length > 0 ? cuts : ["Utuh Bersih (Gratis)"],
       };
       updatedList = [newProduct, ...products];
-      triggerNotification(`✓ Produk baru "${formName}" berhasil ditambahkan & langsung tampil di web!`);
+      triggerNotification(`✓ Produk baru "${formName}" dengan foto galeri berhasil ditambahkan!`);
     }
 
     updateAndSaveProducts(updatedList);
@@ -346,6 +392,15 @@ export default function AdminPage() {
           <span>{notification}</span>
         </div>
       )}
+
+      {/* HIDDEN FILE INPUT FOR MOBILE GALLERY PICKER */}
+      <input
+        type="file"
+        ref={fileInputRef}
+        accept="image/*"
+        onChange={handleImageFileUpload}
+        className="hidden"
+      />
 
       {/* RESPONSIVE HEADER NAVBAR */}
       <header className="bg-[#FFFFFF] border-b border-[#E2ECE7] sticky top-0 z-30 shadow-sm">
@@ -781,7 +836,7 @@ export default function AdminPage() {
         </div>
       </main>
 
-      {/* RESPONSIVE EDIT / ADD PRODUCT MODAL */}
+      {/* RESPONSIVE EDIT / ADD PRODUCT MODAL WITH MOBILE GALLERY UPLOAD */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 bg-[#332219]/50 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto">
           <div className="bg-[#FFFFFF] border border-[#E2ECE7] rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl relative my-4 sm:my-8 anim-zoom-in max-h-[90vh] overflow-y-auto">
@@ -846,6 +901,110 @@ export default function AdminPage() {
                 </div>
               </div>
 
+              {/* IMAGE UPLOADER SECTION (MOBILE GALLERY SUPPORT) */}
+              <div className="bg-[#FAF6F0] p-3.5 rounded-xl border border-[#E2ECE7]">
+                <label className="text-xs font-bold text-[#332219] block mb-2 flex items-center justify-between">
+                  <span>Foto Gambar Menu</span>
+                  <span className="text-[10px] text-[#4E6B5D] font-semibold">Pilih atau Upload Galeri HP</span>
+                </label>
+
+                {/* IMAGE SOURCE TABS */}
+                <div className="grid grid-cols-3 gap-1.5 mb-3">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setImageUploadType("gallery");
+                      fileInputRef.current?.click();
+                    }}
+                    className={`py-1.5 px-2 rounded-lg text-[11px] font-bold flex items-center justify-center gap-1 border transition-colors ${
+                      imageUploadType === "gallery"
+                        ? "bg-[#4E6B5D] text-white border-[#4E6B5D]"
+                        : "bg-white text-[#523A2D] border-[#E2ECE7]"
+                    }`}
+                  >
+                    <Upload className="w-3.5 h-3.5" />
+                    <span>Galeri HP</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setImageUploadType("preset")}
+                    className={`py-1.5 px-2 rounded-lg text-[11px] font-bold flex items-center justify-center gap-1 border transition-colors ${
+                      imageUploadType === "preset"
+                        ? "bg-[#4E6B5D] text-white border-[#4E6B5D]"
+                        : "bg-white text-[#523A2D] border-[#E2ECE7]"
+                    }`}
+                  >
+                    <ImageIcon className="w-3.5 h-3.5" />
+                    <span>Bawaan</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setImageUploadType("url")}
+                    className={`py-1.5 px-2 rounded-lg text-[11px] font-bold flex items-center justify-center gap-1 border transition-colors ${
+                      imageUploadType === "url"
+                        ? "bg-[#4E6B5D] text-white border-[#4E6B5D]"
+                        : "bg-white text-[#523A2D] border-[#E2ECE7]"
+                    }`}
+                  >
+                    <Tag className="w-3.5 h-3.5" />
+                    <span>URL Path</span>
+                  </button>
+                </div>
+
+                {/* LIVE IMAGE PREVIEW & PICKER */}
+                <div className="flex items-center gap-3">
+                  <div className="relative w-16 h-16 rounded-lg overflow-hidden border border-[#E2ECE7] bg-white shrink-0">
+                    <Image
+                      src={formImage}
+                      alt="Preview Produk"
+                      width={64}
+                      height={64}
+                      quality={75}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  <div className="flex-1 min-w-0">
+                    {imageUploadType === "gallery" && (
+                      <button
+                        type="button"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="w-full py-2 px-3 bg-white hover:bg-[#EBF2EE] text-[#4E6B5D] text-xs font-bold rounded-lg border border-[#4E6B5D] flex items-center justify-center gap-1.5 transition-colors"
+                      >
+                        <Upload className="w-3.5 h-3.5" />
+                        <span>Pilih Foto dari Galeri HP / Kamera</span>
+                      </button>
+                    )}
+
+                    {imageUploadType === "preset" && (
+                      <select
+                        value={formImage}
+                        onChange={(e) => setFormImage(e.target.value)}
+                        className="w-full px-2.5 py-2 rounded-lg border border-[#E2ECE7] text-xs text-[#332219] bg-white"
+                      >
+                        {PRESET_IMAGES.map((preset) => (
+                          <option key={preset.path} value={preset.path}>
+                            {preset.label}
+                          </option>
+                        ))}
+                      </select>
+                    )}
+
+                    {imageUploadType === "url" && (
+                      <input
+                        type="text"
+                        placeholder="/images/udang%20vuname%20sedang.webp"
+                        value={formImage}
+                        onChange={(e) => setFormImage(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-[#E2ECE7] text-xs text-[#332219] bg-white"
+                      />
+                    )}
+                  </div>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs font-bold text-[#332219] block mb-1">
@@ -873,20 +1032,6 @@ export default function AdminPage() {
                     className="w-full px-3.5 py-2.5 rounded-xl border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-[#FAF6F0]"
                   />
                 </div>
-              </div>
-
-              <div>
-                <label className="text-xs font-bold text-[#332219] block mb-1">
-                  URL / Path Gambar WebP
-                </label>
-                <input
-                  type="text"
-                  required
-                  placeholder="/images/udang%20vuname%20sedang.webp"
-                  value={formImage}
-                  onChange={(e) => setFormImage(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#E2ECE7] text-xs text-[#332219] focus:outline-none focus:border-[#4E6B5D] bg-[#FAF6F0]"
-                />
               </div>
 
               <div>
